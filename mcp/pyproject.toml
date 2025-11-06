@@ -1,0 +1,24 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "agent-sops-mcp-prompt-server"
+version = "0.1.0"
+description = "MCP server for serving markdown files as prompts"
+dependencies = [
+    "mcp>=1.20.0",
+]
+
+[project.scripts]
+mcp-prompt-server = "main:main"
+
+[tool.hatch.build]
+artifacts = [
+  "sops"
+]
+
+[tool.hatch.build.targets.wheel]
+include = [
+    "main.py"
+]
