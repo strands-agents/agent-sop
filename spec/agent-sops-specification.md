@@ -1,14 +1,14 @@
-# Agent Scripts Specification
+# Agent SOPs Specification
 
 ## Introduction
 
-Agent Scripts are structured markdown files that provide step-by-step instructions for AI agents to perform complex tasks. They enable the creation of reusable, shareable workflows that can be executed consistently across different AI systems and teams.
+Agent SOPs are structured markdown files that provide step-by-step instructions for AI agents to perform complex tasks. They enable the creation of reusable, shareable workflows that can be executed consistently across different AI systems and teams.
 
 ## Core Concepts
 
-### What is an Agent Script?
+### What is an Agent SOP?
 
-An Agent Script is a markdown file with a `.script.md` extension that contains:
+An Agent SOP is a markdown file with a `.sop.md` extension that contains:
 - A clear description of the task to be performed
 - Defined parameters (inputs) the script accepts
 - Step-by-step instructions with specific constraints
@@ -25,10 +25,10 @@ An Agent Script is a markdown file with a `.script.md` extension that contains:
 ## File Format
 
 ### File Extension
-All agent scripts MUST use the `.script.md` file extension.
+All agent SOPs MUST use the `.sop.md` file extension.
 
 ### File Naming
-Script files SHOULD use kebab-case naming (e.g., `code-review-assistant.script.md`).
+SOP files SHOULD use kebab-case naming (e.g., `code-review-assistant.sop.md`).
 
 ## Script Structure
 
@@ -208,7 +208,7 @@ Scripts can include interactive elements:
 ## Implementation Notes
 
 ### Agent Compatibility
-Agent Scripts are designed to work with various AI systems that can:
+Agent SOPs are designed to work with various AI systems that can:
 - Parse markdown format
 - Follow structured instructions
 - Handle parameters and constraints
@@ -223,7 +223,7 @@ Scripts may reference external tools or capabilities:
 
 The specific tools available depend on the implementing AI system.
 
-## Example Agent Script
+## Example Agent SOP
 
 ````markdown
 # Personalized Learning Curriculum

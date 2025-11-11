@@ -380,7 +380,7 @@ If all tests are passing, draft a conventional commit message and perform the ac
 - You MUST verify that all items in the implementation checklist are marked as complete before marking the prompt as complete
 - You MUST NOT mark the prompt as complete in `{documentation_dir}/implementation/prompt-plan.md` if any items in the implementation checklist remain incomplete because this would misrepresent the actual completion status
 - You MUST mark the prompt as complete in `{documentation_dir}/implementation/prompt-plan.md` only after verifying all implementation checklist items are complete and if a prompt_number was used as input
-- You SHOULD include the "🤖 Assisted by the [code-assist](https://code.amazon.com/packages/AmazonBuilderGenAIPowerUsersQContext/blobs/mainline/--/scripts/code-assist.script.md) agent script" footer
+- You SHOULD include the "🤖 Assisted by the [code-assist](https://code.amazon.com/packages/AmazonBuilderGenAIPowerUsersQContext/blobs/mainline/--/scripts/code-assist.sop.md) agent SOP" footer
 
 **Collaboration Guidance:**
 - **Interactive Mode:** Present the draft commit message for review, explain the files to be committed, and ask for confirmation before executing.

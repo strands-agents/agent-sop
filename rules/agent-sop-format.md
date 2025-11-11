@@ -1,25 +1,25 @@
 ---
-description: Standard format for Agent scripts
-globs: **/*.script.md
+description: Standard format for Agent SOPs
+globs: **/*.sop.md
 ---
-# Agent Script Format
+# Agent SOP Format
 
-This rule defines the standard format for Agent scripts, which are reusable workflows that automate complex processes.
+This rule defines the standard format for Agent SOPs, which are reusable workflows that automate complex processes.
 
 <rule>
-name: agent_script_format
-description: Standards for creating and formatting Agent scripts
+name: agent_sop_format
+description: Standards for creating and formatting Agent SOPs
 filters:
-  # Match script files
+  # Match SOP files
   - type: file_extension
-    pattern: "\.script\.md$"
+    pattern: "\.sop\.md$"
 
 actions:
   - type: suggest
     message: |
-      Agent scripts must follow the standard format:
+      Agent SOPs must follow the standard format:
       
-      1. Use `.script.md` file extension
+      1. Use `.sop.md` file extension
       2. Include Overview, Parameters, and Steps sections
       3. Use RFC2119 keywords (MUST, SHOULD, MAY) in constraints
       4. Provide context for all negative constraints (MUST NOT, SHOULD NOT, etc.)
@@ -70,16 +70,16 @@ metadata:
   version: 1.0
 </rule>
 
-# Agent Script Format Specification
+# Agent SOP Format Specification
 
 ## Overview
 
-This document defines the standard format for Agent scripts. Scripts are markdown files that provide structured guidance for agents to follow when performing specific tasks, making complex workflows repeatable and consistent.
+This document defines the standard format for Agent SOPs. SOPs are markdown files that provide structured guidance for agents to follow when performing specific tasks, making complex workflows repeatable and consistent.
 
 ## File Naming and Location
 
-1. All script files MUST use the `.script.md` file extension.
-2. Script files SHOULD have descriptive names using kebab-case (e.g., `idea-honing.script.md`).
+1. All SOP files MUST use the `.sop.md` file extension.
+2. SOP files SHOULD have descriptive names using kebab-case (e.g., `idea-honing.sop.md`).
 
 ## Script Structure
 

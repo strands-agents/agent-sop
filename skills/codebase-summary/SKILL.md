@@ -170,7 +170,7 @@ When running in update mode, the script follows these steps to update existing d
 ### Example Input
 
 
-Run codebase-summary.script.md output_dir=custom_docs code_analysis_depth=3
+Run codebase-summary.sop.md output_dir=custom_docs code_analysis_depth=3
 
 ### Example Output
 
@@ -215,24 +215,24 @@ Summary and Next Steps:
 ### Example Usage
 
 
-Run codebase-summary.script.md
+Run codebase-summary.sop.md
 
 This will generate documentation in the default .planning directory, check for inconsistencies and completeness, and create a consolidated documentation file.
 
 For more specific configuration:
 
 
-Run codebase-summary.script.md output_dir=.my_documentation consolidate=true code_analysis_depth=3
+Run codebase-summary.sop.md output_dir=.my_documentation consolidate=true code_analysis_depth=3
 
 To update existing documentation based on recent commits:
 
 
-Run codebase-summary.script.md update_mode=true output_dir=.planning
+Run codebase-summary.sop.md update_mode=true output_dir=.planning
 
 To analyze a specific codebase path:
 
 
-Run codebase-summary.script.md codebase_path=/path/to/your/codebase
+Run codebase-summary.sop.md codebase_path=/path/to/your/codebase
 
 ### Example Output Structure
 

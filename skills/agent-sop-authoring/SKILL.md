@@ -1,25 +1,25 @@
 ---
-name: Agent Script Authoring
-description: Creating standardized Agent Scripts using AI-assisted authoring with natural language iteration
-usage: when creating new .script.md files, converting workflows to agent scripts, or needing to automate multi-step processes with AI agents
+name: Agent SOP Authoring
+description: Creating standardized Agent SOPs using AI-assisted authoring with natural language iteration
+usage: when creating new .sop.md files, converting workflows to agent SOPs, or needing to automate multi-step processes with AI agents
 version: 1.0.0
-tags: [skill, agent-scripts, automation, ai-assisted-authoring, script-format]
+tags: [skill, agent-sops, automation, ai-assisted-authoring, sop-format]
 ---
 
-# Agent Script Authoring
+# Agent SOP Authoring
 
 ## Overview
 
-Agent Scripts use AI-assisted authoring that leverages natural language interaction rather than manual prompt engineering. You create scripts by describing workflows in plain English and iterating through conversational refinement.
+Agent SOPs use AI-assisted authoring that leverages natural language interaction rather than manual prompt engineering. You create SOPs by describing workflows in plain English and iterating through conversational refinement.
 
 ## Usage
 
 When you need to:
-- Create new `.script.md` automation files
-- Convert manual workflows into reusable agent scripts
+- Create new `.sop.md` automation files
+- Convert manual workflows into reusable agent SOPs
 - Automate multi-step processes for AI agents
 - Share standardized workflows across teams
-- Iterate on existing agent script behavior
+- Iterate on existing agent SOP behavior
 
 When NOT to use:
 - Simple one-step tasks (use direct tool calls)
@@ -44,9 +44,9 @@ You **MUST** follow this iterative development approach:
    - Focus on the end goal, not implementation details
    - Include any specific constraints or requirements
 
-2. **Generate Initial Script**
-   - Ask the AI agent to create an agent script based on your description
-   - The agent will use the script format rule to structure it properly
+2. **Generate Initial SOP**
+   - Ask the AI agent to create an agent SOP based on your description
+   - The agent will use the SOP format rule to structure it properly
    - Review the generated structure and parameters
 
 3. **Iterative Refinement**
@@ -72,7 +72,7 @@ You **MUST** use separate sessions for authoring and testing:
 ### Script Structure Requirements
 
 Your scripts **MUST** include:
-- File extension: `.script.md`
+- File extension: `.sop.md`
 - Overview section explaining purpose
 - Parameters section with required/optional inputs
 - Steps section with numbered workflow
@@ -96,12 +96,12 @@ You **SHOULD** provide context for negative constraints explaining why something
 
 ## Supporting Files
 
-### agent-script-format.md
-The standardized format rule that teaches AI agents proper Agent Script structure. Read this file before authoring.
+### agent-sop-format.md
+The standardized format rule that teaches AI agents proper Agent SOP structure. Read this file before authoring.
 
-**When to use:** Always before creating or modifying agent scripts
+**When to use:** Always before creating or modifying agent SOPs
 
-**How to load:** Read `./agent-script-format.md` directly using file reading tools
+**How to load:** Read `./agent-sop-format.md` directly using file reading tools
 
 ## Core Concepts
 
@@ -110,11 +110,11 @@ The standardized format rule that teaches AI agents proper Agent Script structur
 - **Not Recommended:** Manual prompt engineering or complex technical specifications
 - **Key Benefit:** Natural language iteration is faster and more intuitive
 
-### Script Format Rule
-- Standardizes structure across all Agent Scripts
-- Enables AI agents to author other agent scripts
+### SOP Format Rule
+- Standardizes structure across all Agent SOPs
+- Enables AI agents to author other agent SOPs
 - Improves model consistency using RFC 2119 keywords
-- Required for reliable script generation
+- Required for reliable SOP generation
 
 ### Iterative Development
 - Start simple with basic workflow description
@@ -153,7 +153,7 @@ flowchart TD
 | Refine behavior | Test → describe changes → update |
 | Add error handling | Describe failure scenarios to handle |
 | Optimize performance | Identify inefficient patterns, request improvements |
-| Share script | Save as `.script.md` in shared location |
+| Share SOP | Save as `.sop.md` in shared location |
 
 ## Common Patterns
 
@@ -165,7 +165,7 @@ handling edge cases, formatting output, and managing errors...
 
 ### After: Natural Language Authoring
 ```text
-"Write an agent script that looks up a user's phonetool given their login and 
+"Write an agent SOP that looks up a user's phonetool given their login and 
 provides a summary including their immediate L10 VP."
 ```
 
@@ -183,9 +183,9 @@ Walk up the manager chain until you see a level 10 VP."
 
 ## Common Mistakes
 
-### Writing Scripts Manually
-**Problem:** Trying to author agent scripts by hand without AI assistance
-**Fix:** Use AI agents with script format rule to generate and iterate scripts
+### Writing SOPs Manually
+**Problem:** Trying to author agent SOPs by hand without AI assistance
+**Fix:** Use AI agents with SOP format rule to generate and iterate SOPs
 
 ### Complex Initial Requests
 **Problem:** Trying to specify every detail in the first request
