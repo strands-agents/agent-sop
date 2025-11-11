@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "agent-sops-mcp-prompt-server"
 version = "0.1.0"
-description = "MCP server for serving markdown files as prompts"
+description = "MCP server for serving Agent SOPs as prompts"
 dependencies = [
     "mcp>=1.20.0",
 ]

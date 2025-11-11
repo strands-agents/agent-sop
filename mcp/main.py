@@ -1,5 +1,4 @@
 from pathlib import Path
-from argparse import ArgumentParser
 from mcp.server.fastmcp import FastMCP
 
 SOPS_DIR: Path = Path(__file__).parent / "sops"
@@ -10,7 +9,7 @@ mcp = FastMCP("prompt-server")
 def discover_sops() -> None:
     """Discover markdown files and register as prompts"""
     
-    for md_file in SOPS_DIR.glob("*.md"):
+    for md_file in SOPS_DIR.glob("*sop.md"):
         if md_file.is_file():
             prompt_name = md_file.stem
             
