@@ -8,11 +8,11 @@ from dataclasses import dataclass
 
 AGENT_SOPS_SOURCE = Path("agent-sops")
 
-def mcp_transform(content: str, filename: str) -> None:
+def python_transform(content: str, filename: str) -> None:
     """Transform sop for MCP distribution - creates sops subdirectory."""
     
     # Create sops subdirectory
-    sops_dir = Path("mcp") / "sops"
+    sops_dir = Path("python") / "strands_agents_sops/sops"
     sops_dir.mkdir(parents=True, exist_ok=True)
     
     # Write file to sops directory
@@ -60,7 +60,7 @@ class Distribution:
     transform_function: Callable[[str, str], None]
 
 DISTRIBUTIONS = [
-    Distribution("mcp", mcp_transform),
+    Distribution("python", python_transform),
     Distribution("skills", skills_transform),
 ]
 

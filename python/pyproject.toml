@@ -3,22 +3,19 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "agent-sops-mcp-prompt-server"
+name = "strands-agents-sops"
 version = "0.1.0"
-description = "MCP server for serving Agent SOPs as prompts"
+description = "Agent SOPs as importable strings with optional MCP server"
 dependencies = [
     "mcp>=1.20.0",
 ]
 
 [project.scripts]
-mcp-prompt-server = "main:main"
-
-[tool.hatch.build]
-artifacts = [
-  "sops"
-]
+strands-agents-sops = "__main__:run_mcp_server"
 
 [tool.hatch.build.targets.wheel]
 include = [
-    "main.py"
+    "__init__.py",
+    "__main__.py",
+    "sops/*.md"
 ]
