@@ -19,3 +19,6 @@ include = [
     "__main__.py",
     "sops/*.md"
 ]
+
+[tool.hatch.build.hooks.custom]
+path = "copy_agent_sops_hook.py"
