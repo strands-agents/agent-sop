@@ -75,21 +75,38 @@ Initialize the project environment and create necessary directory structures.
 
 ## Quick Start
 
+Install the `strands-agents-sops` package:
+
+```bash
+pip install strands-agents-sops
+```
+
 ### Using with Strands Agents
+
+Install strands agents and the sops package:
+
+```bash
+pip install strands-agents strands-agents-tools strands-agents-sops
+```
+
+Create a simple cli coding agent:
 
 ```python
 from strands import Agent
+from strands_tools import editor, shell
 import strands_agents_sops
 
 # Create agent with SOP capability
-agent = Agent()
-
-# Use a specific SOP
-sop_content = strands_agents_sops.code_assist_with_input(
-    "Implement user authentication system"
+agent = Agent(
+  system_prompt=strands_agents_sops.code_assist_with_input(),
+  tools=[editor, shell]
 )
 
-response = agent(sop_content)
+agent("Start your sop")
+
+# Simple cli agent loop:
+while(True):
+  agent(input("\nInput: "))
 ```
 
 ### Using as MCP Server
