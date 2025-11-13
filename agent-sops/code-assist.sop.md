@@ -323,7 +323,7 @@ If all tests are passing, draft a conventional commit message and perform the ac
 - You MUST verify that all items in the implementation checklist are marked as complete before marking the prompt as complete
 - You MUST NOT mark the prompt as complete in `{documentation_dir}/implementation/prompt-plan.md` if any items in the implementation checklist remain incomplete because this would misrepresent the actual completion status
 - You MUST mark the prompt as complete in `{documentation_dir}/implementation/prompt-plan.md` only after verifying all implementation checklist items are complete and if a prompt_number was used as input
-- You SHOULD include the "🤖 Assisted by the [code-assist](https://code.amazon.com/packages/AmazonBuilderGenAIPowerUsersQContext/blobs/mainline/--/scripts/code-assist.sop.md) agent SOP" footer
+- You SHOULD include the "🤖 Assisted by the code-assist SOP" footer
 
 > 💬 See [Mode Behavior](#mode-behavior) for mode-specific interaction guidance
 
@@ -421,7 +421,7 @@ If the implementation encounters unexpected challenges:
 ### Project Detection and Configuration
 - Detect project type by examining files (pyproject.toml, build.gradle, package.json, etc.)
 - Check for CODEASSIST.md for additional SOP constraints (see Important Notes)
-- Use project-appropriate build commands from CODEASSIST.md or detected project type
+- Use project-appropriate build commands
 
 ### Build Output Management
 - Pipe build output to log files: `[build-command] > build_output.log 2>&1`
