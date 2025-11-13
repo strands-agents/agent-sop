@@ -9,9 +9,7 @@
   <h2>Natural language workflows that enable AI agents to perform complex, multi-step tasks with consistency and reliability.</h2>
 
   <div align="center">
-    <a href="https://github.com/strands-agents/agent-sop/graphs/commit-activity"><img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/m/strands-agents/agent-sop"/></a>
-    <a href="https://github.com/strands-agents/agent-sop/issues"><img alt="GitHub open issues" src="https://img.shields.io/github/issues/strands-agents/agent-sop"/></a>
-    <a href="https://github.com/strands-agents/agent-sop/pulls"><img alt="GitHub open pull requests" src="https://img.shields.io/github/issues-pr/strands-agents/agent-sop"/></a>
+    <a href="https://pypi.org/project/strands-agents-sops/"><img alt="PyPI" src="https://img.shields.io/pypi/v/strands-agents-sops"/></a>
     <a href="https://github.com/strands-agents/agent-sop/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/github/license/strands-agents/agent-sop"/></a>
   </div>
   
