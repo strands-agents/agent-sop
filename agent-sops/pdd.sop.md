@@ -7,7 +7,7 @@ This sop guides you through the process of transforming a rough idea into a deta
 ## Parameters
 
 - **rough_idea** (required): The initial concept or idea you want to develop into a detailed design
-- **project_dir** (optional, default: ".planning"): The base directory where all project files will be stored
+- **project_dir** (optional, default: ".sop/planning"): The base directory where all project files will be stored
 
 **Constraints for parameter acquisition:**
 - You MUST ask for all required parameters upfront in a single prompt rather than one at a time
@@ -20,7 +20,7 @@ This sop guides you through the process of transforming a rough idea into a deta
 - You MUST confirm successful acquisition of all parameters before proceeding
 - You SHOULD save the acquired rough idea to a consistent location for use in subsequent steps
 - You MUST NOT overwrite the existing project directory because this could destroy previous work and cause data loss
-- You MUST ask for project_dir if it is not given and default ".planning" directory already exist and has contents from previous iteration
+- You MUST ask for project_dir if it is not given and default ".sop/planning" directory already exist and has contents from previous iteration
 
 ## Steps
 

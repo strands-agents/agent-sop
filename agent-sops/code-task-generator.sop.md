@@ -8,7 +8,7 @@ This sop generates structured code task files from rough descriptions, ideas, or
 
 - **input** (required): Task description, file path, or PDD plan path. Can be a simple sentence, paragraph, detailed explanation, or path to a PDD implementation plan.
 - **step_number** (optional): For PDD plans only - specific step to process. If not provided, automatically determines the next uncompleted step from the checklist.
-- **output_dir** (optional, default: ".planning"): Directory where the code task file will be created
+- **output_dir** (optional, default: ".sop/planning"): Directory where the code task file will be created
 - **task_name** (optional): For descriptions only - specific task name. If not provided, will be generated from the description.
 
 **Constraints for parameter acquisition:**
@@ -53,6 +53,7 @@ Organize requirements and determine task breakdown based on mode.
 **Constraints:**
 - For PDD mode: You MUST extract target step's title, description, demo requirements, and constraints
 - For PDD mode: You MUST preserve integration notes with previous steps
+- For PDD mode: You MUST identify which specific research documents (if any) are directly relevant to each task being created
 - For description mode: You MUST identify specific functional requirements from the description
 - You MUST infer reasonable technical constraints and dependencies
 - You MUST create measurable acceptance criteria using Given-When-Then format
@@ -78,6 +79,9 @@ Create appropriate file structure based on mode and approved plan.
 - For PDD mode: You MUST create a folder named `step{NN}` where NN is zero-padded (e.g., step01, step02, step10)
 - For PDD mode: You MUST create multiple code task files within the step folder, named sequentially: `task-01-{title}.code-task.md`, `task-02-{title}.code-task.md`, etc.
 - For PDD mode: You MUST break down the step into logical implementation phases focusing on functional components, NOT separate testing tasks
+- For PDD mode: You MUST include "Reference Documentation" section with path to design/detailed-design.md as required reading
+- For PDD mode: You MUST include specific research documents in "Additional References" only if they are directly relevant to the task (e.g., specific technology research for that component)
+- For PDD mode: You MUST add a note instructing agents to read the detailed design before implementation
 - For description mode: You MUST create single task or multiple tasks as planned
 - You MUST generate task names using kebab-case format
 - You MUST create files with `.code-task.md` extension
@@ -112,6 +116,15 @@ Each code task file MUST follow this exact structure:
 
 ## Background
 [Relevant context and background information needed to understand the task]
+
+## Reference Documentation
+**Required:**
+- Design: [path to detailed design document]
+
+**Additional References (if relevant to this task):**
+- [Specific research document or section]
+
+**Note:** You MUST read the detailed design document before beginning implementation. Read additional references as needed for context.
 
 ## Technical Requirements
 1. [First requirement]
@@ -154,6 +167,15 @@ Create a function that validates email addresses and returns detailed error mess
 
 ## Background
 The application currently accepts any string as an email address, leading to data quality issues and failed communications. We need a robust validation function that can identify common email format errors and provide specific feedback to users.
+
+## Reference Documentation
+**Required:**
+- Design: planning/design/detailed-design.md
+
+**Additional References (if relevant to this task):**
+- planning/research/validation-libraries.md (for email validation approach)
+
+**Note:** You MUST read the detailed design document before beginning implementation. Read additional references as needed for context.
 
 ## Technical Requirements
 1. Create a function that accepts an email string and returns validation results
