@@ -26,16 +26,6 @@ This sop guides the implementation of code tasks using test-driven development p
 
 ## Mode Behavior
 
-| Aspect | Interactive | FSC |
-|--------|------------|-----|
-| Collaboration | Confirm at each major step | Autonomous execution |
-| Decision-making | Present options, explain trade-offs | Make decisions independently |
-| User engagement | Active pair programming partner | No interaction after setup |
-| Feedback | Solicit and adapt to user input | Document all decisions |
-| Documentation | Moderate detail | Comprehensive logging |
-
-## Collaboration Patterns
-
 Apply these patterns throughout all steps based on the selected mode:
 
 **Interactive Mode:**
@@ -90,7 +80,7 @@ Initialize the project environment and create necessary directory structures.
 - You MUST read and summarize key information from selected files in context.md under "Existing Documentation"
 - If CODEASSIST.md is missing, suggest creating it with: additional constraints, pre/post SOP instructions, examples, troubleshooting
 
-> 💬 See [Collaboration Patterns](#collaboration-patterns) for mode-specific interaction guidance
+> 💬 See [Mode Behavior](#mode-behavior) for mode-specific interaction guidance
 
 ### 2. Explore Phase
 
@@ -109,7 +99,7 @@ Analyze the task description and existing documentation to identify core functio
 - You SHOULD ask about non-functional requirements that might not be explicitly stated
 - You SHOULD discuss edge cases and error handling expectations with the user
 
-> 💬 See [Collaboration Patterns](#collaboration-patterns) for mode-specific interaction guidance
+> 💬 See [Mode Behavior](#mode-behavior) for mode-specific interaction guidance
 
 #### 2.2 Research Existing Patterns
 
@@ -123,7 +113,7 @@ Search for similar implementations and identify interfaces, libraries, and compo
 - You SHOULD provide examples of similar patterns when available
 - You SHOULD document any best practices or patterns found in internal documentation
 
-> 💬 See [Collaboration Patterns](#collaboration-patterns) for mode-specific interaction guidance
+> 💬 See [Mode Behavior](#mode-behavior) for mode-specific interaction guidance
 
 #### 2.3 Create Code Context Document
 
@@ -145,7 +135,7 @@ Compile all findings into a comprehensive code context document.
 - You MUST clearly label any included code snippets as examples or references, not as the actual implementation
 - You MUST keep any included code snippets brief and focused on the specific concept being illustrated
 
-> 💬 See [Collaboration Patterns](#collaboration-patterns) for mode-specific interaction guidance
+> 💬 See [Mode Behavior](#mode-behavior) for mode-specific interaction guidance
 
 ### 3. Plan Phase
 
@@ -169,7 +159,7 @@ Create a comprehensive list of test scenarios covering normal operation, edge ca
 - You SHOULD discuss test data strategies and mocking approaches with the user
 - You SHOULD explain the reasoning behind the proposed test structure
 
-> 💬 See [Collaboration Patterns](#collaboration-patterns) for mode-specific interaction guidance
+> 💬 See [Mode Behavior](#mode-behavior) for mode-specific interaction guidance
 
 #### 3.2 Implementation Planning & Tracking
 
@@ -200,7 +190,7 @@ Outline the high-level structure of the implementation and create an implementat
 - You MUST verify all checklist items are complete before finalizing the implementation
 - You MUST maintain the implementation checklist in progress.md using markdown checkbox format
 
-> 💬 See [Collaboration Patterns](#collaboration-patterns) for mode-specific interaction guidance
+> 💬 See [Mode Behavior](#mode-behavior) for mode-specific interaction guidance
 
 ### 4. Code Phase
 
@@ -229,7 +219,7 @@ Write test cases based on the approved outlines, following strict TDD principles
 - You MUST otherwise continue automatically after verifying expected failures
 - You MUST follow the Build Output Management practices defined in the Best Practices section
 
-> 💬 See [Collaboration Patterns](#collaboration-patterns) for mode-specific interaction guidance
+> 💬 See [Mode Behavior](#mode-behavior) for mode-specific interaction guidance
 
 #### 4.2 Develop Implementation Code
 
@@ -265,7 +255,7 @@ Write implementation code to pass the tests, focusing on simplicity and correctn
 - You MUST otherwise continue automatically after verifying test results
 - You MUST follow the Build Output Management practices defined in the Best Practices section
 
-> 💬 See [Collaboration Patterns](#collaboration-patterns) for mode-specific interaction guidance
+> 💬 See [Mode Behavior](#mode-behavior) for mode-specific interaction guidance
 
 #### 4.3 Refactor and Optimize
 
@@ -291,7 +281,7 @@ If the implementation is complete, proceed with review of the implementation to 
 - You SHOULD document simplification opportunities in `{documentation_dir}/implementation/{task_name}/progress.md`
 - You SHOULD document significant refactorings and convention alignments in `{documentation_dir}/implementation/{task_name}/progress.md`
 
-> 💬 See [Collaboration Patterns](#collaboration-patterns) for mode-specific interaction guidance
+> 💬 See [Mode Behavior](#mode-behavior) for mode-specific interaction guidance
 
 #### 4.4 Validate Implementation
 
@@ -315,7 +305,7 @@ If the implementation meets all requirements and follows established patterns, p
 - You MUST verify that all dependencies are satisfied
 - You MUST follow the Build Output Management practices defined in the Best Practices section
 
-> 💬 See [Collaboration Patterns](#collaboration-patterns) for mode-specific interaction guidance
+> 💬 See [Mode Behavior](#mode-behavior) for mode-specific interaction guidance
 
 ### 5. Commit Phase
 
@@ -335,7 +325,7 @@ If all tests are passing, draft a conventional commit message and perform the ac
 - You MUST mark the prompt as complete in `{documentation_dir}/implementation/prompt-plan.md` only after verifying all implementation checklist items are complete and if a prompt_number was used as input
 - You SHOULD include the "🤖 Assisted by the [code-assist](https://code.amazon.com/packages/AmazonBuilderGenAIPowerUsersQContext/blobs/mainline/--/scripts/code-assist.sop.md) agent SOP" footer
 
-> 💬 See [Collaboration Patterns](#collaboration-patterns) for mode-specific interaction guidance
+> 💬 See [Mode Behavior](#mode-behavior) for mode-specific interaction guidance
 
 
 ## Desired Outcome
