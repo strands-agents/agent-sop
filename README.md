@@ -276,6 +276,16 @@ Single SOP source files can be distributed to multiple formats:
 
 ## Creating Agent SOPs
 
+### Authoring with AI Agents
+
+Agent SOPs can be authored in minutes using your favorite AI agent. For any MCP-compatible agent, simply use the strands-agents-sops MCP server and run the `sop-generator` agent SOP. Alternatively, you can use these tool-specific instructions:
+
+1. **Kiro** - Copy `rules/agent-sop-format.md` into your project's `.kiro/steering/` folder.
+2. **Amazon Q Developer** - Copy `rules/agent-sop-format.md` into your project's `.amazonq/rules/` folder.
+3. **Claude Code** - Install and use the Agent SOP generator skill.
+4. **Cursor** - Copy `rules/agent-sop-format.md` into your project's `.cursor/rules/` folder. Note: Change the file extension to `.mdc`
+5. **Cline** - Copy `rules/agent-sop-format.md` into your project's `.clinerules/` folder.
+
 ### Basic Structure
 
 ```markdown
