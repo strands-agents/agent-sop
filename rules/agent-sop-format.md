@@ -29,15 +29,15 @@ actions:
 
 examples:
   - input: |
-      # My Script
+      # My SOP
       
-      This is a non-standard script format.
+      This is a non-standard SOP format.
     output: |
-      # My Script
+      # My SOP
       
       ## Overview
       
-      This script helps users accomplish a specific task by guiding them through a series of steps.
+      This SOP helps users accomplish a specific task by guiding them through a series of steps.
       
       ## Parameters
       
@@ -81,18 +81,18 @@ This document defines the standard format for Agent SOPs. SOPs are markdown file
 1. All SOP files MUST use the `.sop.md` file extension.
 2. SOP files SHOULD have descriptive names using kebab-case (e.g., `idea-honing.sop.md`).
 
-## Script Structure
+## SOP Structure
 
-Each script MUST include the following sections:
+Each SOP MUST include the following sections:
 
 ### 1. Title and Overview
 
 ```markdown
-# [Script Name]
+# [SOP Name]
 
 ## Overview
 
-[A concise description of what the script does and when to use it]
+[A concise description of what the SOP does and when to use it]
 ```
 
 ### 2. Parameters
@@ -195,7 +195,7 @@ If [issue description], you should [resolution steps].
 
 ## RFC2119 Keywords
 
-Scripts MUST use the following keywords as defined in RFC2119 to indicate requirement levels:
+SOPs MUST use the following keywords as defined in RFC2119 to indicate requirement levels:
 
 - **MUST** (or **REQUIRED**): Absolute requirement
 - **MUST NOT** (or **SHALL NOT**): Absolute prohibition
@@ -239,13 +239,13 @@ Bad constraint without context:
 - **Performance concerns**: "as this could cause significant slowdowns..."
 - **Workflow disruption**: "because this interferes with established processes..."
 
-## Interactive Scripts
+## Interactive SOPs
 
-For scripts with interactive elements:
+For SOPs with interactive elements:
 
 1. The natural language description SHOULD clearly indicate when user interaction is expected
 2. Constraints MUST specify how to handle user responses
-3. The script SHOULD specify where to save interaction records
+3. The SOP SHOULD specify where to save interaction records
 
 Example:
 
@@ -270,5 +270,5 @@ Guide the user through a series of questions to refine their initial idea.
 5. Minimize complex conditional logic
 6. Specify file paths for all artifacts created
 7. Include troubleshooting guidance for common issues
-8. Test scripts thoroughly before sharing
+8. Test SOPs thoroughly before sharing
 9. Always list required parameters before optional parameters
