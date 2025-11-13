@@ -3,8 +3,8 @@ from .mcp import run_mcp_server
 from .skills import generate_anthropic_skills
 
 def main():
-    parser = argparse.ArgumentParser(description="Strands Agents SOPs")
-    subparsers = parser.add_subparsers(dest="command", help="Available commands")
+    parser = argparse.ArgumentParser(description="Strands Agents SOPs", prog="strands-agents-sops")
+    subparsers = parser.add_subparsers(dest="command", help="Available commands", required=False)
     
     # MCP server command (default)
     subparsers.add_parser("mcp", help="Run MCP server (default)")

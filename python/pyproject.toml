@@ -11,7 +11,7 @@ dependencies = [
 ]
 
 [project.scripts]
-strands-agents-sops = "strands_agents_sops.__main__:run_mcp_server"
+strands-agents-sops = "strands_agents_sops.__main__:main"
 
 [tool.hatch.build.targets.wheel]
 include = [
