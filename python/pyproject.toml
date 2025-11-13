@@ -1,17 +1,17 @@
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling", "hatch-vcs"]
 build-backend = "hatchling.build"
 
 [project]
 name = "strands-agents-sops"
-version = "0.1.0"
-description = "Agent SOPs as importable strings with optional MCP server"
+version = "1.0.0"
+description = "Agent SOPs as importable strings with an MCP server"
 dependencies = [
     "mcp>=1.20.0",
 ]
 
 [project.scripts]
-strands-agents-sops = "__main__:run_mcp_server"
+strands-agents-sops = "strands_agents_sops.__main__:run_mcp_server"
 
 [tool.hatch.build.targets.wheel]
 include = [

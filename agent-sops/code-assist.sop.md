@@ -2,29 +2,24 @@
 
 ## Overview
 
-This script guides the implementation of code tasks using test-driven development principles, following a structured Explore, Plan, Code, Commit workflow. It balances automation with user collaboration while adhering to existing package patterns and prioritizing readability and extensibility.
-
-The script acts as a Technical Implementation Partner and TDD Coach - providing guidance, generating test cases and implementation code that follows existing patterns, avoids over-engineering, and produces idiomatic, modern code in the target language.
-
-**Important Note:** This script maintains a strict separation between documentation and code. All documentation about the implementation process is stored in the documentation directory, while all actual code (both tests and implementation) must be placed in the appropriate directories within the repository root. No code files should ever be placed in the documentation directory.
+This sop guides the implementation of code tasks using test-driven development principles, following a structured Explore, Plan, Code, Commit workflow. It balances automation with user collaboration while adhering to existing package patterns and prioritizing readability and extensibility. The agent acts as a Technical Implementation Partner and TDD Coach - providing guidance, generating test cases and implementation code that follows existing patterns, avoids over-engineering, and produces idiomatic, modern code in the target language.
 
 ## Parameters
 
 - **task_description** (required): A description of the task to be implemented. This can be a detailed specification with requirements and acceptance criteria, a reference to a prompt from prompt-plan.md (e.g., "implement prompt 3 from prompt-plan.md"), or even a rough idea that will be refined during the explore and plan phases
 - **additional_context** (optional): Any supplementary information that would help with understanding the implementation context
-- **documentation_dir** (optional, default: "planning"): The directory where planning documents will be stored
+- **documentation_dir** (optional, default: ".planning"): The directory where planning documents will be stored
 - **repo_root** (optional, default: current working directory): The root directory of the repository for code implementation
 - **task_name** (optional): A short, descriptive name for the implementation task
 - **mode** (optional, default: "interactive"): The interaction mode:
-  - "interactive": Full collaboration with user confirmation at each step
-  - "minimal": Semi-autonomous mode with minimal user interaction at critical points
+  - "interactive": Collaboration with user confirmation at each step
   - "fsc" (Full Self-Coding): No user interaction after initial setup
 
 **Constraints for parameter acquisition:**
 - You MUST ask for all parameters upfront in a single prompt, not just required ones because this ensures efficient workflow and prevents repeated interruptions during execution
 - You MUST support multiple input methods for task_description and additional_context (direct input, file path, URL)
 - You MUST extract the specified prompt from prompt-plan.md if the task_description references it
-- You MUST normalize mode input to "interactive", "minimal", or "fsc"
+- You MUST normalize mode input to "interactive" or "fsc"
 - You MUST validate directory paths and generate task_name if not provided
 - You MUST confirm successful acquisition of all parameters before proceeding
 - If mode is "fsc", you MUST warn the user that no further interaction will be required
@@ -45,20 +40,16 @@ The script's behavior varies based on the selected mode:
 - Provide educational context when introducing patterns or techniques
 - Ask for user expertise in domain-specific areas
 
-**Minimal Mode:**
-- Proceed without confirmation at non-critical steps
-- Provide summaries at the end of each phase
-- Only ask for input on critical decisions
-- Make reasonable assumptions and document them
-- Check in with the user at phase transitions
-- Provide options at key decision points but with less detail
-
 **FSC Mode:**
 - Proceed through all phases without user interaction
 - Make all decisions autonomously
 - Document all assumptions and decisions thoroughly
 - Provide comprehensive summaries at the end
 - Create detailed logs of decision points and reasoning
+
+## Important Note
+This script maintains a strict separation between documentation and code. All documentation about the implementation process is stored in the documentation directory, while all actual code (both tests and implementation) must be placed in the appropriate directories within the repository root. No code files should ever be placed in the documentation directory.
+
 
 ## Steps
 
@@ -91,8 +82,7 @@ Initialize the project environment and create necessary directory structures.
 **Instruction File Discovery:**
 - You MUST run the find command to discover available instruction files
 - **Interactive Mode:** Present the discovered files to the user and ask which ones should be included for context
-- **Minimal Mode:** Automatically include the most important files: `AmazonQ.md`, `DEVELOPMENT.md`, `CONTRIBUTING.md`, `ARCHITECTURE.md`, `context.md`, `projectbrief.md`, `activeContext.md`
-- **FSC Mode:** Automatically include core context files (`AmazonQ.md`, `.clinerules/*.md`, `context.md`) plus Cline memory bank files (`projectbrief.md`, `packageStructure.md`, `productContext.md`, `activeContext.md`, `systemPatterns.md`, `techContext.md`, `progress.md`) plus task-relevant files
+- **FSC Mode:** Automatically include core context files (`AGENTS.md`, `README.md`, `CONTRIBUTING.md`) plus task-relevant files
 - You MUST read and summarize key information from selected files in the context.md file under an "Existing Documentation" section
 - If DEVELOPMENT.md is missing, you MUST suggest creating it with a template that includes:
   - Project type and structure
@@ -104,7 +94,6 @@ Initialize the project environment and create necessary directory structures.
 
 **Collaboration Guidance:**
 - **Interactive Mode:** Present the proposed directory structure for review, explain its purpose, and adjust based on user feedback. If DEVELOPMENT.md is missing, ask if they want to create it. Present discovered instruction files and ask which ones to include for context.
-- **Minimal Mode:** Briefly describe the structure, create it without confirmation, and only seek input if issues arise. Mention if DEVELOPMENT.md is missing. Automatically include key instruction files.
 - **FSC Mode:** Create the directory structure autonomously and document all decisions and actions in progress.md. Automatically select and include relevant instruction files based on task type. Note DEVELOPMENT.md status.
 
 ### 2. Explore Phase
@@ -129,7 +118,6 @@ Analyze the task description and existing documentation to identify core functio
 
 **Collaboration Guidance:**
 - **Interactive Mode:** Engage in detailed discussions about requirements, asking specific questions and validating understanding with the user. Help refine rough task descriptions into clear requirements and acceptance criteria.
-- **Minimal Mode:** Summarize requirements and only ask targeted questions about critical ambiguities. Suggest requirements and acceptance criteria for user confirmation when they're not explicitly provided.
 - **FSC Mode:** Analyze requirements independently, documenting all assumptions made during analysis. Derive implied requirements and acceptance criteria from rough task descriptions.
 
 #### 2.2 Research Existing Patterns
@@ -147,7 +135,6 @@ Search for similar implementations and identify interfaces, libraries, and compo
 
 **Collaboration Guidance:**
 - **Interactive Mode:** Share findings from repository searches with the user in real-time and collaboratively decide which patterns to follow.
-- **Minimal Mode:** Summarize key findings and present the most relevant patterns without extensive discussion.
 - **FSC Mode:** Conduct comprehensive repository searches independently and document all findings in detail with references.
 
 #### 2.3 Create Code Context Document
@@ -172,7 +159,6 @@ Compile all findings into a comprehensive code context document.
 
 **Collaboration Guidance:**
 - **Interactive Mode:** Present an outline of the code context document for user review and make adjustments based on feedback.
-- **Minimal Mode:** Provide a brief summary of the document structure and only seek input on critical uncertainties.
 - **FSC Mode:** Create the code context document autonomously with comprehensive information based on available resources.
 
 ### 3. Plan Phase
@@ -200,7 +186,6 @@ Create a comprehensive list of test scenarios covering normal operation, edge ca
 
 **Collaboration Guidance:**
 - **Interactive Mode:** Present initial test scenarios and ask for feedback on coverage, approach, and edge cases.
-- **Minimal Mode:** Present a concise summary of the proposed test strategy and only seek input on critical test decisions.
 - **FSC Mode:** Design the complete test strategy independently with comprehensive coverage of all scenarios.
 
 #### 3.2 Implementation Planning & Tracking
@@ -234,7 +219,6 @@ Outline the high-level structure of the implementation and create an implementat
 
 **Collaboration Guidance:**
 - **Interactive Mode:** Present multiple implementation approaches with clear pros and cons and discuss architectural decisions collaboratively.
-- **Minimal Mode:** Present a concise summary of the proposed implementation approach with brief explanations of key decisions.
 - **FSC Mode:** Design the complete implementation approach independently with detailed documentation of architectural decisions.
 
 ### 4. Code Phase
@@ -266,7 +250,6 @@ Write test cases based on the approved outlines, following strict TDD principles
 
 **Collaboration Guidance:**
 - **Interactive Mode:** Present the test implementation plan before writing any code and review test code after implementing each logical group.
-- **Minimal Mode:** Implement tests with minimal interaction and show completed test implementations for quick review.
 - **FSC Mode:** Implement all tests autonomously following best practices and document test implementation decisions.
 
 #### 4.2 Develop Implementation Code
@@ -305,7 +288,6 @@ Write implementation code to pass the tests, focusing on simplicity and correctn
 
 **Collaboration Guidance:**
 - **Interactive Mode:** Present implementation options with pros and cons before writing code and seek feedback on each logical component.
-- **Minimal Mode:** Briefly describe the implementation approach and only ask for input on critical decisions.
 - **FSC Mode:** Implement code autonomously following best practices and document all implementation decisions.
 
 #### 4.3 Refactor and Optimize
@@ -334,7 +316,6 @@ If the implementation is complete, proceed with review of the implementation to 
 
 **Collaboration Guidance:**
 - **Interactive Mode:** Present identified refactoring opportunities and coding convention mismatches with clear rationales and discuss the benefits and risks of each alignment.
-- **Minimal Mode:** Summarize key refactoring opportunities and convention alignments, implementing obvious improvements without extensive discussion.
 - **FSC Mode:** Identify and implement refactorings and convention alignments autonomously with detailed documentation of decisions and rationale.
 
 #### 4.4 Validate Implementation
@@ -361,7 +342,6 @@ If the implementation meets all requirements and follows established patterns, p
 
 **Collaboration Guidance:**
 - **Interactive Mode:** Walk through the implementation with the user to verify it meets all requirements and discuss any potential gaps.
-- **Minimal Mode:** Provide a summary of how the implementation meets each requirement and highlight any areas of concern.
 - **FSC Mode:** Perform comprehensive validation against all requirements and document how each requirement is satisfied.
 
 ### 5. Commit Phase
@@ -384,7 +364,6 @@ If all tests are passing, draft a conventional commit message and perform the ac
 
 **Collaboration Guidance:**
 - **Interactive Mode:** Present the draft commit message for review, explain the files to be committed, and ask for confirmation before executing.
-- **Minimal Mode:** Show the draft commit message and file list for quick review and only ask for confirmation before committing.
 - **FSC Mode:** Create and execute the commit autonomously with thorough documentation of all decisions.
 
 
@@ -426,7 +405,7 @@ mode: "interactive"
 **Input:**
 ```
 task_description: "Add logging to the authentication service"
-mode: "minimal"
+mode: "interactive"
 ```
 
 **Expected Process:**
@@ -456,7 +435,7 @@ mode: "interactive"
 **Input:**
 ```
 task_description: "implement prompt 3 from prompt-plan.md"
-mode: "minimal"
+mode: "interactive"
 ```
 
 **Expected Process:**

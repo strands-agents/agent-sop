@@ -2,17 +2,12 @@
 
 ## Overview
 
-This script guides you through the process of transforming a rough idea into a detailed design document with an implementation plan and todo list. It follows the Prompt-Driven Development methodology to systematically refine your idea, conduct necessary research, create a comprehensive design, and develop an actionable implementation plan. The process is designed to be iterative, allowing movement between requirements clarification and research as needed.
+This sop guides you through the process of transforming a rough idea into a detailed design document with an implementation plan and todo list. It follows the Prompt-Driven Development methodology to systematically refine your idea, conduct necessary research, create a comprehensive design, and develop an actionable implementation plan. The process is designed to be iterative, allowing movement between requirements clarification and research as needed.
 
 ## Parameters
 
 - **rough_idea** (required): The initial concept or idea you want to develop into a detailed design
-- **project_dir** (optional, default: "planning"): The base directory where all project files will be stored
-- **checkpointing** (optional, default: "false"): Enable progress checkpointing during implementation. Options:
-  - "false" or "none": No checkpointing (default)
-  - "notes-only" or "notes": Create checkpoint notes only
-  - "git-only" or "git": Create git commits only
-  - "both": Create both checkpoint notes and git commits
+- **project_dir** (optional, default: ".planning"): The base directory where all project files will be stored
 
 **Constraints for parameter acquisition:**
 - You MUST ask for all required parameters upfront in a single prompt rather than one at a time
@@ -25,7 +20,7 @@ This script guides you through the process of transforming a rough idea into a d
 - You MUST confirm successful acquisition of all parameters before proceeding
 - You SHOULD save the acquired rough idea to a consistent location for use in subsequent steps
 - You MUST NOT overwrite the existing project directory because this could destroy previous work and cause data loss
-- You MUST ask for project_dir if it is not given and default "planning" directory already exist and has contents from previous iteration
+- You MUST ask for project_dir if it is not given and default ".planning" directory already exist and has contents from previous iteration
 
 ## Steps
 
@@ -194,165 +189,6 @@ Create a structured implementation plan with a series of steps for implementing 
 - You MUST ensure the plan covers all aspects of the design
 - You SHOULD sequence steps to validate core functionality early
 - You MUST ensure the checklist items correspond directly to the steps in the implementation plan
-- If checkpointing is enabled, You MUST include checkpoint instructions in the implementation plan as described in Step 8.1
-
-### 7.1. Add Checkpoint Instructions (if checkpointing enabled)
-
-If the user has enabled checkpointing, add checkpoint instructions to the implementation plan.
-
-**Constraints:**
-- You MUST ONLY execute this step if the checkpointing parameter is not "false" or "none"
-- You MUST add checkpoint instructions to the prompt plan based on the checkpointing type:
-  - For "notes-only" or "notes": Add notes checkpointing instructions
-  - For "git-only" or "git": Add git checkpointing instructions
-  - For "both": Add both types of checkpointing instructions
-- You MUST add checkpoint instructions after every step in the implementation plan
-- You MUST create a checkpoint template section in the implementation plan
-- You MUST include specific instructions for when and how to create checkpoints
-
-**Checkpoint Instructions Format:**
-
-For **Notes Checkpointing**:
-```markdown
-## Checkpoint Instructions
-
-### Notes Checkpointing
-After completing each step, create a checkpoint file at {project_dir}/implementation/checkpoint-step-N-complete.md with the following format:
-
-**Template:**
-```
-# [Project Name] - Implementation Checkpoint
-
-**Status:** Step N Complete - Ready for Step N+1
-**Date:** [Current Date]
-**Next Step:** [Brief description of next step]
-
-## Completed Work
-
-### ✅ Step N: [Step Title]
-- [Key achievement 1]
-- [Key achievement 2]
-- [Key achievement 3]
-
-[Include previous completed steps if this is not the first checkpoint]
-
-## Technical Implementation Details
-
-[Describe key technical decisions, architecture choices, or implementation patterns used]
-
-## Test Results
-[Include test results, coverage information, or validation outcomes]
-
-## Next Steps - Step N+1: [Next Step Title]
-
-### Objectives
-[List the main objectives for the next step]
-
-### Implementation Focus
-[Describe the key areas of focus for the next implementation step]
-
-## Files Status
-
-### Core Implementation Files
-- [List key files and their status: ✅ complete, 🔄 in progress, ⏳ placeholder]
-
-### Test Files
-- [List test files and their status]
-
-## How to Continue
-
-Reference this checkpoint and continue with:
-
-> "Continue [Project Name] implementation with Step N+1: [Next Step Title]. [Brief guidance for continuation]"
-
----
-
-**Ready for Step N+1**: [Summary of readiness state]
-```
-
-For **Git Checkpointing**:
-```markdown
-### Git Checkpointing
-After completing each step, create a git commit with all src and test code changes:
-
-**Constraints:**
-- You MUST add and commit all changes in src/ and test/ directories
-- You MUST NOT commit files in planning/ directory or build artifacts
-- You MUST use descriptive commit messages following this format:
-  ```
-  feat: implement [brief description of completed work]
-
-  - [Key achievement 1]
-  - [Key achievement 2]
-  - [Key achievement 3]
-
-  Completes Step N of implementation plan
-  ```
-- You MUST verify the git status before committing
-- You MUST assume the user has properly set up their git environment and branch
-
-**Git Commands:**
-```bash
-# Add source and test files only
-git add src/ test/
-
-# Commit with descriptive message
-git commit -m "feat: implement [description]
-
-- [achievement 1]
-- [achievement 2]
-
-Completes Step N of implementation plan"
-```
-```
-
-For **Both Types**:
-Include both sets of instructions with a note that both should be executed at checkpoint intervals.
-```
-
-**Example Format (truncated):**
-```markdown
-# Implementation Prompt Plan
-
-## Checklist
-- [ ] Step 1: Set up project structure and core interfaces
-- [ ] Step 2: Implement data models and validation
-- [ ] Step 3: Create storage mechanism
-- [ ] Step 4: Implement core business logic
-- [ ] Step 5: Add API endpoints
-- [ ] Step 6: Implement authentication and authorization
-- [ ] Step 7: Add error handling and logging
-- [ ] Step 8: Create integration tests
-- [ ] Step 9: Wire everything together
-
-## Steps
-
-### Step 1: Set up project structure and core interfaces
-Create the initial project structure following the architecture defined in the design document. Implement the core interfaces that will define the system boundaries.
-
-1. Set up the directory structure for models, services, repositories, and API components
-2. Create interface definitions for the core data models based on the requirements
-3. Set up a basic test framework and add a simple smoke test
-4. Create placeholder files for the main modules we'll implement
-
-Focus on establishing a clean architecture with clear separation of concerns. Don't implement any business logic yet, just define the interfaces and structure.
-
-**Demo:** A working project structure with placeholder endpoints that return mock data, demonstrating the basic application framework is functional.
-
-### Step 2: Implement data models and validation
-Implement the data models defined in the design document with appropriate validation rules.
-
-1. Create the User model with validation for required fields as specified in the requirements
-2. Implement the Document model with the relationships described in the design
-3. Add unit tests for model validation that verify the requirements are met
-4. Ensure all models implement the interfaces defined in Step 1
-
-Focus on strong typing and validation to ensure data integrity throughout the system. Make sure to handle edge cases identified during the requirements clarification phase.
-
-**Demo:** Working data models with validation that can create, validate, and serialize/deserialize data objects with proper error handling for invalid inputs.
-
-[Additional steps continue...]
-```
 
 ### 8. Summarize and Present Results
 
@@ -365,34 +201,6 @@ Provide a summary of all artifacts created and next steps.
 - You MUST suggest next steps for the user
 - You SHOULD highlight any areas that may need further refinement
 - You MUST present this summary to the user in the conversation
-- If checkpointing is enabled, You MUST include checkpoint guidance in the summary
-
-### 9. Implementation Checkpoint Execution (if checkpointing enabled)
-
-Execute checkpointing during the implementation phase when following the prompt plan.
-
-**Constraints:**
-- You MUST ONLY execute checkpointing if the checkpointing parameter is not "false" or "none"
-- You MUST create checkpoints after completing each step during implementation
-- You MUST follow the checkpoint instructions created in Step 8.1
-- For notes checkpointing, You MUST create checkpoint files in {project_dir}/implementation/
-- For git checkpointing, You MUST create git commits with descriptive messages
-- You MUST ensure checkpoint files capture:
-  - Current progress status
-  - Completed work summary
-  - Technical implementation details
-  - Test results and validation
-  - Next steps and objectives
-  - File status inventory
-  - Clear continuation instructions
-- You MUST ensure git commits include:
-  - All src/ and test/ code changes
-  - Descriptive commit messages with achievements
-  - Reference to completed step number
-- You MUST NOT include planning/ directory files in git commits because these are working documents not intended for the main codebase
-- You MUST NOT include build artifacts, logs, or temporary files in git commits because these are generated files that should not be version controlled
-- You MUST assume the user has properly configured their git environment and is on the appropriate branch
-- You MUST provide clear instructions for how to continue from each checkpoint
 
 ## Examples
 

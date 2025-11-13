@@ -2,13 +2,13 @@
 
 ## Overview
 
-This script generates structured code task files from rough descriptions, ideas, or PDD implementation plans. It automatically detects the input type and creates properly formatted code task files following Amazon's code task format specification. For PDD plans, it processes implementation steps one at a time to allow for learning and adaptation between steps.
+This sop generates structured code task files from rough descriptions, ideas, or PDD implementation plans. It automatically detects the input type and creates properly formatted code task files following Amazon's code task format specification. For PDD plans, it processes implementation steps one at a time to allow for learning and adaptation between steps.
 
 ## Parameters
 
 - **input** (required): Task description, file path, or PDD plan path. Can be a simple sentence, paragraph, detailed explanation, or path to a PDD implementation plan.
 - **step_number** (optional): For PDD plans only - specific step to process. If not provided, automatically determines the next uncompleted step from the checklist.
-- **output_dir** (optional, default: current directory): Directory where the code task file will be created
+- **output_dir** (optional, default: ".planning"): Directory where the code task file will be created
 - **task_name** (optional): For descriptions only - specific task name. If not provided, will be generated from the description.
 
 **Constraints for parameter acquisition:**

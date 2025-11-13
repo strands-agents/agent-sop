@@ -1,121 +1,130 @@
 # Codebase Summary
+
 ## Overview
 
-This script helps you generate comprehensive summary documentation for a codebase. It creates a structured set of metadata files that describe the system architecture, components, interfaces, and workflows. The documentation is
-organized in a way that makes it easy for an LLM to understand the system and assist with feature
-design. The script creates a knowledge base index file that agents can leverage when added to
-context, enabling more effective assistance with system-related tasks.
+This SOP analyzes a codebase and generates comprehensive documentation including structured metadata files that describe the system architecture, components, interfaces, and workflows. It can create targeted documentation files like AGENTS.md (README for AI agents), README.md, CONTRIBUTING.md, or generate a complete documentation ecosystem. The documentation is organized to make it easy for AI assistants to understand the system and help with development tasks.
 
 ## Parameters
 
-- **output_dir** (optional, default: ".planning"): Directory where documentation will be stored
-- **current_state_dir** (optional, default: "current_state"): Subdirectory for current state documentation
-- **consolidate** (optional, default: true): Whether to create a consolidated AGENTS.md documentation file
+- **output_dir** (optional, default: ".summary"): Directory where documentation will be stored
+- **consolidate** (optional, default: true): Whether to create a consolidated documentation file
+- **consolidate_target** (optional, default: "AGENTS.md"): Target file for consolidation (e.g., "README.md", "CONTRIBUTING.md", or custom filename). Only used if consolidate is true
+- **consolidate_prompt** (optional): Description of how to structure the consolidated content for the target file type (e.g., "Create an AGENTS.md file optimized for AI coding assistants"). Only used if consolidate is true
 - **check_consistency** (optional, default: true): Whether to check for inconsistencies across documents
 - **check_completeness** (optional, default: true): Whether to identify areas lacking sufficient detail
 - **update_mode** (optional, default: false): Whether to update existing documentation based on recent commits
-- **code_analysis_depth** (optional, default: 2): Depth level for code analysis (1-3, where 3 is most detailed)
 - **codebase_path** (optional, default: current directory): Path to the codebase to analyze
 
 **Constraints for parameter acquisition:**
-- You MUST ask for all parameters upfront in a single prompt
+- You MUST ask for all parameters upfront in a single prompt rather than one at a time
+- You MUST support multiple input methods including:
+  - Direct input: Text provided directly in the conversation
+  - File path: Path to a local file containing codebase information
+  - Directory path: Path to the codebase to analyze
+  - Other methods: You SHOULD be open to other ways the user might want to specify the codebase
+- You MUST use appropriate tools to access content based on the input method
 - You MUST confirm successful acquisition of all parameters before proceeding
+- You MUST validate that the codebase_path exists and is accessible
+- If consolidate is false, you MUST inform the user that consolidate_target and consolidate_prompt will be ignored
 
 ## Steps
 
-### 1. Setup Directory Structure
+### 1. Setup and Directory Structure
 
-Create the necessary directory structure for organizing system metadata.
+Initialize the analysis environment and create necessary directory structure.
 
 **Constraints:**
-- You MUST create the output directory and subdirectories if they don't exist
-- You MUST create the following directory structure:
-  - {output_dir}/{current_state_dir}/ (for main documentation files)
-  - {output_dir}/{current_state_dir}/code_analysis/ (for code analysis artifacts)
+- You MUST validate that the codebase_path exists and is accessible
+- You MUST create the output_dir if it doesn't exist
 - You MUST inform the user about the directory structure being created
-- If in update mode, you MUST:
-  - Check if the index.md file exists in the specified output directory
-  - Extract the last update timestamp from the index.md file
-  - Verify the timestamp format and validity
+- If update_mode is true, you MUST:
+  - Check if an index.md file exists in the output_dir
+  - Extract the last update timestamp from the index.md file if it exists
+  - Use git commands to identify commits that occurred after the last documentation update
+  - Inform the user about update mode and the reference timestamp being used
+- If update_mode is false or no previous documentation exists, you MUST inform the user that full analysis will be performed
+- You MUST create subdirectories for organizing different types of documentation artifacts
 
-### 2. Analyze codebase
+### 2. Analyze Codebase Structure
 
-Analyze the codebase to understand its structure, packages, and relationships.
+Perform comprehensive analysis of the codebase to understand its structure, components, and relationships.
 
 **Constraints:**
-- You MUST use appropriate tools to gather information about the codebase
-- You MUST identify all packages in the codebase
-- You MUST document basic codebase information in {output_dir}/{current_state_dir}/codebase_info.md
-- If in update mode, you MUST:
-  - Use git commands to identify commits that occurred after the last documentation update
-  - Analyze which packages and files were modified in those commits
-  - Prioritize documentation updates for the modified components
+- You MUST use appropriate tools to gather information about the codebase structure
+- You MUST identify all packages, modules, and major components in the codebase
+- You MUST analyze file organization, directory structure, and architectural patterns
+- You MUST identify supported and unsupported programming languages
+- You MUST document the technology stack and dependencies
+- You MUST create a hierarchical map of the codebase structure
+- You MUST identify key interfaces, APIs, and integration points
+- You MUST analyze code patterns and design principles used throughout the codebase
+- You MUST document basic codebase information in {output_dir}/codebase_info.md
+- If update_mode is true, you MUST:
+  - Analyze which packages and files were modified in recent commits
+  - Prioritize analysis of modified components
   - Create a change summary document listing all relevant changes since last update
 
-### 3. Generate Codebase Overview
+### 3. Generate Documentation Files
 
-Create a high-level overview of the codebase structure.
-
-**Constraints:**
-- You MUST generate overview for the entire codebase
-- You MUST save the codebase overview to {output_dir}/{current_state_dir}/code_analysis/codebase_overview.md
-- You MUST document the high-level structure in {output_dir}/{current_state_dir}/architecture.md
-- You MUST include information about file organization, major components, and their relationships
-- You MUST extract key architectural patterns and design principles from the codebase
-- You MUST organize the overview in a hierarchical structure for easy navigation
-- You MUST document which parts of the codebase use supported vs. unsupported languages
-- If in update mode, you MUST:
-  - Compare the new overview with the existing one to identify structural changes
-  - Document significant architectural changes in a "Recent Changes" section
-
-### 4. Generate Documentation Files
-
-Create documentation files for different aspects of the system.
+Create comprehensive documentation files for different aspects of the system.
 
 **Constraints:**
-- You MUST create a comprehensive knowledge base index file ({output_dir}/{current_state_dir}/index.md) that:
-  - Provides explicit instructions for agents on how to use the documentation
+- You MUST create a comprehensive knowledge base index file ({output_dir}/index.md) that:
+  - Provides explicit instructions for AI assistants on how to use the documentation
   - Contains rich metadata about each file's purpose and content
   - Includes a table of contents with descriptive summaries for each document
   - Explains relationships between different documentation files
-  - Guides an agent on which files to consult for specific types of questions
+  - Guides AI assistants on which files to consult for specific types of questions
   - Contains brief summaries of each file's content to help determine relevance
-  - Is designed to be the only file needed in context for an agent to effectively answer questions
+  - Is designed to be the primary file needed in context for AI assistants to effectively answer questions
   - Includes a timestamp indicating when the documentation was last generated or updated
-- You MUST create placeholder files for each aspect of the system (architecture, components, interfaces, data models, workflows, dependencies) in {output_dir}/{current_state_dir}/
-- You MUST create a project tracker to manage the documentation process
-- You MUST ensure the index file is structured to be easily parsed by an agent when added to context
-- If in update mode, you MUST:
+- You MUST create documentation files for different aspects of the system:
+  - {output_dir}/architecture.md (system architecture and design patterns)
+  - {output_dir}/components.md (major components and their responsibilities)
+  - {output_dir}/interfaces.md (APIs, interfaces, and integration points)
+  - {output_dir}/data_models.md (data structures and models)
+  - {output_dir}/workflows.md (key processes and workflows)
+  - {output_dir}/dependencies.md (external dependencies and their usage)
+- You MUST ensure each documentation file contains relevant information from the codebase analysis
+- If update_mode is true, you MUST:
   - Preserve existing documentation structure where possible
-  - Only create new placeholder files for newly identified components
-  - Mark updated sections in the documentation with an "Updated on [date]" notation
+  - Only update sections related to modified components
+  - Mark updated sections with an "Updated on [date]" notation
 
-### 5. Review Documentation
+### 4. Review Documentation
 
 Review the documentation for consistency and completeness.
 
 **Constraints:**
-- You MUST check for inconsistencies across documents
-- You MUST identify areas lacking sufficient detail
-- You MUST document any inconsistencies or gaps found in separate files
+- If check_consistency is true, you MUST check for inconsistencies across documents
+- If check_completeness is true, you MUST identify areas lacking sufficient detail
+- You MUST document any inconsistencies or gaps found in {output_dir}/review_notes.md
 - You MUST specifically identify gaps resulting from language support limitations
-- You SHOULD use insights from the code analysis to identify areas needing more detail
+- You SHOULD use insights from the codebase analysis to identify areas needing more detail
+- You MUST provide recommendations for improving documentation quality
 
-### 6. Consolidate Documentation
+### 5. Consolidate Documentation
 
-Create a consolidated AGENTS.md documentation file that combines all content from the current_state directory.
+Create a consolidated documentation file if requested.
 
 **Constraints:**
-- You MUST create a consolidated AGENTS.md documentation file if requested
-- You MUST organize the content in a coherent structure
-- You MUST ensure the consolidated AGENTS.md file contains all necessary information
+- If consolidate is true, you MUST create a consolidated documentation file
+- You MUST use consolidate_target as the filename for the consolidated file
+- If consolidate_prompt is provided, you MUST use it to guide the structure and content of the consolidated file
+- You MUST tailor the consolidated content to the target file type:
+  - AGENTS.md: Focus on AI assistant context, project structure, development patterns, and assistant-specific instructions
+  - README.md: Focus on project overview, installation, usage, and getting started information
+  - CONTRIBUTING.md: Focus on development setup, coding standards, contribution workflow, and guidelines
+  - Other files: Adapt content based on filename and consolidate_prompt
+- You MUST organize the consolidated content in a coherent structure appropriate for the target audience
 - You MUST include a comprehensive table of contents with descriptive summaries
 - You MUST add metadata tags to each section to facilitate targeted information retrieval
 - You MUST include cross-references between related sections
-- You MUST clearly indicate sections with limited analysis due to language support constraints
-- You MUST include information from code_analysis directory in the consolidated file
+- You MUST include information from all relevant documentation files
+- You MUST include metadata about when the consolidated file was generated or last updated
+- If consolidate is false, you MUST skip this step and inform the user that no consolidated file will be created
 
-### 7. Summary and Next Steps
+### 6. Summary and Next Steps
 
 Provide a summary of the documentation process and suggest next steps.
 
@@ -123,154 +132,142 @@ Provide a summary of the documentation process and suggest next steps.
 - You MUST summarize what has been accomplished
 - You MUST suggest next steps for using the documentation
 - You MUST provide guidance on maintaining and updating the documentation
-- You MUST include specific instructions for adding the documentation to an agents context:
-  - Recommend using /context add {output_dir}/{current_state_dir}/index.md to add just the index file
-  - Explain how an agent will leverage the index.md file as a knowledge base to find relevant information
-  - Emphasize that the index.md contains sufficient metadata for an agent to understand which files contain detailed information
-- If in update mode, you MUST:
+- You MUST include specific instructions for adding the documentation to AI assistant context:
+  - Recommend using the index.md file as the primary context file
+  - Explain how AI assistants can leverage the index.md file as a knowledge base to find relevant information
+  - Emphasize that the index.md contains sufficient metadata for assistants to understand which files contain detailed information
+  - Provide example queries that demonstrate how to effectively use the documentation
+- If consolidate is true, you MUST provide guidance on using the consolidated file
+- If update_mode was used, you MUST:
   - Summarize what changes were detected and updated in the documentation
   - Highlight any significant architectural changes
   - Recommend areas that might need further manual review
 
-## Update Mode Implementation
-
-When running in update mode, the script follows these steps to update existing documentation:
-
-1. **Extract Last Update Timestamp**
-   - Reads the index.md file to find the "Last Updated" timestamp
-   - Validates the timestamp format (ISO 8601)
-   - Uses this timestamp as the reference point for finding changes
-
-2. **Identify Recent Changes**
-   - Uses git commands to find commits after the last update timestamp:
-     bash
-    git log --since="[TIMESTAMP]" --name-status
-
-
-   - Analyzes which packages and files were modified
-   - Creates a change summary document listing all relevant changes
-
-3. **Selective Documentation Update**
-   - Updates only documentation sections related to changed components
-   - Preserves existing documentation for unchanged components
-   - Adds "Updated on [date]" notations to modified sections
-   - Creates a "Recent Changes" section in the index.md file
-
-4. **Update Timestamp**
-   - Updates the "Last Updated" timestamp in the index.md file to the current time
-   - Ensures the timestamp is in ISO 8601 format for future updates
-
 ## Examples
 
-### Example Input
+### Example Input (Default AGENTS.md)
+```
+output_dir: ".summary"
+consolidate: true
+consolidate_target: "AGENTS.md"
+consolidate_prompt: "Create a comprehensive AGENTS.md file optimized for AI coding assistants"
+codebase_path: "/path/to/project"
+```
 
-
-Run codebase-summary.sop.md output_dir=custom_docs code_analysis_depth=3
-
-### Example Output
-
-Verifying dependencies...
-✅ All required tools are available.
-
+### Example Output (Generate Mode)
+```
 Setting up directory structure...
-✅ Created directory custom_docs/current_state/
-✅ Created directory custom_docs/current_state/code_analysis/
+✅ Created directory .summary/
+✅ Created subdirectories for documentation artifacts
 
-Analyzing codebase...
-✅ Found 12 packages in the codebase.
-✅ Codebase information saved to custom_docs/current_state/codebase_info.md
-
-Building code index...
-⏳ This may take a few minutes for large codebases...
-✅ Code index built successfully!
-✅ Supported languages detected: Java (full support), JavaScript (full support), Python (full
-support)
-✅ Partially supported languages: Go (basic structure only)
-
-Generating codebase overview...
-✅ Codebase overview saved to custom_docs/current_state/code_analysis/codebase_overview.md
-✅ Architecture documentation saved to custom_docs/current_state/architecture.md
+Analyzing codebase structure...
+✅ Found 15 packages across 3 programming languages
+✅ Identified 45 major components and 12 key interfaces
+✅ Codebase information saved to .summary/codebase_info.md
 
 Generating documentation files...
 ✅ Created index.md with knowledge base metadata
-✅ Created placeholder files for all system aspects
-✅ Project tracker created at custom_docs/project_tracker.md
+✅ Generated architecture.md, components.md, interfaces.md
+✅ Generated data_models.md, workflows.md, dependencies.md
 
 Reviewing documentation...
 ✅ Consistency check complete
 ✅ Completeness check complete
-✅ Found 3 areas needing more detail (documented in custom_docs/incomplete.md)
+✅ Review notes saved to .summary/review_notes.md
 
 Consolidating documentation...
-✅ Consolidated AGENTS.md documentation created
+✅ Created AGENTS.md optimized for AI coding assistants
+✅ Included comprehensive project context and development guidance
 
 Summary and Next Steps:
 ✅ Documentation generation complete!
+✅ To use with AI assistants, add .summary/index.md to context
+✅ AGENTS.md provides comprehensive guidance for AI coding assistance
+```
 
-### Example Usage
+### Example Input (README.md)
+```
+consolidate_target: "README.md"
+consolidate_prompt: "Create a user-friendly README that explains the project purpose, installation, and usage"
+```
 
+### Example Input (No Consolidation)
+```
+consolidate: false
+check_consistency: true
+check_completeness: true
+```
 
-Run codebase-summary.sop.md
+### Example Output (Update Mode)
+```
+Update mode detected - checking for recent changes...
+✅ Found existing documentation with timestamp: 2024-01-15T10:30:00Z
+✅ Identified 8 commits since last update affecting 3 packages
 
-This will generate documentation in the default .planning directory, check for inconsistencies and completeness, and create a consolidated documentation file.
+Analyzing recent changes...
+✅ Updated components: AuthService, DataProcessor, APIGateway
+✅ Change summary saved to .summary/recent_changes.md
 
-For more specific configuration:
+Updating documentation...
+✅ Updated architecture.md with new AuthService patterns
+✅ Updated components.md with DataProcessor changes
+✅ Updated interfaces.md with new API endpoints
+✅ Marked updated sections with timestamps
 
+Consolidating updated documentation...
+✅ Updated AGENTS.md with recent changes
+✅ Added "Recent Changes" section highlighting updates
 
-Run codebase-summary.sop.md output_dir=.my_documentation consolidate=true code_analysis_depth=3
-
-To update existing documentation based on recent commits:
-
-
-Run codebase-summary.sop.md update_mode=true output_dir=.planning
-
-To analyze a specific codebase path:
-
-
-Run codebase-summary.sop.md codebase_path=/path/to/your/codebase
+Summary:
+✅ Documentation updated based on 8 recent commits
+✅ 3 major components updated in documentation
+✅ Review .summary/recent_changes.md for detailed change summary
+```
 
 ### Example Output Structure
-
-
-AGENTS.md
-.planning/
-├── current_state/
-│   ├── index.md
-│   ├── codebase_info.md
-│   ├── architecture.md
-│   ├── components.md
-│   ├── interfaces.md
-│   ├── data_models.md
-│   ├── workflows.md
-│   ├── dependencies.md
-│   └── code_analysis/
-│       ├── codebase_overview.md
-│       ├── component_details.md
-│       └── symbol_references.md
-├── project_tracker.md
-├── inconsistencies.md
-└── incomplete.md
-
-
-## Desired Outcome
-
-* A complete, well-structured documentation set for the codebase
-* A comprehensive knowledge base index file that can be added to an agents context
-* Clear documentation of the system architecture, components, interfaces, and workflows
-* Identification of any inconsistencies or gaps in the documentation
-* A consolidated AGENTS.md documentation file (if requested) that combines all content
-* A seamless experience for users to understand and navigate their codebase
+```
+.summary/
+├── index.md (knowledge base index)
+├── codebase_info.md
+├── architecture.md
+├── components.md
+├── interfaces.md
+├── data_models.md
+├── workflows.md
+├── dependencies.md
+├── review_notes.md
+├── recent_changes.md (if update_mode)
+└── AGENTS.md (consolidated file)
+```
 
 ## Troubleshooting
 
 ### Large Codebase Performance
-For very large codebases, the script may take some time to run. Consider:
-• Setting a specific codebase_path to focus on a subset of the codebase
-• Reducing the code_analysis_depth parameter
-• Breaking the analysis into smaller chunks by running the script multiple times with different focus areas
+For very large codebases that take significant time to analyze:
+- You SHOULD provide progress updates during analysis
+- You SHOULD suggest focusing on specific directories or components if performance becomes an issue
+- Consider running with consolidate=false to generate individual files faster
 
 ### Update Mode Issues
 If update mode fails to detect changes correctly:
-• Verify that the index.md file contains a valid timestamp in ISO format
-• Check if git history is available and accessible
-• Try running in non-update mode to generate fresh documentation
+- Verify that the index.md file contains a valid timestamp in ISO format
+- Check if git history is available and accessible
+- Try running with update_mode=false to generate fresh documentation
+
+### Consolidation Issues
+If consolidation fails or produces poor results:
+- Check that consolidate_prompt provides clear guidance for the target file type
+- Verify that all source documentation files were generated successfully
+- Consider using a more specific consolidate_prompt for better results
+
+### Missing Documentation Sections
+If certain aspects of the codebase are not well documented:
+- Check the review_notes.md file for identified gaps
+- Consider running with check_completeness=true to identify missing areas
+- Review the codebase analysis to ensure all components were properly identified
+
+### Git Integration Problems
+If git commands fail during update mode:
+- Ensure the codebase_path is within a valid git repository
+- Check that git is installed and accessible
+- Verify that the user has appropriate permissions to read git history
