@@ -63,7 +63,7 @@ Initialize the project environment and create necessary directory structures.
   - Use `mkdir -p {documentation_dir}` to explicitly create the documentation directory as a directory
   - Create the full path: `{documentation_dir}/implementation/{task_name}/` with logs subdirectory using `mkdir -p`
   - Verify the directory structure was created successfully before proceeding
-- You MUST discover existing instruction files using: `find . -maxdepth 3 -type f \( -path "*/node_modules/*" -o -path "*/build/*" -o -path "*/.venv/*" -o -path "*/venv/*" -o -path "*/__pycache__/*" -o -path "*/.git/*" -o -path "*/dist/*" -o -path "*/target/*" \) -prune -o \( -name "*.md" -o -name "AmazonQ.md" \) -print | grep -E "(CODEASSIST|DEVELOPMENT|SETUP|BUILD|CONTRIBUTING|ARCHITECTURE|TESTING|DEPLOYMENT|TROUBLESHOOTING|AmazonQ|context|cline-context|README|projectbrief|packageStructure|productContext|activeContext|systemPatterns|techContext|progress)" | head -20`
+- You MUST discover existing instruction files using: `find . -maxdepth 3 -type f \( -path "*/node_modules/*" -o -path "*/build/*" -o -path "*/.venv/*" -o -path "*/venv/*" -o -path "*/__pycache__/*" -o -path "*/.git/*" -o -path "*/dist/*" -o -path "*/target/*" \) -prune -o -name "*.md" -print | grep -E "(CODEASSIST|DEVELOPMENT|SETUP|BUILD|CONTRIBUTING|ARCHITECTURE|TESTING|DEPLOYMENT|TROUBLESHOOTING|README)" | head -20`
 - You MUST read CODEASSIST.md if found and apply its constraints throughout (see Important Notes)
 - You MUST notify the user when the structure has been created
 - You MUST handle directory creation errors gracefully and report specific issues to the user
