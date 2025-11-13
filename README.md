@@ -6,7 +6,7 @@
   </div>
 
   <h1>Agent SOPs</h1>
-  <h2>Structured workflows that enable AI agents to perform complex, multi-step tasks with consistency and reliability.</h2>
+  <h2>Natural language workflows that enable AI agents to perform complex, multi-step tasks with consistency and reliability.</h2>
 
   <div align="center">
     <a href="https://github.com/strands-agents/agent-sop/graphs/commit-activity"><img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/m/strands-agents/agent-sop"/></a>
@@ -91,8 +91,15 @@ response = agent(sop_content)
 # Install the package
 pip install strands-agents-sops
 
-# Start MCP server
+# Start MCP server (default)
 strands-agents-sops
+# or explicitly
+strands-agents-sops mcp
+
+# Generate Anthropic skills
+strands-agents-sops skills
+# or with custom output directory
+strands-agents-sops skills --output-dir my-skills
 ```
 
 Then connect your MCP-compatible AI assistant to access SOPs as tools:
@@ -133,7 +140,10 @@ Each Agent SOP can be automatically converted to Anthropic's Skills format:
 
 ```bash
 # Generate Skills format from SOPs
-python build_agent_sop_skills.py
+strands-agents-sops skills
+
+# Or specify custom output directory
+strands-agents-sops skills --output-dir my-skills
 ```
 
 This creates individual skill directories:
@@ -296,8 +306,10 @@ result = agent(formatted)
 
 ### MCP Server Integration
 ```bash
-# Start server
-python -m strands_agents_sops
+# Start MCP server (default behavior)
+strands-agents-sops
+# or explicitly
+strands-agents-sops server
 
 # Available as MCP tools:
 # - code_assist
@@ -307,15 +319,13 @@ python -m strands_agents_sops
 # - sop_generator
 ```
 
-### Skills Integration
-```markdown
----
-name: code-assist
-description: TDD-based code implementation with structured workflow
----
+### Anthropic Skills Generation
+```bash
+# Generate skills in default 'skills' directory
+strands-agents-sops skills
 
-# Code Assist
-[SOP content follows...]
+# Generate skills in custom directory
+strands-agents-sops skills --output-dir my-custom-skills
 ```
 
 ## Documentation
@@ -324,17 +334,10 @@ description: TDD-based code implementation with structured workflow
 - **[Format Rules](rules/agent-sop-format.md)**: Validation and compliance rules
 - **[Examples](agent-sops/)**: All available SOPs with full implementations
 
-## Contributing
-
-1. **Create SOPs**: Follow the [specification](spec/agent-sops-specification.md)
-2. **Test Integration**: Verify MCP server and Skills compatibility
-3. **Add Examples**: Include concrete usage demonstrations
-4. **Update Documentation**: Keep format rules and examples current
-
 ## License
 
 This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
 
----
+## Security
 
-**Agent SOPs enable consistent, reliable AI workflows across any platform that supports structured instructions.**
+See [CONTRIBUTING](CONTRIBUTING.md#security-issue-notifications) for more information.

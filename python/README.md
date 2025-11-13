@@ -4,7 +4,7 @@
   </h1>
 
   <h2>
-    Agent Standard Operating Procedures as importable strings and MCP prompts.
+    Agent Standard Operating Procedures Python Package
   </h2>
 
   <div align="center">
@@ -14,14 +14,15 @@
   </div>
 </div>
 
-A Python package and MCP server that provides Agent Standard Operating Procedures (SOPs) as importable strings and structured prompts for AI agents.
+A Python package and MCP server that provides Agent Standard Operating Procedures (SOPs) as importable strings, structured prompts for AI agents, and Anthropic Skills generation.
 
 ## Feature Overview
 
 - **Python Package**: Import SOPs as module attributes for direct use in code
-- **MCP Server**: Serve SOPs as structured prompts with user input injection through the Model Context Protocol  
+- **MCP Server**: Serve SOPs as structured prompts with user input injection through the Model Context Protocol
+- **Anthropic Skills**: Generate SOPs in Anthropic Skills format for Claude integration  
 
-## Python Package Quick Start
+## Strands Agent (Python Package) Quick Start
 
 Ensure you have Python 3.10+ installed, then:
 
@@ -66,6 +67,28 @@ Add the server to your MCP client configuration:
     }
   }
 }
+```
+
+## Anthropic Skills Quick Start
+
+Generate SOPs in Anthropic Skills format:
+
+```bash
+# Generate skills in default 'skills' directory
+strands-agents-sops skills
+
+# Generate skills in custom directory  
+strands-agents-sops skills --output-dir my-skills
+```
+
+This creates individual skill directories that can be uploaded to Claude:
+```
+skills/
+├── code-assist/
+│   └── SKILL.md
+├── codebase-summary/
+│   └── SKILL.md
+└── ...
 ```
 
 ## Features at a Glance
@@ -122,7 +145,11 @@ pip install -e .
 ### Testing the MCP Server
 
 ```bash
+# Test MCP server
 npx @modelcontextprotocol/inspector strands-agents-sops
+
+# Test skills generation
+strands-agents-sops skills --output-dir test-skills
 ```
 
 ## License

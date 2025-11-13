@@ -7,7 +7,7 @@ This SOP analyzes a codebase and generates comprehensive documentation including
 ## Parameters
 
 - **output_dir** (optional, default: ".summary"): Directory where documentation will be stored
-- **consolidate** (optional, default: true): Whether to create a consolidated documentation file
+- **consolidate** (optional, default: false): Whether to create a consolidated documentation file
 - **consolidate_target** (optional, default: "AGENTS.md"): Target file for consolidation (e.g., "README.md", "CONTRIBUTING.md", or custom filename). Only used if consolidate is true
 - **consolidate_prompt** (optional): Description of how to structure the consolidated content for the target file type (e.g., "Create an AGENTS.md file optimized for AI coding assistants"). Only used if consolidate is true
 - **check_consistency** (optional, default: true): Whether to check for inconsistencies across documents

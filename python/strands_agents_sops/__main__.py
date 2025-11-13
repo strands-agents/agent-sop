@@ -1,37 +1,26 @@
-from pathlib import Path
-import re
-from mcp.server.fastmcp import FastMCP
+import argparse
+from .mcp import run_mcp_server
+from .skills import generate_anthropic_skills
 
-def run_mcp_server():
-    """Run the MCP server for serving SOPs as prompts"""
-    sops_dir = Path(__file__).parent / "sops"
-    mcp = FastMCP("agent-sop-prompt-server")
+def main():
+    parser = argparse.ArgumentParser(description="Strands Agents SOPs")
+    subparsers = parser.add_subparsers(dest="command", help="Available commands")
     
-    for md_file in sops_dir.glob("*.sop.md"):
-        if md_file.is_file():
-            prompt_name = md_file.stem.removesuffix(".sop")
-            sop_content = md_file.read_text(encoding='utf-8')
-            overview_match = re.search(r'## Overview\s*\n(.*?)(?=\n##|\n#|\Z)', sop_content, re.DOTALL)
-            if not overview_match:
-                raise ValueError(f"No Overview section found in {sop_content}")
-            
-            description = overview_match.group(1).strip().replace('\n', ' ')
-            
-            def make_prompt_handler(name: str, content: str):
-                def get_prompt(user_input: str = "") -> str:
-                    return f"""<agent-sop name="{name}">
-    <content>
-{content}
-</content>
-<user-input>
-{user_input}
-</user-input>
-</agent-sop>"""
-                return get_prompt
-            
-            mcp.prompt(name=prompt_name, description=description)(make_prompt_handler(prompt_name, sop_content))
+    # MCP server command (default)
+    subparsers.add_parser("mcp", help="Run MCP server (default)")
     
-    mcp.run()
+    # Skills generation command
+    skills_parser = subparsers.add_parser("skills", help="Generate Anthropic skills")
+    skills_parser.add_argument("--output-dir", default="skills", 
+                              help="Output directory for skills (default: skills)")
+    
+    args = parser.parse_args()
+    
+    if args.command == "skills":
+        generate_anthropic_skills(args.output_dir)
+    else:
+        # Default to MCP server
+        run_mcp_server()
 
 if __name__ == "__main__":
-    run_mcp_server()
+    main()
