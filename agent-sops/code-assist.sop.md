@@ -6,23 +6,22 @@ This sop guides the implementation of code tasks using test-driven development p
 
 ## Parameters
 
-- **task_description** (required): A description of the task to be implemented. This can be a detailed specification with requirements and acceptance criteria, a reference to a prompt from prompt-plan.md (e.g., "implement prompt 3 from prompt-plan.md"), or even a rough idea that will be refined during the explore and plan phases
+- **task_description** (required): A description of the task to be implemented. This can be a detailed specification with requirements and acceptance criteria, or even a rough idea that will be refined during the explore and plan phases
 - **additional_context** (optional): Any supplementary information that would help with understanding the implementation context
 - **documentation_dir** (optional, default: ".sop/planning"): The directory where planning documents will be stored
 - **repo_root** (optional, default: current working directory): The root directory of the repository for code implementation
 - **task_name** (optional): A short, descriptive name for the implementation task
-- **mode** (optional, default: "interactive"): The interaction mode:
+- **mode** (optional, default: "auto"): The interaction mode:
   - "interactive": Collaboration with user confirmation at each step
-  - "fsc" (Full Self-Coding): No user interaction after initial setup
+  - "auto": No user interaction after initial setup
 
 **Constraints for parameter acquisition:**
 - You MUST ask for all parameters upfront in a single prompt, not just required ones because this ensures efficient workflow and prevents repeated interruptions during execution
 - You MUST support multiple input methods for task_description and additional_context (direct input, file path, URL)
-- You MUST extract the specified prompt from prompt-plan.md if the task_description references it
-- You MUST normalize mode input to "interactive" or "fsc"
+- You MUST normalize mode input to "interactive" or "auto"
 - You MUST validate directory paths and generate task_name if not provided
 - You MUST confirm successful acquisition of all parameters before proceeding
-- If mode is "fsc", you MUST warn the user that no further interaction will be required
+- If mode is "auto", you MUST warn the user that no further interaction will be required
 
 ## Mode Behavior
 
@@ -37,7 +36,7 @@ Apply these patterns throughout all steps based on the selected mode:
 - Adapt to user feedback and preferences
 - Provide educational context when introducing new patterns or techniques
 
-**FSC Mode:**
+**Auto Mode:**
 - Execute all actions autonomously without user confirmation
 - Document all decisions, assumptions, and reasoning in progress.md
 - When multiple approaches exist, select the most appropriate and document why
@@ -76,7 +75,7 @@ Initialize the project environment and create necessary directory structures.
 **Instruction File Discovery:**
 - You MUST run the find command to discover available instruction files
 - **Interactive Mode:** Present discovered files and ask which to include for context
-- **FSC Mode:** Automatically include CODEASSIST.md (if found) plus core files (README.md, CONTRIBUTING.md) and task-relevant files
+- **Auto Mode:** Automatically include CODEASSIST.md (if found) plus core files (README.md, CONTRIBUTING.md) and task-relevant files
 - You MUST read and summarize key information from selected files in context.md under "Existing Documentation"
 - If CODEASSIST.md is missing, suggest creating it with: additional constraints, pre/post SOP instructions, examples, troubleshooting
 
@@ -321,8 +320,6 @@ If all tests are passing, draft a conventional commit message and perform the ac
 - You MUST document the commit hash and status in `{documentation_dir}/implementation/{task_name}/progress.md`
 - You MUST NOT push changes to remote repositories because this could publish unreviewed code to shared repositories where others depend on it
 - You MUST verify that all items in the implementation checklist are marked as complete before marking the prompt as complete
-- You MUST NOT mark the prompt as complete in `{documentation_dir}/implementation/prompt-plan.md` if any items in the implementation checklist remain incomplete because this would misrepresent the actual completion status
-- You MUST mark the prompt as complete in `{documentation_dir}/implementation/prompt-plan.md` only after verifying all implementation checklist items are complete and if a prompt_number was used as input
 - You SHOULD include the "🤖 Assisted by the code-assist SOP" footer
 
 > 💬 See [Mode Behavior](#mode-behavior) for mode-specific interaction guidance
@@ -368,12 +365,6 @@ mode: "interactive"
 
 ## Troubleshooting
 
-### Prompt Not Found
-If the specified prompt number doesn't exist in prompt-plan.md:
-- You SHOULD inform the user that the prompt couldn't be found
-- You SHOULD provide the list of available prompts from the file
-- You SHOULD ask the user to either provide a different prompt number or a direct task description
-
 ### Project Directory Issues
 If the documentation directory doesn't exist or isn't accessible:
 - You SHOULD attempt to create the directory if it has permissions
@@ -414,7 +405,7 @@ If the implementation encounters unexpected challenges:
 - You SHOULD propose alternative approaches
 - You MAY use available tools to search code repositories, read documentation, and gather relevant information
 - In interactive mode, you SHOULD ask for user guidance on how to proceed
-- In minimal/FSC mode, you SHOULD select the most promising alternative and document the decision
+- In auto mode, you SHOULD select the most promising alternative and document the decision
 
 ## Best Practices
 
