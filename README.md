@@ -71,7 +71,6 @@ Initialize the project environment and create necessary directory structures.
 | **[codebase-summary](agent-sops/codebase-summary.sop.md)** | Comprehensive codebase analysis and documentation generation | Project onboarding, documentation creation, system understanding |
 | **[code-task-generator](agent-sops/code-task-generator.sop.md)** | Intelligent task breakdown and planning from requirements | Project planning, sprint preparation, requirement analysis |
 | **[pdd](agent-sops/pdd.sop.md)** | Problem-driven development methodology | Complex problem solving, architectural decisions, system design |
-| **[sop-generator](agent-sops/sop-generator.sop.md)** | Automated creation of new Agent SOPs | Workflow standardization, process documentation, SOP development |
 
 ## Quick Start
 
@@ -134,7 +133,7 @@ Then connect your MCP-compatible AI assistant to access SOPs as tools:
 ```python
 # Each SOP becomes an available tool
 tools = mcp_client.list_tools()
-# Returns: code_assist, codebase_summary, code_task_generator, pdd, sop_generator
+# Returns: code_assist, codebase_summary, code_task_generator, pdd
 
 # Execute a SOP
 result = mcp_client.call_tool("code_assist", {
@@ -182,9 +181,7 @@ skills/
 │   └── SKILL.md
 ├── code-task-generator/
 │   └── SKILL.md
-├── pdd/
-│   └── SKILL.md
-└── sop-generator/
+└── pdd/
     └── SKILL.md
 ```
 
@@ -272,7 +269,7 @@ SOPs accept inputs to customize execution:
 
 ### 4. Multi-Modal Distribution
 Single SOP source files can be distributed to multiple formats:
-- **MCP Tools**: For AI assistant integration
+- **MCP Prompts**: For AI assistant integration
 - **Anthropic Skills**: For Claude.ai and Skills API
 - **Python Modules**: For programmatic access
 - **Documentation**: For human reference
@@ -356,12 +353,11 @@ strands-agents-sops
 # or explicitly
 strands-agents-sops server
 
-# Available as MCP tools:
+# Available as MCP Prompts:
 # - code_assist
 # - codebase_summary  
 # - code_task_generator
 # - pdd
-# - sop_generator
 ```
 
 ### Anthropic Skills Generation
