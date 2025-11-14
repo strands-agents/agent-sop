@@ -124,6 +124,9 @@ strands-agents-sops mcp
 strands-agents-sops skills
 # or with custom output directory
 strands-agents-sops skills --output-dir my-skills
+
+# Output agent SOP authoring rule
+strands-agents-sops rule
 ```
 
 Then connect your MCP-compatible AI assistant to access SOPs as tools:
@@ -278,13 +281,21 @@ Single SOP source files can be distributed to multiple formats:
 
 ### Authoring with AI Agents
 
-Agent SOPs can be authored in minutes using your favorite AI agent. For any MCP-compatible agent, simply use the strands-agents-sops MCP server and run the `sop-generator` agent SOP. Alternatively, you can use these tool-specific instructions:
+Agent SOPs can be authored in minutes using your favorite AI agent and the standard formatting rule. You can either copy the rule directly from this repo or use `strands-agents-sops rule`:
 
-1. **Kiro** - Copy `rules/agent-sop-format.md` into your project's `.kiro/steering/` folder.
-2. **Amazon Q Developer** - Copy `rules/agent-sop-format.md` into your project's `.amazonq/rules/` folder.
-3. **Claude Code** - Install and use the Agent SOP generator skill.
-4. **Cursor** - Copy `rules/agent-sop-format.md` into your project's `.cursor/rules/` folder. Note: Change the file extension to `.mdc`
-5. **Cline** - Copy `rules/agent-sop-format.md` into your project's `.clinerules/` folder.
+```bash
+# Output the Agent SOP format rule
+strands-agents-sops rule
+```
+
+The rule can be used in various AI coding agents:
+
+1. **Kiro IDE** - Copy into your project as `.kiro/steering/agent-sop-format.md`.
+1. **Kiro CLI** - Pin the rule file via the `/context` command or instruct Kiro CLI to read the rule file.
+2. **Amazon Q Developer** - Copy into your project as `.amazonq/rules/agent-sop-format.md`.
+3. **Claude Code** - Instruct Claude Code to read the rule file.
+4. **Cursor** - Copy into your project as `.cursor/rules/agent-sop-format.mdc` folder (Note the `.mdc` file extension).
+5. **Cline** - Copy into your project as `.clinerules/agent-sop-format.md`.
 
 ### Basic Structure
 

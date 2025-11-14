@@ -15,9 +15,13 @@ strands-agents-sops = "strands_agents_sops.__main__:main"
 
 [tool.hatch.build.targets.wheel]
 include = [
-    "__init__.py",
-    "__main__.py",
-    "sops/*.md"
+    "strands_agents_sops/__init__.py",
+    "strands_agents_sops/__main__.py",
+    "strands_agents_sops/mcp.py",
+    "strands_agents_sops/skills.py",
+    "strands_agents_sops/rules.py",
+    "strands_agents_sops/sops/*.md",
+    "strands_agents_sops/rules/*.md"
 ]
 
 [tool.hatch.build.hooks.custom]

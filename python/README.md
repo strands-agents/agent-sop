@@ -20,7 +20,8 @@ A Python package and MCP server that provides Agent Standard Operating Procedure
 
 - **Python Package**: Import SOPs as module attributes for direct use in code
 - **MCP Server**: Serve SOPs as structured prompts with user input injection through the Model Context Protocol
-- **Anthropic Skills**: Generate SOPs in Anthropic Skills format for Claude integration  
+- **Anthropic Skills**: Generate SOPs in Anthropic Skills format for Claude integration
+- **Agent SOP Authoring Rule**: Access standardized formatting rule for creating new SOPs  
 
 ## Strands Agent (Python Package) Quick Start
 
@@ -91,6 +92,22 @@ skills/
 └── ...
 ```
 
+## Agent SOP Authoring Rule Quick Start
+
+Access standardized formatting rule for creating new Agent SOPs:
+
+```bash
+# Output agent SOP authoring rule
+strands-agents-sops rule
+```
+
+This displays the complete Agent SOP format specification, including:
+- Required sections (Overview, Parameters, Steps)
+- RFC2119 keyword usage (MUST, SHOULD, MAY)
+- Negative constraint formatting with context
+- File naming conventions
+- Best practices for SOP creation
+
 ## Features at a Glance
 
 ### Access SOPs as Strings or Prompts
@@ -150,6 +167,9 @@ npx @modelcontextprotocol/inspector strands-agents-sops
 
 # Test skills generation
 strands-agents-sops skills --output-dir test-skills
+
+# Test agent SOP authoring rule
+strands-agents-sops rule
 ```
 
 ## License
