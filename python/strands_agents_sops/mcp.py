@@ -19,8 +19,9 @@ def run_mcp_server():
             
             def make_prompt_handler(name: str, content: str):
                 def get_prompt(user_input: str = "") -> str:
-                    return f"""<agent-sop name="{name}">
-    <content>
+                    return f"""Run this SOP:
+<agent-sop name="{name}">
+<content>
 {content}
 </content>
 <user-input>
