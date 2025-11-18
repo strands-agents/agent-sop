@@ -70,3 +70,24 @@ strands-agents-sops skills
 # Custom output directory
 strands-agents-sops skills --output-dir my-skills
 ```
+
+## 🧪 Development & Testing
+
+### Running Tests
+
+```bash
+# Navigate to python directory
+cd python
+
+# Activate virtual environment (if available)
+source venv/bin/activate
+
+# Run all tests
+python -m pytest tests/ -v
+
+# Run specific test file
+python -m pytest tests/test_skills_external_sops.py -v
+
+# Run with coverage (if pytest-cov is installed)
+python -m pytest tests/ --cov=strands_agents_sops
+```
