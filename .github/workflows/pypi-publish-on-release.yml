@@ -51,7 +51,7 @@ jobs:
         path: python/dist/
 
   deploy:
-    name: Upload release to PyPI Test
+    name: Upload release to PyPI
     needs:
     - build
     runs-on: ubuntu-latest
@@ -59,8 +59,8 @@ jobs:
     # environment is used by PyPI Trusted Publisher and is strongly encouraged
     # https://docs.pypi.org/trusted-publishers/adding-a-publisher/
     environment:
-      name: testpypi
-      url: https://test.pypi.org/p/strands-agents
+      name: pypi
+      url: https://pypi.org/p/strands-agents
     permissions:
       # IMPORTANT: this permission is mandatory for Trusted Publishing
       id-token: write
@@ -71,7 +71,5 @@ jobs:
       with:
         name: python-package-distributions
         path: dist/
-    - name: Publish distribution 📦 to PyPI Test
+    - name: Publish distribution 📦 to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1
-      with:
-        repository-url: https://test.pypi.org/legacy/
