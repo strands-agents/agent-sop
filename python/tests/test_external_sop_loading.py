@@ -3,7 +3,8 @@ import tempfile
 import os
 from pathlib import Path
 from unittest.mock import patch, MagicMock
-from strands_agents_sops.mcp import run_mcp_server, load_external_sops, expand_sop_paths
+from strands_agents_sops.mcp import run_mcp_server
+from strands_agents_sops.utils import load_external_sops, expand_sop_paths
 
 
 class TestPathExpansion:

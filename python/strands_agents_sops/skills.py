@@ -2,7 +2,7 @@ from pathlib import Path
 import re
 import logging
 from typing import Optional
-from .mcp import expand_sop_paths, load_external_sops
+from .utils import expand_sop_paths, load_external_sops
 
 logger = logging.getLogger(__name__)
 
