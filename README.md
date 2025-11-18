@@ -185,11 +185,43 @@ For example, you might provide Claude with all five Agent SOPs as skills. When a
 Each Agent SOP can be automatically converted to Anthropic's Skills format:
 
 ```bash
-# Generate Skills format from SOPs
+# Generate Skills format from built-in SOPs only
 strands-agents-sops skills
 
 # Or specify custom output directory
 strands-agents-sops skills --output-dir my-skills
+
+# Load external SOPs from custom directories
+strands-agents-sops skills --sop-paths ~/my-sops:/path/to/other-sops
+
+# External SOPs override built-in SOPs with same name
+strands-agents-sops skills --sop-paths ~/custom-sops --output-dir ./skills
+```
+
+#### External SOP Loading
+
+The `--sop-paths` argument allows you to extend skills generation with your own SOPs:
+
+- **Colon-separated paths**: `~/sops1:/absolute/path:relative/path`
+- **Path expansion**: Supports `~` (home directory) and relative paths
+- **First-wins precedence**: External SOPs override built-in SOPs with same name
+- **Graceful error handling**: Invalid paths or malformed SOPs are skipped with warnings
+
+**Example workflow:**
+```bash
+# Create your custom SOP
+mkdir ~/my-sops
+cat > ~/my-sops/custom-workflow.sop.md << 'EOF'
+# Custom Workflow
+## Overview
+My custom workflow for specific tasks.
+## Steps
+### 1. Custom Step
+Do something custom.
+EOF
+
+# Generate skills with your custom SOPs
+strands-agents-sops skills --sop-paths ~/my-sops --output-dir ./skills
 ```
 
 This creates individual skill directories:

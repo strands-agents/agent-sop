@@ -17,6 +17,9 @@ def main():
     skills_parser = subparsers.add_parser("skills", help="Generate Anthropic skills")
     skills_parser.add_argument("--output-dir", default="skills", 
                               help="Output directory for skills (default: skills)")
+    skills_parser.add_argument("--sop-paths", 
+                              help="Colon-separated list of directory paths to load external SOPs from. "
+                                   "Supports absolute paths, relative paths, and tilde (~) expansion.")
     
     # Rules output command
     subparsers.add_parser("rule", help="Output agent SOP authoring rule")
@@ -24,7 +27,8 @@ def main():
     args = parser.parse_args()
     
     if args.command == "skills":
-        generate_anthropic_skills(args.output_dir)
+        sop_paths = getattr(args, 'sop_paths', None)
+        generate_anthropic_skills(args.output_dir, sop_paths=sop_paths)
     elif args.command == "rule":
         output_rules()
     else:
