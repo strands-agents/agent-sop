@@ -5,7 +5,7 @@
     </a>
   </div>
 
-  <h1>Agent SOPs</h1>
+  <h1>Agent SOP</h1>
   <h2>Natural language workflows that enable AI agents to perform complex, multi-step tasks with consistency and reliability.</h2>
 
   <div align="center">
@@ -67,10 +67,10 @@ Initialize the project environment and create necessary directory structures.
 
 | SOP | Purpose | Use Cases |
 |-----|---------|-----------|
-| **[code-assist](agent-sops/code-assist.sop.md)** | TDD-based code implementation with structured workflow | Feature development, bug fixes, refactoring |
 | **[codebase-summary](agent-sops/codebase-summary.sop.md)** | Comprehensive codebase analysis and documentation generation | Project onboarding, documentation creation, system understanding |
-| **[code-task-generator](agent-sops/code-task-generator.sop.md)** | Intelligent task breakdown and planning from requirements | Project planning, sprint preparation, requirement analysis |
 | **[pdd](agent-sops/pdd.sop.md)** | Problem-driven development methodology | Complex problem solving, architectural decisions, system design |
+| **[code-task-generator](agent-sops/code-task-generator.sop.md)** | Intelligent task breakdown and planning from requirements | Project planning, sprint preparation, requirement analysis |
+| **[code-assist](agent-sops/code-assist.sop.md)** | TDD-based code implementation with structured workflow | Feature development, bug fixes, refactoring |
 
 ## Quick Start
 
@@ -93,17 +93,15 @@ Create a simple cli coding agent:
 ```python
 from strands import Agent
 from strands_tools import editor, shell
-import strands_agents_sops
+from strands_agents_sops import code_assist
 
-# Create agent with SOP capability
 agent = Agent(
-  system_prompt=strands_agents_sops.code_assist_with_input(),
+  system_prompt=code_assist,
   tools=[editor, shell]
 )
 
-agent("Start your sop")
+agent("Start code-assist sop")
 
-# Simple cli agent loop:
 while(True):
   agent(input("\nInput: "))
 ```
@@ -118,27 +116,18 @@ pip install strands-agents-sops
 strands-agents-sops
 # or explicitly
 strands-agents-sops mcp
-
-# Generate Anthropic skills
-strands-agents-sops skills
-# or with custom output directory
-strands-agents-sops skills --output-dir my-skills
-
-# Output agent SOP authoring rule
-strands-agents-sops rule
 ```
 
-Then connect your MCP-compatible AI assistant to access SOPs as tools:
+Then connect your MCP-compatible AI assistant to access SOPs as tools. Here is an example mcp server configuration:
 
 ```python
-# Each SOP becomes an available tool
-tools = mcp_client.list_tools()
-# Returns: code_assist, codebase_summary, code_task_generator, pdd
-
-# Execute a SOP
-result = mcp_client.call_tool("code_assist", {
-    "user_input": "Create a REST API for user management"
-})
+{
+  "mcpServers": {
+    "agent-sops": {
+      "command": "strands-agents-sops"
+    }
+  }
+}
 ```
 
 ---
@@ -330,49 +319,10 @@ Common issues and their solutions.
 4. **Error Handling**: Include troubleshooting for common failure modes
 5. **Examples**: Provide concrete usage demonstrations
 
-## Integration Patterns
-
-### Strands Agents Integration
-```python
-# Direct SOP content access
-content = strands_agents_sops.code_assist
-
-# Formatted SOP with user input
-formatted = strands_agents_sops.codebase_summary_with_input(
-    "Analyze the authentication module"
-)
-
-agent = Agent()
-result = agent(formatted)
-```
-
-### MCP Server Integration
-```bash
-# Start MCP server (default behavior)
-strands-agents-sops
-# or explicitly
-strands-agents-sops server
-
-# Available as MCP Prompts:
-# - code_assist
-# - codebase_summary  
-# - code_task_generator
-# - pdd
-```
-
-### Anthropic Skills Generation
-```bash
-# Generate skills in default 'skills' directory
-strands-agents-sops skills
-
-# Generate skills in custom directory
-strands-agents-sops skills --output-dir my-custom-skills
-```
-
 ## Documentation
 
 - **[Specification](spec/agent-sops-specification.md)**: Complete format specification
-- **[Format Rules](rules/agent-sop-format.md)**: Validation and compliance rules
+- **[Format Rules](rules/agent-sop-format.md)**: Agent context for writing your own rules
 - **[Examples](agent-sops/)**: All available SOPs with full implementations
 
 ## License

@@ -4,14 +4,26 @@ build-backend = "hatchling.build"
 
 [project]
 name = "strands-agents-sops"
-version = "1.0.0"
-description = "Agent SOPs as importable strings with an MCP server"
+dynamic = ["version"]
+description = "Natural language workflows that enable AI agents to perform complex, multi-step tasks with consistency and reliability"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "Apache-2.0"}
 dependencies = [
     "mcp>=1.20.0",
 ]
 
 [project.scripts]
 strands-agents-sops = "strands_agents_sops.__main__:main"
+
+[tool.hatch.envs.default.scripts]
+clean = [
+    "find . -name '__pycache__' -type d | xargs rm -rf",
+    "rm -rf strands_agents_sops/rules",
+    "rm -rf strands_agents_sops/sops", 
+    "rm -rf dist",
+    "rm -rf *.egg-info"
+]
 
 [tool.hatch.build.targets.wheel]
 include = [
@@ -26,3 +38,7 @@ include = [
 
 [tool.hatch.build.hooks.custom]
 path = "copy_agent_sops_hook.py"
+
+[tool.hatch.version]
+source = "vcs"
+raw-options = { search_parent_directories = true }
