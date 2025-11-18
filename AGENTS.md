@@ -84,6 +84,19 @@ strands-agents-sops rule  # Outputs SOP format specification
 
 ## Development Guidelines
 
+### Running Tests
+
+```bash
+# Navigate to python package directory
+cd python
+
+# Activate virtual environment (if available)
+source venv/bin/activate
+
+# Run all tests with verbose output
+python -m pytest tests/ -v
+```
+
 ### Adding New SOPs
 1. Create `.sop.md` file in `agent-sops/` directory
 2. Follow standardized format with Overview, Parameters, Steps
