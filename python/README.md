@@ -73,21 +73,35 @@ strands-agents-sops skills --output-dir my-skills
 
 ## 🧪 Development & Testing
 
-### Running Tests
+### Setup Development Environment
 
 ```bash
 # Navigate to python directory
 cd python
 
-# Activate virtual environment (if available)
-source venv/bin/activate
+# Install development dependencies
+pip install hatch
+```
 
-# Run all tests
-python -m pytest tests/ -v
+### Running Tests
 
-# Run specific test file
-python -m pytest tests/test_skills_external_sops.py -v
+```bash
+# Run all tests with coverage
+hatch test
+```
 
-# Run with coverage (if pytest-cov is installed)
-python -m pytest tests/ --cov=strands_agents_sops
+### Code Formatting & Linting
+
+```bash
+# Format code with Ruff
+hatch run format
+
+# Check linting issues
+hatch run lint
+
+# Auto-fix linting issues
+hatch run lint-fix
+
+# Clean build artifacts and cache
+hatch run clean
 ```

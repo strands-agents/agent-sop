@@ -16,14 +16,34 @@ dependencies = [
 [project.scripts]
 strands-agents-sops = "strands_agents_sops.__main__:main"
 
+[tool.hatch.envs.default]
+dependencies = [
+    "ruff",
+]
+
 [tool.hatch.envs.default.scripts]
+format = "ruff format ."
+lint = "ruff check ."
+lint-fix = "ruff check --fix ."
 clean = [
     "find . -name '__pycache__' -type d | xargs rm -rf",
     "rm -rf strands_agents_sops/rules",
     "rm -rf strands_agents_sops/sops", 
     "rm -rf dist",
+    "rm -rf build",
+    "rm -rf .pytest_cache",
+    "rm -rf .ruff_cache",
     "rm -rf *.egg-info"
 ]
+
+[tool.hatch.envs.hatch-test]
+dependencies = [
+    "pytest",
+    "pytest-cov",
+]
+
+[[tool.hatch.envs.hatch-test.matrix]]
+python = ["3.10", "3.11", "3.12"]
 
 [tool.hatch.build.targets.wheel]
 include = [
@@ -42,3 +62,19 @@ path = "copy_agent_sops_hook.py"
 [tool.hatch.version]
 source = "vcs"
 raw-options = { search_parent_directories = true }
+
+[tool.pytest.ini_options]
+addopts = "--cov=strands_agents_sops --cov-report=term-missing --cov-report=html:build/htmlcov --cov-report=xml:build/coverage.xml --cov-fail-under=80"
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "UP"]
+ignore = ["E501"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
