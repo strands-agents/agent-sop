@@ -112,19 +112,50 @@ while(True):
 # Install the package
 pip install strands-agents-sops
 
-# Start MCP server (default)
-strands-agents-sops
-# or explicitly
+# Start MCP server with built-in SOPs only
 strands-agents-sops mcp
+
+# Load external SOPs from custom directories
+strands-agents-sops mcp --sop-paths ~/my-sops:/path/to/other-sops
+
+# External SOPs override built-in SOPs with same name
+strands-agents-sops mcp --sop-paths ~/custom-sops  # Your custom code-assist.sop.md overrides built-in
+```
+
+#### External SOP Loading
+
+The `--sop-paths` argument allows you to extend the MCP server with your own SOPs:
+
+- **Colon-separated paths**: `~/sops1:/absolute/path:relative/path`
+- **Path expansion**: Supports `~` (home directory) and relative paths
+- **First-wins precedence**: External SOPs override built-in SOPs with same name
+- **Graceful error handling**: Invalid paths or malformed SOPs are skipped with warnings
+
+**Example workflow:**
+```bash
+# Create your custom SOP
+mkdir ~/my-sops
+cat > ~/my-sops/custom-workflow.sop.md << 'EOF'
+# Custom Workflow
+## Overview
+My custom workflow for specific tasks.
+## Steps
+### 1. Custom Step
+Do something custom.
+EOF
+
+# Start MCP server with your custom SOPs
+strands-agents-sops mcp --sop-paths ~/my-sops
 ```
 
 Then connect your MCP-compatible AI assistant to access SOPs as tools. Here is an example mcp server configuration:
 
-```python
+```json
 {
   "mcpServers": {
     "agent-sops": {
-      "command": "strands-agents-sops"
+      "command": "strands-agents-sops",
+      "args": ["mcp", "--sop-paths", "~/my-sops"]
     }
   }
 }
