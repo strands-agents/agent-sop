@@ -8,7 +8,10 @@ def main():
     subparsers = parser.add_subparsers(dest="command", help="Available commands", required=False)
     
     # MCP server command (default)
-    subparsers.add_parser("mcp", help="Run MCP server (default)")
+    mcp_parser = subparsers.add_parser("mcp", help="Run MCP server (default)")
+    mcp_parser.add_argument("--sop-paths", 
+                           help="Colon-separated list of directory paths to load external SOPs from. "
+                                "Supports absolute paths, relative paths, and tilde (~) expansion.")
     
     # Skills generation command
     skills_parser = subparsers.add_parser("skills", help="Generate Anthropic skills")
@@ -26,7 +29,8 @@ def main():
         output_rules()
     else:
         # Default to MCP server
-        run_mcp_server()
+        sop_paths = getattr(args, 'sop_paths', None)
+        run_mcp_server(sop_paths=sop_paths)
 
 if __name__ == "__main__":
     main()
