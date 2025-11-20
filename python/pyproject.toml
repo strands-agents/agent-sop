@@ -52,6 +52,7 @@ include = [
     "strands_agents_sops/mcp.py",
     "strands_agents_sops/skills.py",
     "strands_agents_sops/rules.py",
+    "strands_agents_sops/utils.py",
     "strands_agents_sops/sops/*.md",
     "strands_agents_sops/rules/*.md"
 ]
