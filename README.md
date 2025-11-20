@@ -5,7 +5,7 @@
     </a>
   </div>
 
-  <h1>Agent SOPs</h1>
+  <h1>Agent SOP</h1>
   <h2>Natural language workflows that enable AI agents to perform complex, multi-step tasks with consistency and reliability.</h2>
 
   <div align="center">
@@ -33,9 +33,10 @@ Agent SOPs (Standard Operating Procedures) are markdown-based instruction sets t
 
 Agent SOPs use a standardized format to define:
 - **Clear objectives** with detailed overviews
-- **Parameterized inputs** for flexible reuse
+- **Parameterized inputs** for flexible reuse across different contexts
 - **Step-by-step instructions** with RFC 2119 constraints (MUST, SHOULD, MAY)
 - **Examples and troubleshooting** for reliable execution
+- **Multi-modal distribution** (MCP tools, Anthropic Skills, Python modules)
 
 ### Example SOP Structure
 
@@ -67,11 +68,10 @@ Initialize the project environment and create necessary directory structures.
 
 | SOP | Purpose | Use Cases |
 |-----|---------|-----------|
-| **[code-assist](agent-sops/code-assist.sop.md)** | TDD-based code implementation with structured workflow | Feature development, bug fixes, refactoring |
 | **[codebase-summary](agent-sops/codebase-summary.sop.md)** | Comprehensive codebase analysis and documentation generation | Project onboarding, documentation creation, system understanding |
-| **[code-task-generator](agent-sops/code-task-generator.sop.md)** | Intelligent task breakdown and planning from requirements | Project planning, sprint preparation, requirement analysis |
 | **[pdd](agent-sops/pdd.sop.md)** | Problem-driven development methodology | Complex problem solving, architectural decisions, system design |
-| **[sop-generator](agent-sops/sop-generator.sop.md)** | Automated creation of new Agent SOPs | Workflow standardization, process documentation, SOP development |
+| **[code-task-generator](agent-sops/code-task-generator.sop.md)** | Intelligent task breakdown and planning from requirements | Project planning, sprint preparation, requirement analysis |
+| **[code-assist](agent-sops/code-assist.sop.md)** | TDD-based code implementation with structured workflow | Feature development, bug fixes, refactoring |
 
 ## Quick Start
 
@@ -94,49 +94,75 @@ Create a simple cli coding agent:
 ```python
 from strands import Agent
 from strands_tools import editor, shell
-import strands_agents_sops
+from strands_agents_sops import code_assist
 
-# Create agent with SOP capability
 agent = Agent(
-  system_prompt=strands_agents_sops.code_assist_with_input(),
+  system_prompt=code_assist,
   tools=[editor, shell]
 )
 
-agent("Start your sop")
+agent("Start code-assist sop")
 
-# Simple cli agent loop:
 while(True):
   agent(input("\nInput: "))
 ```
 
 ### Using as MCP Server
 
+The MCP (Model Context Protocol) server exposes SOPs as tools that AI assistants can discover and execute on-demand:
+
 ```bash
 # Install the package
 pip install strands-agents-sops
 
-# Start MCP server (default)
-strands-agents-sops
-# or explicitly
+# Start MCP server with built-in SOPs only
 strands-agents-sops mcp
 
-# Generate Anthropic skills
-strands-agents-sops skills
-# or with custom output directory
-strands-agents-sops skills --output-dir my-skills
+# Load external SOPs from custom directories (sops in path must have `.sop.md` postfix)
+strands-agents-sops mcp --sop-paths ~/my-sops:/path/to/other-sops
+
+# External SOPs override built-in SOPs with same name
+strands-agents-sops mcp --sop-paths ~/custom-sops  # Your custom code-assist.sop.md overrides built-in
 ```
 
-Then connect your MCP-compatible AI assistant to access SOPs as tools:
+#### External SOP Loading
 
-```python
-# Each SOP becomes an available tool
-tools = mcp_client.list_tools()
-# Returns: code_assist, codebase_summary, code_task_generator, pdd, sop_generator
+The `--sop-paths` argument allows you to extend the MCP server with your own SOPs:
 
-# Execute a SOP
-result = mcp_client.call_tool("code_assist", {
-    "user_input": "Create a REST API for user management"
-})
+- **File format**: Only files with `.sop.md` postfix are recognized as SOPs
+- **Colon-separated paths**: `~/sops1:/absolute/path:relative/path`
+- **Path expansion**: Supports `~` (home directory) and relative paths
+- **First-wins precedence**: External SOPs override built-in SOPs with same name
+- **Graceful error handling**: Invalid paths or malformed SOPs are skipped with warnings
+
+**Example workflow:**
+```bash
+# Create your custom SOP
+mkdir ~/my-sops
+cat > ~/my-sops/custom-workflow.sop.md << 'EOF'
+# Custom Workflow
+## Overview
+My custom workflow for specific tasks.
+## Steps
+### 1. Custom Step
+Do something custom.
+EOF
+
+# Start MCP server with your custom SOPs
+strands-agents-sops mcp --sop-paths ~/my-sops
+```
+
+Then connect your MCP-compatible AI assistant to access SOPs as tools. Here is an example mcp server configuration:
+
+```json
+{
+  "mcpServers": {
+    "agent-sops": {
+      "command": "strands-agents-sops",
+      "args": ["mcp", "--sop-paths", "~/my-sops"]
+    }
+  }
+}
 ```
 
 ---
@@ -147,7 +173,7 @@ Agent SOPs are fully compatible with Claude's [Skills system](https://support.cl
 
 ### How SOPs Work as Skills
 
-The key value of using SOPs as Skills is **progressive disclosure of context**. Instead of loading all workflow instructions into Claude's context upfront, you can provide many SOP skills to an agent, and Claude will intelligently decide which ones to load and execute based on the task at hand.
+The key value of using SOPs as Skills is **progressive disclosure of context**. Instead of loading all workflow instructions into Claude's context upfront, you can provide many SOP skills to Claude, and Claude will intelligently decide which ones to load and execute based on the task at hand.
 
 This approach offers several advantages:
 
@@ -156,18 +182,51 @@ This approach offers several advantages:
 - **Intelligent Selection**: Claude automatically chooses the most appropriate SOP for each task
 - **Dynamic Loading**: Complex workflows are only activated when Claude determines they're useful
 
-For example, you might provide Claude with all five Agent SOPs as skills. When asked to "implement user authentication," Claude would automatically select and load the `code-assist` skill. When asked to "document this codebase," it would choose the `codebase-summary` skill instead.
+For example, you might provide Claude with all Agent SOPs as skills. When asked to "implement user authentication," Claude would automatically select and load the `code-assist` skill. When asked to "document this codebase," it would choose the `codebase-summary` skill instead.
 
 ### Converting SOPs to Skills
 
 Each Agent SOP can be automatically converted to Anthropic's Skills format:
 
 ```bash
-# Generate Skills format from SOPs
+# Generate Skills format from built-in SOPs only
 strands-agents-sops skills
 
 # Or specify custom output directory
 strands-agents-sops skills --output-dir my-skills
+
+# Load external SOPs from custom directories
+strands-agents-sops skills --sop-paths ~/my-sops:/path/to/other-sops
+
+# External SOPs override built-in SOPs with same name
+strands-agents-sops skills --sop-paths ~/custom-sops --output-dir ./skills
+```
+
+#### External SOP Loading
+
+The `--sop-paths` argument allows you to extend skills generation with your own SOPs:
+
+- **File format**: Only files with `.sop.md` postfix are recognized as SOPs
+- **Colon-separated paths**: `~/sops1:/absolute/path:relative/path`
+- **Path expansion**: Supports `~` (home directory) and relative paths
+- **First-wins precedence**: External SOPs override built-in SOPs with same name
+- **Graceful error handling**: Invalid paths or malformed SOPs are skipped with warnings
+
+**Example workflow:**
+```bash
+# Create your custom SOP
+mkdir ~/my-sops
+cat > ~/my-sops/custom-workflow.sop.md << 'EOF'
+# Custom Workflow
+## Overview
+My custom workflow for specific tasks.
+## Steps
+### 1. Custom Step
+Do something custom.
+EOF
+
+# Generate skills with your custom SOPs
+strands-agents-sops skills --sop-paths ~/my-sops --output-dir ./skills
 ```
 
 This creates individual skill directories:
@@ -179,9 +238,7 @@ skills/
 │   └── SKILL.md
 ├── code-task-generator/
 │   └── SKILL.md
-├── pdd/
-│   └── SKILL.md
-└── sop-generator/
+└── pdd/
     └── SKILL.md
 ```
 
@@ -245,36 +302,35 @@ collaboration while adhering to existing package patterns.
 
 ---
 
-## How Agent SOPs Work
+## What Are Agent SOPs?
 
-### 1. Structured Format
-SOPs use a standardized markdown format with:
-- **Overview**: Clear purpose and context
-- **Parameters**: Typed inputs with defaults and constraints
-- **Steps**: Numbered workflow phases with specific requirements
-- **Constraints**: RFC 2119 keywords (MUST, SHOULD, MAY) for precise behavior
+Agent SOPs use a standardized markdown format with key features that enable repeatable and understandable behavior from AI agents:
 
-### 2. Constraint-Based Execution
-Each step includes explicit constraints that define:
-- Required actions (MUST)
-- Recommended practices (SHOULD) 
-- Optional enhancements (MAY)
-- Prohibited behaviors (MUST NOT)
+1. **Structured steps with [RFC 2119](https://datatracker.ietf.org/doc/html/rfc2119) constraints** - Each workflow step uses [RFC 2119](https://datatracker.ietf.org/doc/html/rfc2119) keywords like MUST, SHOULD, and MAY to provide precise control over agent behavior without rigid scripting, ensuring reliable execution while preserving the agent's reasoning ability.
+2. **Parameterized inputs** - Rather than hardcoding specific values, SOPs accept parameters that customize behavior for different projects, teams, or requirements. This transforms single-use prompts into flexible templates that can be applied broadly while maintaining consistency.
+3. **Easy authoring through AI assistance** - Teams can create new SOPs in minutes. Coding agents can read the SOP format specification and generate new workflows based on natural language descriptions, making the creation process accessible to anyone regardless of prompt engineering expertise.
+4. **Progress tracking and resumability** - Agent SOPs can instruct agents to document their progress as they work, making it easy to understand what's happening and resume if something breaks. This transparency was crucial for debugging prompts and building developer trust in AI automation.
 
-### 3. Parameterized Workflows
-SOPs accept inputs to customize execution:
-- **Required parameters**: Essential inputs for the workflow
-- **Optional parameters**: Customization options with sensible defaults
-- **Multiple input methods**: Direct text, file paths, URLs, or interactive prompts
-
-### 4. Multi-Modal Distribution
-Single SOP source files can be distributed to multiple formats:
-- **MCP Tools**: For AI assistant integration
-- **Anthropic Skills**: For Claude.ai and Skills API
-- **Python Modules**: For programmatic access
-- **Documentation**: For human reference
 
 ## Creating Agent SOPs
+
+### Authoring with AI Agents
+
+Agent SOPs can be authored in minutes using your favorite AI agent and the standard formatting rule. You can either copy the rule directly from this repo or use `strands-agents-sops rule`:
+
+```bash
+# Output the Agent SOP format rule
+strands-agents-sops rule
+```
+
+The rule can be used in various AI coding agents:
+
+1. **Kiro IDE** - Copy into your project as `.kiro/steering/agent-sop-format.md`.
+1. **Kiro CLI** - Pin the rule file via the `/context` command or instruct Kiro CLI to read the rule file.
+2. **Amazon Q Developer** - Copy into your project as `.amazonq/rules/agent-sop-format.md`.
+3. **Claude Code** - Instruct Claude Code to read the rule file.
+4. **Cursor** - Copy into your project as `.cursor/rules/agent-sop-format.mdc` folder (Note the `.mdc` file extension).
+5. **Cline** - Copy into your project as `.clinerules/agent-sop-format.md`.
 
 ### Basic Structure
 
@@ -303,60 +359,6 @@ Concrete usage examples showing input and expected outcomes.
 ## Troubleshooting
 Common issues and their solutions.
 ```
-
-### Best Practices
-
-1. **Clear Objectives**: Start with a comprehensive Overview section
-2. **Explicit Constraints**: Use RFC 2119 keywords for precise behavior
-3. **Parameterization**: Make SOPs reusable with well-defined inputs
-4. **Error Handling**: Include troubleshooting for common failure modes
-5. **Examples**: Provide concrete usage demonstrations
-
-## Integration Patterns
-
-### Strands Agents Integration
-```python
-# Direct SOP content access
-content = strands_agents_sops.code_assist
-
-# Formatted SOP with user input
-formatted = strands_agents_sops.codebase_summary_with_input(
-    "Analyze the authentication module"
-)
-
-agent = Agent()
-result = agent(formatted)
-```
-
-### MCP Server Integration
-```bash
-# Start MCP server (default behavior)
-strands-agents-sops
-# or explicitly
-strands-agents-sops server
-
-# Available as MCP tools:
-# - code_assist
-# - codebase_summary  
-# - code_task_generator
-# - pdd
-# - sop_generator
-```
-
-### Anthropic Skills Generation
-```bash
-# Generate skills in default 'skills' directory
-strands-agents-sops skills
-
-# Generate skills in custom directory
-strands-agents-sops skills --output-dir my-custom-skills
-```
-
-## Documentation
-
-- **[Specification](spec/agent-sops-specification.md)**: Complete format specification
-- **[Format Rules](rules/agent-sop-format.md)**: Validation and compliance rules
-- **[Examples](agent-sops/)**: All available SOPs with full implementations
 
 ## License
 

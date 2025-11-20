@@ -6,13 +6,13 @@ This sop analyzes a codebase and generates comprehensive documentation including
 
 ## Parameters
 
-- **output_dir** (optional, default: ".summary"): Directory where documentation will be stored
+- **output_dir** (optional, default: ".sop/summary"): Directory where documentation will be stored
 - **consolidate** (optional, default: false): Whether to create a consolidated documentation file
 - **consolidate_target** (optional, default: "AGENTS.md"): Target file for consolidation (e.g., "README.md", "CONTRIBUTING.md", or custom filename). Only used if consolidate is true
-- **consolidate_prompt** (optional): Description of how to structure the consolidated content for the target file type (e.g., "Create an AGENTS.md file optimized for AI coding assistants"). Only used if consolidate is true
+- **consolidate_prompt** (optional): Description of how to structure the consolidated content for the target file type (e.g., Reference the AGENTS.md example below for the default "consolidate_prompt"). Only used if consolidate is true
 - **check_consistency** (optional, default: true): Whether to check for inconsistencies across documents
 - **check_completeness** (optional, default: true): Whether to identify areas lacking sufficient detail
-- **update_mode** (optional, default: false): Whether to update existing documentation based on recent commits
+- **update_mode** (optional, default: false): Whether to update existing documentation based on recent changes
 - **codebase_path** (optional, default: current directory): Path to the codebase to analyze
 
 **Constraints for parameter acquisition:**
@@ -39,9 +39,7 @@ Initialize the analysis environment and create necessary directory structure.
 - You MUST inform the user about the directory structure being created
 - If update_mode is true, you MUST:
   - Check if an index.md file exists in the output_dir
-  - Extract the last update timestamp from the index.md file if it exists
-  - Use git commands to identify commits that occurred after the last documentation update
-  - Inform the user about update mode and the reference timestamp being used
+  - Use git commands to review the latest commits and see if its changes are documented
 - If update_mode is false or no previous documentation exists, you MUST inform the user that full analysis will be performed
 - You MUST create subdirectories for organizing different types of documentation artifacts
 
@@ -77,7 +75,6 @@ Create comprehensive documentation files for different aspects of the system.
   - Guides AI assistants on which files to consult for specific types of questions
   - Contains brief summaries of each file's content to help determine relevance
   - Is designed to be the primary file needed in context for AI assistants to effectively answer questions
-  - Includes a timestamp indicating when the documentation was last generated or updated
 - You MUST create documentation files for different aspects of the system:
   - {output_dir}/architecture.md (system architecture and design patterns)
   - {output_dir}/components.md (major components and their responsibilities)
@@ -89,7 +86,6 @@ Create comprehensive documentation files for different aspects of the system.
 - If update_mode is true, you MUST:
   - Preserve existing documentation structure where possible
   - Only update sections related to modified components
-  - Mark updated sections with an "Updated on [date]" notation
 
 ### 4. Review Documentation
 
@@ -109,10 +105,11 @@ Create a consolidated documentation file if requested.
 
 **Constraints:**
 - If consolidate is true, you MUST create a consolidated documentation file
+- You MUST place the consolidated file in the codebase root directory (outside of the output_dir)
 - You MUST use consolidate_target as the filename for the consolidated file
 - If consolidate_prompt is provided, you MUST use it to guide the structure and content of the consolidated file
 - You MUST tailor the consolidated content to the target file type:
-  - AGENTS.md: Focus on AI assistant context, project structure, development patterns, and assistant-specific instructions
+  - AGENTS.md: Focus on AI assistant context, project and directory structure, development patterns, and assistant-specific instructions
   - README.md: Focus on project overview, installation, usage, and getting started information
   - CONTRIBUTING.md: Focus on development setup, coding standards, contribution workflow, and guidelines
   - Other files: Adapt content based on filename and consolidate_prompt
@@ -121,7 +118,6 @@ Create a consolidated documentation file if requested.
 - You MUST add metadata tags to each section to facilitate targeted information retrieval
 - You MUST include cross-references between related sections
 - You MUST include information from all relevant documentation files
-- You MUST include metadata about when the consolidated file was generated or last updated
 - If consolidate is false, you MUST skip this step and inform the user that no consolidated file will be created
 
 ### 6. Summary and Next Steps
@@ -147,10 +143,10 @@ Provide a summary of the documentation process and suggest next steps.
 
 ### Example Input (Default AGENTS.md)
 ```
-output_dir: ".summary"
+output_dir: ".sop/summary"
 consolidate: true
 consolidate_target: "AGENTS.md"
-consolidate_prompt: "Create a comprehensive AGENTS.md file optimized for AI coding assistants"
+consolidate_prompt: "Create a comprehensive AGENTS.md file optimized for AI coding assistants. You MUST focus on information that is not already present in other documentation sources like README.md or CONTRIBUTING.md. Useful information for this file includes: File purpose, directory structure, Coding style patterns, file organization patterns, instructions on how to write and run tests, documentation guidelines, and package specific guidance."
 codebase_path: "/path/to/project"
 ```
 
@@ -200,8 +196,8 @@ check_completeness: true
 
 ### Example Output (Update Mode)
 ```
-Update mode detected - checking for recent changes...
-✅ Found existing documentation with timestamp: 2024-01-15T10:30:00Z
+Update mode detected - checking for changes...
+✅ Found existing documentation
 ✅ Identified 8 commits since last update affecting 3 packages
 
 Analyzing recent changes...
@@ -212,7 +208,6 @@ Updating documentation...
 ✅ Updated architecture.md with new AuthService patterns
 ✅ Updated components.md with DataProcessor changes
 ✅ Updated interfaces.md with new API endpoints
-✅ Marked updated sections with timestamps
 
 Consolidating updated documentation...
 ✅ Updated AGENTS.md with recent changes
@@ -226,6 +221,7 @@ Summary:
 
 ### Example Output Structure
 ```
+AGENTS.md (consolidated file in root directory)
 .summary/
 ├── index.md (knowledge base index)
 ├── codebase_info.md
@@ -236,8 +232,7 @@ Summary:
 ├── workflows.md
 ├── dependencies.md
 ├── review_notes.md
-├── recent_changes.md (if update_mode)
-└── AGENTS.md (consolidated file)
+└── recent_changes.md (if update_mode)
 ```
 
 ## Troubleshooting
@@ -250,7 +245,6 @@ For very large codebases that take significant time to analyze:
 
 ### Update Mode Issues
 If update mode fails to detect changes correctly:
-- Verify that the index.md file contains a valid timestamp in ISO format
 - Check if git history is available and accessible
 - Try running with update_mode=false to generate fresh documentation
 

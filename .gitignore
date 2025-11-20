@@ -1,5 +1,8 @@
 __pycache__
 python/strands_agents_sops/sops
+python/strands_agents_sops/rules
 skills
 dist
 .amazonq
+.sop
+.coverage
