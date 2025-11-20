@@ -16,7 +16,7 @@ agent-sop/
 │   ├── codebase-summary.sop.md   # Documentation generation workflow
 │   ├── code-assist.sop.md        # TDD implementation workflow
 │   ├── code-task-generator.sop.md # Task breakdown workflow
-│   └── pdd.sop.md               # Problem-driven development workflow
+│   └── pdd.sop.md               # Prompt-driven development workflow
 ├── python/tests/                 # Comprehensive test suite
 ├── spec/                         # SOP format specification
 └── rules/                        # SOP authoring guidelines
@@ -70,7 +70,7 @@ Common issues and their solutions.
 1. **codebase-summary**: Analyzes codebases and generates comprehensive documentation
 2. **code-assist**: TDD-based implementation with Explore, Plan, Code, Commit workflow
 3. **code-task-generator**: Breaks down requirements into manageable tasks
-4. **pdd**: Problem-driven development methodology
+4. **pdd**: Prompt-driven development methodology
 
 ## Testing and Quality Assurance
 

@@ -69,7 +69,7 @@ Initialize the project environment and create necessary directory structures.
 | SOP | Purpose | Use Cases |
 |-----|---------|-----------|
 | **[codebase-summary](agent-sops/codebase-summary.sop.md)** | Comprehensive codebase analysis and documentation generation | Project onboarding, documentation creation, system understanding |
-| **[pdd](agent-sops/pdd.sop.md)** | Problem-driven development methodology | Complex problem solving, architectural decisions, system design |
+| **[pdd](agent-sops/pdd.sop.md)** | Prompt-driven development methodology | Complex problem solving, architectural decisions, system design |
 | **[code-task-generator](agent-sops/code-task-generator.sop.md)** | Intelligent task breakdown and planning from requirements | Project planning, sprint preparation, requirement analysis |
 | **[code-assist](agent-sops/code-assist.sop.md)** | TDD-based code implementation with structured workflow | Feature development, bug fixes, refactoring |
 
