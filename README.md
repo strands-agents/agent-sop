@@ -33,9 +33,10 @@ Agent SOPs (Standard Operating Procedures) are markdown-based instruction sets t
 
 Agent SOPs use a standardized format to define:
 - **Clear objectives** with detailed overviews
-- **Parameterized inputs** for flexible reuse
+- **Parameterized inputs** for flexible reuse across different contexts
 - **Step-by-step instructions** with RFC 2119 constraints (MUST, SHOULD, MAY)
 - **Examples and troubleshooting** for reliable execution
+- **Multi-modal distribution** (MCP tools, Anthropic Skills, Python modules)
 
 ### Example SOP Structure
 
@@ -108,6 +109,8 @@ while(True):
 
 ### Using as MCP Server
 
+The MCP (Model Context Protocol) server exposes SOPs as tools that AI assistants can discover and execute on-demand:
+
 ```bash
 # Install the package
 pip install strands-agents-sops
@@ -115,7 +118,7 @@ pip install strands-agents-sops
 # Start MCP server with built-in SOPs only
 strands-agents-sops mcp
 
-# Load external SOPs from custom directories
+# Load external SOPs from custom directories (sops in path must have `.sop.md` postfix)
 strands-agents-sops mcp --sop-paths ~/my-sops:/path/to/other-sops
 
 # External SOPs override built-in SOPs with same name
@@ -126,6 +129,7 @@ strands-agents-sops mcp --sop-paths ~/custom-sops  # Your custom code-assist.sop
 
 The `--sop-paths` argument allows you to extend the MCP server with your own SOPs:
 
+- **File format**: Only files with `.sop.md` postfix are recognized as SOPs
 - **Colon-separated paths**: `~/sops1:/absolute/path:relative/path`
 - **Path expansion**: Supports `~` (home directory) and relative paths
 - **First-wins precedence**: External SOPs override built-in SOPs with same name
@@ -169,7 +173,7 @@ Agent SOPs are fully compatible with Claude's [Skills system](https://support.cl
 
 ### How SOPs Work as Skills
 
-The key value of using SOPs as Skills is **progressive disclosure of context**. Instead of loading all workflow instructions into Claude's context upfront, you can provide many SOP skills to an agent, and Claude will intelligently decide which ones to load and execute based on the task at hand.
+The key value of using SOPs as Skills is **progressive disclosure of context**. Instead of loading all workflow instructions into Claude's context upfront, you can provide many SOP skills to Claude, and Claude will intelligently decide which ones to load and execute based on the task at hand.
 
 This approach offers several advantages:
 
@@ -178,7 +182,7 @@ This approach offers several advantages:
 - **Intelligent Selection**: Claude automatically chooses the most appropriate SOP for each task
 - **Dynamic Loading**: Complex workflows are only activated when Claude determines they're useful
 
-For example, you might provide Claude with all five Agent SOPs as skills. When asked to "implement user authentication," Claude would automatically select and load the `code-assist` skill. When asked to "document this codebase," it would choose the `codebase-summary` skill instead.
+For example, you might provide Claude with all Agent SOPs as skills. When asked to "implement user authentication," Claude would automatically select and load the `code-assist` skill. When asked to "document this codebase," it would choose the `codebase-summary` skill instead.
 
 ### Converting SOPs to Skills
 
@@ -202,6 +206,7 @@ strands-agents-sops skills --sop-paths ~/custom-sops --output-dir ./skills
 
 The `--sop-paths` argument allows you to extend skills generation with your own SOPs:
 
+- **File format**: Only files with `.sop.md` postfix are recognized as SOPs
 - **Colon-separated paths**: `~/sops1:/absolute/path:relative/path`
 - **Path expansion**: Supports `~` (home directory) and relative paths
 - **First-wins precedence**: External SOPs override built-in SOPs with same name
@@ -297,34 +302,15 @@ collaboration while adhering to existing package patterns.
 
 ---
 
-## How Agent SOPs Work
+## What Are Agent SOPs?
 
-### 1. Structured Format
-SOPs use a standardized markdown format with:
-- **Overview**: Clear purpose and context
-- **Parameters**: Typed inputs with defaults and constraints
-- **Steps**: Numbered workflow phases with specific requirements
-- **Constraints**: RFC 2119 keywords (MUST, SHOULD, MAY) for precise behavior
+Agent SOPs use a standardized markdown format with key features that enable repeatable and understandable behavior from AI agents:
 
-### 2. Constraint-Based Execution
-Each step includes explicit constraints that define:
-- Required actions (MUST)
-- Recommended practices (SHOULD) 
-- Optional enhancements (MAY)
-- Prohibited behaviors (MUST NOT)
+1. **Structured steps with [RFC 2119](https://datatracker.ietf.org/doc/html/rfc2119) constraints** - Each workflow step uses [RFC 2119](https://datatracker.ietf.org/doc/html/rfc2119) keywords like MUST, SHOULD, and MAY to provide precise control over agent behavior without rigid scripting, ensuring reliable execution while preserving the agent's reasoning ability.
+2. **Parameterized inputs** - Rather than hardcoding specific values, SOPs accept parameters that customize behavior for different projects, teams, or requirements. This transforms single-use prompts into flexible templates that can be applied broadly while maintaining consistency.
+3. **Easy authoring through AI assistance** - Teams can create new SOPs in minutes. Coding agents can read the SOP format specification and generate new workflows based on natural language descriptions, making the creation process accessible to anyone regardless of prompt engineering expertise.
+4. **Progress tracking and resumability** - Agent SOPs can instruct agents to document their progress as they work, making it easy to understand what's happening and resume if something breaks. This transparency was crucial for debugging prompts and building developer trust in AI automation.
 
-### 3. Parameterized Workflows
-SOPs accept inputs to customize execution:
-- **Required parameters**: Essential inputs for the workflow
-- **Optional parameters**: Customization options with sensible defaults
-- **Multiple input methods**: Direct text, file paths, URLs, or interactive prompts
-
-### 4. Multi-Modal Distribution
-Single SOP source files can be distributed to multiple formats:
-- **MCP Prompts**: For AI assistant integration
-- **Anthropic Skills**: For Claude.ai and Skills API
-- **Python Modules**: For programmatic access
-- **Documentation**: For human reference
 
 ## Creating Agent SOPs
 
@@ -373,20 +359,6 @@ Concrete usage examples showing input and expected outcomes.
 ## Troubleshooting
 Common issues and their solutions.
 ```
-
-### Best Practices
-
-1. **Clear Objectives**: Start with a comprehensive Overview section
-2. **Explicit Constraints**: Use RFC 2119 keywords for precise behavior
-3. **Parameterization**: Make SOPs reusable with well-defined inputs
-4. **Error Handling**: Include troubleshooting for common failure modes
-5. **Examples**: Provide concrete usage demonstrations
-
-## Documentation
-
-- **[Specification](spec/agent-sops-specification.md)**: Complete format specification
-- **[Format Rules](rules/agent-sop-format.md)**: Agent context for writing your own rules
-- **[Examples](agent-sops/)**: All available SOPs with full implementations
 
 ## License
 
