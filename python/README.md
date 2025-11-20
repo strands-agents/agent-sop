@@ -47,7 +47,15 @@ agent = Agent(
 ```bash
 # Install and run MCP server
 pip install strands-agents-sops
-strands-agents-sops  # Starts MCP server
+
+# Start with built-in SOPs only
+strands-agents-sops mcp
+
+# Load external SOPs from custom directories (sops in path must have `.sop.md` postfix)
+strands-agents-sops mcp --sop-paths ~/my-sops:/path/to/other-sops
+
+# External SOPs override built-in SOPs with same name
+strands-agents-sops mcp --sop-paths ~/custom-sops
 ```
 
 Add to your MCP client configuration:
@@ -55,7 +63,8 @@ Add to your MCP client configuration:
 {
   "mcpServers": {
     "agent-sops": {
-      "command": "strands-agents-sops"
+      "command": "strands-agents-sops",
+      "args": ["mcp", "--sop-paths", "~/my-sops"]
     }
   }
 }
@@ -69,6 +78,35 @@ strands-agents-sops skills
 
 # Custom output directory
 strands-agents-sops skills --output-dir my-skills
+
+# Include external SOPs in skills generation (sops in path must have `.sop.md` postfix)
+strands-agents-sops skills --sop-paths ~/my-sops --output-dir ./skills
+```
+
+### External SOP Loading
+
+Both MCP and Skills commands support loading custom SOPs:
+
+- **File format**: Only files with `.sop.md` postfix are recognized as SOPs
+- **Colon-separated paths**: `~/sops1:/absolute/path:relative/path`
+- **Path expansion**: Supports `~` (home directory) and relative paths  
+- **First-wins precedence**: External SOPs override built-in SOPs with same name
+- **Graceful error handling**: Invalid paths or malformed SOPs are skipped with warnings
+
+```bash
+# Create custom SOP
+mkdir ~/my-sops
+cat > ~/my-sops/custom-workflow.sop.md << 'EOF'
+# Custom Workflow
+## Overview
+My custom workflow for specific tasks.
+## Steps
+### 1. Custom Step
+Do something custom.
+EOF
+
+# Use with MCP server
+strands-agents-sops mcp --sop-paths ~/my-sops
 ```
 
 ## 🧪 Development & Testing
