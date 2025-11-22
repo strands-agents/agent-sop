@@ -53,9 +53,10 @@ Perform comprehensive analysis of the codebase to understand its structure, comp
 - You MUST analyze file organization, directory structure, and architectural patterns
 - You MUST identify supported and unsupported programming languages
 - You MUST document the technology stack and dependencies
-- You MUST create a hierarchical map of the codebase structure
+- You MUST create a hierarchical map of the codebase structure using Mermaid diagrams
 - You MUST identify key interfaces, APIs, and integration points
 - You MUST analyze code patterns and design principles used throughout the codebase
+- You MUST use Mermaid diagrams for all visual representations instead of ASCII art
 - You MUST document basic codebase information in {output_dir}/codebase_info.md
 - If update_mode is true, you MUST:
   - Analyze which packages and files were modified in recent commits
@@ -83,6 +84,8 @@ Create comprehensive documentation files for different aspects of the system.
   - {output_dir}/workflows.md (key processes and workflows)
   - {output_dir}/dependencies.md (external dependencies and their usage)
 - You MUST ensure each documentation file contains relevant information from the codebase analysis
+- You MUST use Mermaid diagrams for all visual representations throughout the documentation
+- You MUST NOT use ASCII art for any visual elements
 - If update_mode is true, you MUST:
   - Preserve existing documentation structure where possible
   - Only update sections related to modified components
@@ -233,6 +236,43 @@ AGENTS.md (consolidated file in root directory)
 ├── dependencies.md
 ├── review_notes.md
 └── recent_changes.md (if update_mode)
+```
+
+### Example Mermaid Diagram Types
+The documentation will include various Mermaid diagram types:
+
+**Architecture Overview:**
+```mermaid
+graph TB
+    A[Frontend] --> B[API Gateway]
+    B --> C[Auth Service]
+    B --> D[Business Logic]
+    D --> E[Database]
+```
+
+**Component Relationships:**
+```mermaid
+classDiagram
+    class UserService {
+        +authenticate()
+        +authorize()
+    }
+    class DataService {
+        +getData()
+        +saveData()
+    }
+    UserService --> DataService
+```
+
+**API Workflows:**
+```mermaid
+sequenceDiagram
+    Client->>API: Request
+    API->>Auth: Validate
+    Auth-->>API: Token Valid
+    API->>Service: Process
+    Service-->>API: Response
+    API-->>Client: Result
 ```
 
 ## Troubleshooting
