@@ -1,21 +1,25 @@
 from pathlib import Path
 
 
+def get_sop_format() -> str:
+    """Get the agent SOP format rule as a string.
+
+    Returns:
+        Content of the agent-sop-format.md rule file, or empty string if not found.
+    """
+    rule_file = Path(__file__).parent / "rules" / "agent-sop-format.md"
+
+    if not rule_file.exists():
+        return ""
+
+    return rule_file.read_text()
+
+
 def output_rules():
     """Output the contents of agent SOP authoring rules"""
-    rules_dir = Path(__file__).parent / "rules"
-
-    if not rules_dir.exists():
+    content = get_sop_format()
+    if not content:
         print("Rules directory not found. Make sure the package was built properly.")
         return
 
-    rule_files = list(rules_dir.glob("*.md"))
-
-    if not rule_files:
-        print("No rule files found in rules directory.")
-        return
-
-    for rule_file in rule_files:
-        print(f"=== {rule_file.name} ===")
-        print(rule_file.read_text())
-        print()
+    print(content)

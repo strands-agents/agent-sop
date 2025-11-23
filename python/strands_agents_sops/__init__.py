@@ -1,5 +1,7 @@
 from pathlib import Path
 
+from .rules import get_sop_format as get_sop_format
+
 # Load all SOP files as module attributes
 _sops_dir = Path(__file__).parent.parent.parent / "agent-sops"
 
