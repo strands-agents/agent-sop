@@ -8,6 +8,8 @@ on:
 jobs:
   test:
     name: Run tests 🧪
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v6
