@@ -325,11 +325,10 @@ strands-agents-sops rule
 
 The rule can be used in various AI coding agents:
 
-1. **Kiro IDE** - Copy into your project as `.kiro/steering/agent-sop-format.md`.
-1. **Kiro CLI** - Pin the rule file via the `/context` command or instruct Kiro CLI to read the rule file.
+1. **Kiro** - Copy into your home directory or project as `.kiro/steering/agent-sop-format.md`.
 2. **Amazon Q Developer** - Copy into your project as `.amazonq/rules/agent-sop-format.md`.
 3. **Claude Code** - Instruct Claude Code to read the rule file.
-4. **Cursor** - Copy into your project as `.cursor/rules/agent-sop-format.mdc` folder (Note the `.mdc` file extension).
+4. **Cursor** - Copy into your project as `.cursor/rules/agent-sop-format.mdc` (Note the `.mdc` file extension).
 5. **Cline** - Copy into your project as `.clinerules/agent-sop-format.md`.
 
 ### Basic Structure
