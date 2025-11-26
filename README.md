@@ -167,6 +167,114 @@ Then connect your MCP-compatible AI assistant to access SOPs as tools. Here is a
 
 ---
 
+## Cursor IDE Integration
+
+Agent SOPs can be converted to Cursor commands, allowing you to execute workflows directly within Cursor IDE using the `/` command prefix.
+
+### Understanding Cursor Rules vs Commands
+
+- **Rules** (`.cursor/rules`): Provide persistent, system-level guidance that's automatically applied. Rules are static and don't support parameters.
+- **Commands** (`.cursor/commands`): Reusable workflows triggered with `/` prefix. Commands can prompt users for input, making them ideal for parameterized SOPs.
+
+Since Agent SOPs are parameterized workflows that need user input, they're best implemented as **Commands** rather than Rules.
+
+### Converting SOPs to Cursor Commands
+
+Each Agent SOP can be automatically converted to Cursor command format:
+
+```bash
+# Generate Cursor commands from built-in SOPs (default output: .cursor/commands)
+strands-agents-sops cursor
+
+# Or specify custom output directory
+strands-agents-sops cursor --output-dir .cursor/commands
+
+# Load external SOPs from custom directories
+strands-agents-sops cursor --sop-paths ~/my-sops:/path/to/other-sops
+
+# External SOPs override built-in SOPs with same name
+strands-agents-sops cursor --sop-paths ~/custom-sops --output-dir .cursor/commands
+```
+
+#### External SOP Loading
+
+The `--sop-paths` argument allows you to extend commands generation with your own SOPs:
+
+- **File format**: Only files with `.sop.md` postfix are recognized as SOPs
+- **Colon-separated paths**: `~/sops1:/absolute/path:relative/path`
+- **Path expansion**: Supports `~` (home directory) and relative paths
+- **First-wins precedence**: External SOPs override built-in SOPs with same name
+- **Graceful error handling**: Invalid paths or malformed SOPs are skipped with warnings
+
+**Example workflow:**
+```bash
+# Create your custom SOP
+mkdir ~/my-sops
+cat > ~/my-sops/custom-workflow.sop.md << 'EOF'
+# Custom Workflow
+## Overview
+My custom workflow for specific tasks.
+## Parameters
+- **task** (required): Description of task
+## Steps
+### 1. Custom Step
+Do something custom.
+EOF
+
+# Generate Cursor commands with your custom SOPs
+strands-agents-sops cursor --sop-paths ~/my-sops
+```
+
+This creates command files in `.cursor/commands/`:
+```
+.cursor/commands/
+├── code-assist.md
+├── codebase-summary.md
+├── code-task-generator.md
+├── pdd.md
+└── custom-workflow.md
+```
+
+### Using Commands in Cursor
+
+1. **Generate commands**: Run `strands-agents-sops cursor` in your project root
+2. **Execute workflows**: In Cursor chat, type `/` followed by the command name (e.g., `/code-assist`)
+3. **Provide parameters**: When prompted, provide the required parameters for the workflow
+
+**Example:**
+```
+You: /code-assist
+
+AI: I'll help you implement code using the code-assist workflow. 
+    Please provide the following required parameters:
+    - task_description: [description of the task]
+    - mode (optional, default: "auto"): "interactive" or "auto"
+    
+You: task_description: "Create a user authentication system"
+     mode: "interactive"
+```
+
+### Command Format
+
+Each generated command includes:
+- Clear usage instructions
+- Parameter documentation (required and optional)
+- Full SOP content for execution
+
+The commands handle parameters by prompting users when executed, since Cursor doesn't support explicit parameter passing. The SOP's "Constraints for parameter acquisition" section guides this interaction.
+
+### Parameter Handling
+
+Since Cursor commands don't support explicit parameters, the generated commands include instructions to prompt users for required inputs. The AI assistant will:
+1. Read the command file when you type `/command-name`
+2. Identify required and optional parameters from the SOP
+3. Prompt you for all required parameters upfront
+4. Execute the workflow with the provided parameters
+
+This approach maintains the parameterized nature of SOPs while working within Cursor's command system.
+
+---
+
 ## Anthropic Skills Integration
 
 Agent SOPs are fully compatible with Claude's [Skills system](https://support.claude.com/en/articles/12512176-what-are-skills), allowing you to teach Claude specialized workflows that can be reused across conversations and projects.
