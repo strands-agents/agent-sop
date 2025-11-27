@@ -109,7 +109,7 @@ while(True):
 
 ### Using as MCP Server
 
-The MCP (Model Context Protocol) server exposes SOPs as tools that AI assistants can discover and execute on-demand:
+The MCP (Model Context Protocol) server exposes SOPs as prompts that AI assistants can discover and use on-demand:
 
 ```bash
 # Install the package
