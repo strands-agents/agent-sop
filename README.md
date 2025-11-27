@@ -78,6 +78,10 @@ Initialize the project environment and create necessary directory structures.
 Install the `strands-agents-sops` package:
 
 ```bash
+# Using Homebrew
+brew install strands-agents-sops
+
+# Or using pip
 pip install strands-agents-sops
 ```
 
@@ -86,8 +90,11 @@ pip install strands-agents-sops
 Install strands agents and the sops package:
 
 ```bash
-pip install strands-agents strands-agents-tools strands-agents-sops
+brew install strands-agents-sops
+pip install strands-agents strands-agents-tools
 ```
+
+> **Note:** See [Quick Start](#quick-start) above for pip installation of `strands-agents-sops`.
 
 Create a simple cli coding agent:
 
@@ -112,8 +119,8 @@ while(True):
 The MCP (Model Context Protocol) server exposes SOPs as tools that AI assistants can discover and execute on-demand:
 
 ```bash
-# Install the package
-pip install strands-agents-sops
+# Install the package (see Quick Start for pip alternative)
+brew install strands-agents-sops
 
 # Start MCP server with built-in SOPs only
 strands-agents-sops mcp
