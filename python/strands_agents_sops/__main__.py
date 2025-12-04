@@ -1,5 +1,6 @@
 import argparse
 
+from .cursor import generate_cursor_commands
 from .mcp import run_mcp_server
 from .rules import output_rules
 from .skills import generate_anthropic_skills
@@ -37,6 +38,21 @@ def main():
     # Rules output command
     subparsers.add_parser("rule", help="Output agent SOP authoring rule")
 
+    # Cursor commands generation command
+    cursor_parser = subparsers.add_parser(
+        "cursor", help="Generate Cursor IDE commands from SOPs"
+    )
+    cursor_parser.add_argument(
+        "--output-dir",
+        default=".cursor/commands",
+        help="Output directory for Cursor commands (default: .cursor/commands)",
+    )
+    cursor_parser.add_argument(
+        "--sop-paths",
+        help="Colon-separated list of directory paths to load external SOPs from. "
+        "Supports absolute paths, relative paths, and tilde (~) expansion.",
+    )
+
     args = parser.parse_args()
 
     if args.command == "skills":
@@ -44,6 +60,9 @@ def main():
         generate_anthropic_skills(args.output_dir, sop_paths=sop_paths)
     elif args.command == "rule":
         output_rules()
+    elif args.command == "cursor":
+        sop_paths = getattr(args, "sop_paths", None)
+        generate_cursor_commands(args.output_dir, sop_paths=sop_paths)
     else:
         # Default to MCP server
         sop_paths = getattr(args, "sop_paths", None)
