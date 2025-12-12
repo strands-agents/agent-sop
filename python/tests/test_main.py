@@ -37,3 +37,19 @@ def test_main_mcp_with_paths(mock_init, mock_run):
     main()
     mock_init.assert_called_once_with(sop_paths="/test/path")
     mock_run.assert_called_once()
+
+
+@patch("strands_agents_sops.__main__.generate_cursor_commands")
+@patch("sys.argv", ["strands-agents-sops", "commands", "--type", "cursor", "--output-dir", "test-dir"])
+def test_main_commands_cursor(mock_generate):
+    """Test main function with commands --type cursor"""
+    main()
+    mock_generate.assert_called_once_with("test-dir", sop_paths=None)
+
+
+@patch("strands_agents_sops.__main__.generate_cursor_commands")
+@patch("sys.argv", ["strands-agents-sops", "commands", "--type", "cursor", "--sop-paths", "/test/path"])
+def test_main_commands_cursor_with_paths(mock_generate):
+    """Test main function with commands --type cursor and sop-paths"""
+    main()
+    mock_generate.assert_called_once_with(".cursor/commands", sop_paths="/test/path")
