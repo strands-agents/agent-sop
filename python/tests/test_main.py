@@ -19,17 +19,21 @@ def test_main_rule_command(mock_output_rules):
     mock_output_rules.assert_called_once()
 
 
-@patch("strands_agents_sops.__main__.run_mcp_server")
+@patch("strands_agents_sops.mcp.server.AgentSOPMCPServer.run")
+@patch("strands_agents_sops.mcp.server.AgentSOPMCPServer.__init__", return_value=None)
 @patch("sys.argv", ["strands-agents-sops"])
-def test_main_default_mcp(mock_run_mcp):
+def test_main_default_mcp(mock_init, mock_run):
     """Test main function defaults to MCP server"""
     main()
-    mock_run_mcp.assert_called_once_with(sop_paths=None)
+    mock_init.assert_called_once_with(sop_paths=None)
+    mock_run.assert_called_once()
 
 
-@patch("strands_agents_sops.__main__.run_mcp_server")
+@patch("strands_agents_sops.mcp.server.AgentSOPMCPServer.run")
+@patch("strands_agents_sops.mcp.server.AgentSOPMCPServer.__init__", return_value=None)
 @patch("sys.argv", ["strands-agents-sops", "mcp", "--sop-paths", "/test/path"])
-def test_main_mcp_with_paths(mock_run_mcp):
+def test_main_mcp_with_paths(mock_init, mock_run):
     """Test main function with MCP and sop-paths"""
     main()
-    mock_run_mcp.assert_called_once_with(sop_paths="/test/path")
+    mock_init.assert_called_once_with(sop_paths="/test/path")
+    mock_run.assert_called_once()

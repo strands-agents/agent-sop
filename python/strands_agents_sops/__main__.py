@@ -1,6 +1,6 @@
 import argparse
 
-from .mcp import run_mcp_server
+from .mcp.server import AgentSOPMCPServer
 from .rules import output_rules
 from .skills import generate_anthropic_skills
 
@@ -47,7 +47,8 @@ def main():
     else:
         # Default to MCP server
         sop_paths = getattr(args, "sop_paths", None)
-        run_mcp_server(sop_paths=sop_paths)
+        mcp_server = AgentSOPMCPServer(sop_paths=sop_paths)
+        mcp_server.run()
 
 
 if __name__ == "__main__":
