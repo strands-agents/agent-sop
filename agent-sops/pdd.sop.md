@@ -157,6 +157,8 @@ Develop a comprehensive design document based on the requirements and research.
 - You MUST ensure the design addresses all requirements identified during the clarification process
 - You SHOULD highlight design decisions and their rationales, referencing research findings where applicable
 - You MUST review the design with the user and iterate based on feedback
+- You MUST explicitly ask the user if they are ready to proceed to implementation before moving to Step 7
+- You MUST NOT proceed to the implementation plan step without explicit user confirmation because this could skip important design refinement
 - You MUST offer to return to requirements clarification or research if gaps are identified during design
 
 ### 7. Develop Implementation Plan
