@@ -24,6 +24,11 @@ def main():
     # MCP server command (default)
     mcp_parser = subparsers.add_parser("mcp", help="Run MCP server (default)")
     mcp_parser.add_argument(
+        "--sop-source",
+        action="append",
+        help="External SOP source in format 'type=s3,bucket=my-bucket[,prefix=path][,region=us-east-1][,endpoint-url=https://s3.example.com][,profile=myprofile]'. Can be repeated for multiple sources.",
+    )
+    mcp_parser.add_argument(
         "--sop-paths",
         help="Colon-separated list of directory paths to load external SOPs from. "
         "Supports absolute paths, relative paths, and tilde (~) expansion.",
@@ -35,6 +40,11 @@ def main():
         "--output-dir",
         default="skills",
         help="Output directory for skills (default: skills)",
+    )
+    skills_parser.add_argument(
+        "--sop-source",
+        action="append",
+        help="External SOP source in format 'type=s3,bucket=my-bucket[,prefix=path][,region=us-east-1][,endpoint-url=https://s3.example.com][,profile=myprofile]'. Can be repeated for multiple sources.",
     )
     skills_parser.add_argument(
         "--sop-paths",
@@ -68,8 +78,9 @@ def main():
     args = parser.parse_args()
 
     if args.command == "skills":
+        sop_sources = getattr(args, "sop_source", None) or []
         sop_paths = getattr(args, "sop_paths", None)
-        generate_anthropic_skills(args.output_dir, sop_paths=sop_paths)
+        generate_anthropic_skills(args.output_dir, sop_sources=sop_sources, sop_paths=sop_paths)
     elif args.command == "rule":
         output_rules()
     elif args.command == "commands":
@@ -84,8 +95,9 @@ def main():
         generator_func(output_dir, sop_paths=sop_paths)
     else:
         # Default to MCP server
+        sop_sources = getattr(args, "sop_source", None) or []
         sop_paths = getattr(args, "sop_paths", None)
-        run_mcp_server(sop_paths=sop_paths)
+        run_mcp_server(sop_sources=sop_sources, sop_paths=sop_paths)
 
 
 if __name__ == "__main__":

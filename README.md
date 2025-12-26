@@ -126,22 +126,44 @@ brew install strands-agents-sops
 # Start MCP server with built-in SOPs only
 strands-agents-sops mcp
 
+# Load external SOPs from S3
+strands-agents-sops mcp --sop-source type=s3,bucket=my-sop-bucket,prefix=workflows/
+
 # Load external SOPs from custom directories (sops in path must have `.sop.md` postfix)
 strands-agents-sops mcp --sop-paths ~/my-sops:/path/to/other-sops
 
-# External SOPs override built-in SOPs with same name
-strands-agents-sops mcp --sop-paths ~/custom-sops  # Your custom code-assist.sop.md overrides built-in
+# Mix S3 and local sources with first-wins precedence
+strands-agents-sops mcp \
+  --sop-source type=s3,bucket=prod-sops,prefix=workflows/ \
+  --sop-source type=s3,bucket=team-sops \
+  --sop-paths ~/custom-sops
 ```
 
-#### External SOP Loading
+#### External SOP Sources
 
-The `--sop-paths` argument allows you to extend the MCP server with your own SOPs:
+The MCP server supports loading SOPs from multiple external sources with first-wins precedence:
 
+##### Source Types
+- **S3**: `--sop-source type=s3,bucket=my-bucket[,prefix=path][,region=us-east-1][,endpoint-url=https://s3.example.com][,profile=myprofile]`
+- **Local directories**: `--sop-paths ~/sops1:/absolute/path:relative/path`
+
+##### Source Precedence
+1. Listed `--sop-source` entries (in order)
+2. Listed `--sop-paths` entries (in order)
+3. Built-in SOPs
+
+##### General Requirements
 - **File format**: Only files with `.sop.md` postfix are recognized as SOPs
-- **Colon-separated paths**: `~/sops1:/absolute/path:relative/path`
-- **Path expansion**: Supports `~` (home directory) and relative paths
 - **First-wins precedence**: External SOPs override built-in SOPs with same name
-- **Graceful error handling**: Invalid paths or malformed SOPs are skipped with warnings
+- **Graceful error handling**: Invalid sources or malformed SOPs are skipped with warnings
+
+##### S3 Configuration
+S3 sources use the AWS default credential chain and require minimal IAM permissions:
+```bash
+# Required IAM permissions for S3 bucket access
+s3:GetObject on arn:aws:s3:::bucket/prefix/*
+s3:ListBucket on arn:aws:s3:::bucket (with s3:prefix condition)
+```
 
 **Example workflow:**
 ```bash
@@ -308,14 +330,20 @@ Each Agent SOP can be automatically converted to Anthropic's Skills format:
 # Generate Skills format from built-in SOPs only
 strands-agents-sops skills
 
+# Load external SOPs from S3
+strands-agents-sops skills --sop-source type=s3,bucket=my-sop-bucket,prefix=workflows/
+
 # Or specify custom output directory
 strands-agents-sops skills --output-dir my-skills
 
 # Load external SOPs from custom directories
 strands-agents-sops skills --sop-paths ~/my-sops:/path/to/other-sops
 
-# External SOPs override built-in SOPs with same name
-strands-agents-sops skills --sop-paths ~/custom-sops --output-dir ./skills
+# Mix S3 and local sources with first-wins precedence
+strands-agents-sops skills \
+  --sop-source type=s3,bucket=prod-sops,prefix=workflows/ \
+  --sop-paths ~/custom-sops \
+  --output-dir ./skills
 ```
 
 #### External SOP Loading
