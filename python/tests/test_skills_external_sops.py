@@ -20,7 +20,7 @@ class TestSkillsCLIIntegration:
                 from strands_agents_sops.__main__ import main
 
                 main()
-                mock_generate.assert_called_once_with("skills", sop_paths="~/test-sops")
+                mock_generate.assert_called_once_with("skills", sop_sources=[], sop_paths="~/test-sops")
 
     def test_skills_accepts_both_arguments(self):
         """Test that skills subcommand accepts both --sop-paths and --output-dir"""
@@ -41,7 +41,7 @@ class TestSkillsCLIIntegration:
                 from strands_agents_sops.__main__ import main
 
                 main()
-                mock_generate.assert_called_once_with("./output", sop_paths="~/sops")
+                mock_generate.assert_called_once_with("./output", sop_sources=[], sop_paths="~/sops")
 
     def test_skills_backward_compatibility(self):
         """Test that skills subcommand works without --sop-paths"""
@@ -55,7 +55,7 @@ class TestSkillsCLIIntegration:
                 from strands_agents_sops.__main__ import main
 
                 main()
-                mock_generate.assert_called_once_with("./skills", sop_paths=None)
+                mock_generate.assert_called_once_with("./skills", sop_sources=[], sop_paths=None)
 
 
 class TestSkillsExternalSOPLoading:

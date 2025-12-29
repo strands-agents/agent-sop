@@ -1,19 +1,24 @@
 import logging
 import re
 from pathlib import Path
+from typing import List
 
 from mcp.server.fastmcp import FastMCP
 
-from .utils import expand_sop_paths, load_external_sops
+from .sources import (
+    build_sop_sources,
+    load_sops_from_sources,
+)
 
 logger = logging.getLogger(__name__)
 
 
-def run_mcp_server(sop_paths: str | None = None):
+def run_mcp_server(sop_sources: List[str] | None = None, sop_paths: str | None = None):
     """Run the MCP server for serving SOPs as prompts
 
     Args:
-        sop_paths: Optional colon-separated string of external SOP directory paths
+        sop_sources: List of external SOP source strings
+        sop_paths: Optional colon-separated string of external SOP directory paths (backward compatibility)
     """
     mcp = FastMCP("agent-sop-prompt-server")
     registered_sops = set()  # Track registered SOP names for first-wins behavior
@@ -41,27 +46,19 @@ def run_mcp_server(sop_paths: str | None = None):
                 make_prompt_handler(name, content)
             )
 
-    # Load external SOPs first (higher precedence)
-    if sop_paths:
-        external_directories = expand_sop_paths(sop_paths)
-        external_sops = load_external_sops(external_directories)
-
-        for sop in external_sops:
-            register_sop(sop["name"], sop["content"], sop["description"])
-
-    # Load built-in SOPs last (lower precedence)
+    # Build sources list with proper precedence order
     sops_dir = Path(__file__).parent / "sops"
-    for md_file in sops_dir.glob("*.sop.md"):
-        if md_file.is_file():
-            prompt_name = md_file.stem.removesuffix(".sop")
-            sop_content = md_file.read_text(encoding="utf-8")
-            overview_match = re.search(
-                r"## Overview\s*\n(.*?)(?=\n##|\n#|\Z)", sop_content, re.DOTALL
-            )
-            if not overview_match:
-                raise ValueError(f"No Overview section found in {sop_content}")
+    sources = build_sop_sources(
+        sop_sources=sop_sources,
+        sop_paths=sop_paths,
+        builtin_sops_dir=sops_dir
+    )
 
-            description = overview_match.group(1).strip().replace("\n", " ")
-            register_sop(prompt_name, sop_content, description)
+    # Load all SOPs from sources with first-wins precedence
+    all_sops = load_sops_from_sources(sources)
+    
+    # Register SOPs with MCP server
+    for sop in all_sops:
+        register_sop(sop["name"], sop["content"], sop["description"])
 
     mcp.run()

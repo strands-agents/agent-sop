@@ -1,49 +1,43 @@
 import logging
 import re
 from pathlib import Path
+from typing import List
 
-from .utils import expand_sop_paths, load_external_sops
+from .sources import (
+    build_sop_sources,
+    load_sops_from_sources,
+)
 
 logger = logging.getLogger(__name__)
 
 
-def generate_anthropic_skills(output_dir: str, sop_paths: str | None = None):
-    """Generate Anthropic skills from SOPs"""
+def generate_anthropic_skills(output_dir: str, sop_sources: List[str] | None = None, sop_paths: str | None = None):
+    """Generate Anthropic skills from SOPs
+    
+    Args:
+        output_dir: Output directory for skills
+        sop_sources: List of external SOP source strings
+        sop_paths: Optional colon-separated string of external SOP directory paths (backward compatibility)
+    """
     output_path = Path(output_dir)
     output_path.mkdir(exist_ok=True)
 
-    processed_sops = set()  # Track processed SOP names for first-wins behavior
-
-    # Process external SOPs first (higher precedence)
-    if sop_paths:
-        external_directories = expand_sop_paths(sop_paths)
-        external_sops = load_external_sops(external_directories)
-
-        for sop in external_sops:
-            if sop["name"] not in processed_sops:
-                processed_sops.add(sop["name"])
-                _create_skill_file(
-                    output_path, sop["name"], sop["content"], sop["description"]
-                )
-
-    # Process built-in SOPs last (lower precedence)
+    # Build sources list with proper precedence order
     sops_dir = Path(__file__).parent / "sops"
-    for sop_file in sops_dir.glob("*.sop.md"):
-        skill_name = sop_file.stem.removesuffix(".sop")
+    sources = build_sop_sources(
+        sop_sources=sop_sources,
+        sop_paths=sop_paths,
+        builtin_sops_dir=sops_dir
+    )
 
-        if skill_name not in processed_sops:
-            processed_sops.add(skill_name)
-            content = sop_file.read_text()
-
-            # Extract overview/description
-            overview_match = re.search(
-                r"## Overview\s*\n(.*?)(?=\n##|\n#|\Z)", content, re.DOTALL
-            )
-            if not overview_match:
-                raise ValueError(f"No Overview section found in {sop_file.name}")
-
-            description = overview_match.group(1).strip().replace("\n", " ")
-            _create_skill_file(output_path, skill_name, content, description)
+    # Load all SOPs from sources with first-wins precedence
+    all_sops = load_sops_from_sources(sources)
+    
+    # Create skill files for all loaded SOPs
+    for sop in all_sops:
+        _create_skill_file(
+            output_path, sop["name"], sop["content"], sop["description"]
+        )
 
     print(f"\nAnthropic skills generated in: {output_path.absolute()}")
 
