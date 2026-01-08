@@ -133,6 +133,22 @@ strands-agents-sops mcp --sop-paths ~/my-sops:/path/to/other-sops
 strands-agents-sops mcp --sop-paths ~/custom-sops  # Your custom code-assist.sop.md overrides built-in
 ```
 
+#### Using SOPs in Different AI Tools
+
+The syntax for invoking MCP prompts varies between AI tools:
+
+**Kiro:**
+```
+@codebase-summary
+```
+
+**Claude Code:**
+```
+/strands-agents-sops:codebase-summary
+```
+
+
+
 #### External SOP Loading
 
 The `--sop-paths` argument allows you to extend the MCP server with your own SOPs:
