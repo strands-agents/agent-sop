@@ -33,3 +33,48 @@ def test_main_mcp_with_paths(mock_run_mcp):
     """Test main function with MCP and sop-paths"""
     main()
     mock_run_mcp.assert_called_once_with(sop_paths="/test/path")
+
+
+@patch(
+    "sys.argv",
+    ["strands-agents-sops", "commands", "--type", "cursor", "--output-dir", "test-dir"],
+)
+def test_main_commands_cursor():
+    """Test main function with commands --type cursor"""
+    from unittest.mock import MagicMock
+
+    mock_func = MagicMock()
+
+    # Patch the registry with our mock
+    with patch(
+        "strands_agents_sops.__main__.COMMAND_GENERATORS",
+        {"cursor": (mock_func, ".cursor/commands")},
+    ):
+        main()
+        mock_func.assert_called_once_with("test-dir", sop_paths=None)
+
+
+@patch(
+    "sys.argv",
+    [
+        "strands-agents-sops",
+        "commands",
+        "--type",
+        "cursor",
+        "--sop-paths",
+        "/test/path",
+    ],
+)
+def test_main_commands_cursor_with_paths():
+    """Test main function with commands --type cursor and sop-paths"""
+    from unittest.mock import MagicMock
+
+    mock_func = MagicMock()
+
+    # Patch the registry with our mock
+    with patch(
+        "strands_agents_sops.__main__.COMMAND_GENERATORS",
+        {"cursor": (mock_func, ".cursor/commands")},
+    ):
+        main()
+        mock_func.assert_called_once_with(".cursor/commands", sop_paths="/test/path")
