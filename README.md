@@ -72,7 +72,7 @@ Initialize the project environment and create necessary directory structures.
 | **[pdd](agent-sops/pdd.sop.md)** | Prompt-driven development methodology | Complex problem solving, architectural decisions, system design |
 | **[code-task-generator](agent-sops/code-task-generator.sop.md)** | Intelligent task breakdown and planning from requirements | Project planning, sprint preparation, requirement analysis |
 | **[code-assist](agent-sops/code-assist.sop.md)** | TDD-based code implementation with structured workflow | Feature development, bug fixes, refactoring |
-| **[eval](agent-sops/eval.sop.md)** | Automated evaluation workflow for AI agents using [Strands Evals SDK](https://github.com/strands-agents/evals) | Evaluation planning, test data generation, evaluation execution, and result analysis |
+| **[eval](agent-sops/eval.sop.md)** | Automated evaluation workflow for AI agents using [Strands Evals SDK](https://github.com/strands-agents/evals) | Evaluation planning, test data generation, evaluation execution, and result analysis ([usage guide](https://strandsagents.com/latest/documentation/docs/user-guide/evals-sdk/eval-sop/)) |
 
 ## Quick Start
 
