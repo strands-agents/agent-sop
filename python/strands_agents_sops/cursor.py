@@ -72,7 +72,7 @@ def _create_command_file(
     # Cursor commands are plain markdown, so we can include the full SOP
     # but we'll add a header to make it clear this is a command
     # Wrap SOP content in XML tags like MCP server does, with "Run this SOP:" prefix
-    command_content = f"""# {command_name.replace('-', ' ').title()}
+    command_content = f"""# {command_name.replace("-", " ").title()}
 
 {description}
 
@@ -126,11 +126,11 @@ This workflow does not require any parameters. Simply execute the command to beg
     for match in re.finditer(param_pattern, parameters_section, re.DOTALL):
         param_name, param_type, default_value, description = match.groups()
         # Clean up description - remove extra whitespace and normalize newlines
-        description = re.sub(r'\s+', ' ', description.strip())
+        description = re.sub(r"\s+", " ", description.strip())
         param_info = {
             "name": param_name,
             "description": description,
-            "default": default_value.strip() if default_value else None
+            "default": default_value.strip() if default_value else None,
         }
 
         if param_type == "required":
@@ -141,7 +141,9 @@ This workflow does not require any parameters. Simply execute the command to beg
     instructions = ["## Parameters\n"]
 
     if required_params or optional_params:
-        instructions.append("When you execute this command, I will prompt you for the following parameters:\n")
+        instructions.append(
+            "When you execute this command, I will prompt you for the following parameters:\n"
+        )
 
         if required_params:
             instructions.append("### Required Parameters\n")
@@ -151,11 +153,19 @@ This workflow does not require any parameters. Simply execute the command to beg
         if optional_params:
             instructions.append("### Optional Parameters\n")
             for param in optional_params:
-                default_text = f" (default: {param['default']})" if param['default'] else ""
-                instructions.append(f"- **{param['name']}**: {param['description']}{default_text}\n")
+                default_text = (
+                    f" (default: {param['default']})" if param["default"] else ""
+                )
+                instructions.append(
+                    f"- **{param['name']}**: {param['description']}{default_text}\n"
+                )
 
-        instructions.append("\n**Note**: Please provide all required parameters when prompted. Optional parameters can be skipped to use their default values.\n")
+        instructions.append(
+            "\n**Note**: Please provide all required parameters when prompted. Optional parameters can be skipped to use their default values.\n"
+        )
     else:
-        instructions.append("This workflow does not require any parameters. Simply execute the command to begin.\n")
+        instructions.append(
+            "This workflow does not require any parameters. Simply execute the command to begin.\n"
+        )
 
     return "".join(instructions)
