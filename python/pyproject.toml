@@ -55,8 +55,6 @@ include = [
     "strands_agents_sops/utils.py",
     "strands_agents_sops/mcp/__init__.py",
     "strands_agents_sops/mcp/server.py",
-    "strands_agents_sops/mcp/tools.py",
-    "strands_agents_sops/mcp/prompts.py",
     "strands_agents_sops/sops/*.md",
     "strands_agents_sops/rules/*.md"
 ]

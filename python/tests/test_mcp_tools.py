@@ -4,15 +4,14 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from strands_agents_sops.mcp.tools import register_sop_tools
-from strands_agents_sops.utils import create_sop_metadata
+from strands_agents_sops.mcp.server import AgentSOPMCPServer
 
 
 @pytest.fixture
 def test_sops():
     """Create minimal test SOP data"""
-    return [
-        {
+    return {
+        "test-sop-b": {
             "name": "test-sop-b",
             "description": "Second test SOP",
             "content": """# Test SOP B
@@ -22,7 +21,7 @@ Test SOP B for testing.
 - **param1** (required): Test parameter
 """,
         },
-        {
+        "test-sop-a": {
             "name": "test-sop-a",
             "description": "First test SOP",
             "content": """# Test SOP A
@@ -36,13 +35,14 @@ Example usage of test-sop-a.
 Common issues and solutions.
 """,
         },
-    ]
+    }
 
 
 @pytest.fixture
 def registered_tools(test_sops):
-    """Register tools and capture registered functions"""
-    mock_mcp = MagicMock()
+    """Create server and capture registered tool functions"""
+    server = AgentSOPMCPServer()
+    server.sops = test_sops
     captured_functions = {}
 
     # Mock tool() decorator to capture registered functions
@@ -53,87 +53,56 @@ def registered_tools(test_sops):
 
         return decorator
 
-    mock_mcp.tool = mock_tool_decorator
+    server.mcp.tool = mock_tool_decorator
+    server._register_sop_tools()
 
-    register_sop_tools(mock_mcp, test_sops)
-
-    return {
-        "list_agent_sops": captured_functions["list_agent_sops"],
-        "get_agent_sop": captured_functions["get_agent_sop"],
-    }
-
-
-@pytest.fixture
-def expected_metadata(test_sops):
-    """Create expected metadata for test SOPs using create_sop_metadata"""
-    return {
-        sop["name"]: create_sop_metadata(sop["name"], sop["content"])
-        for sop in test_sops
-    }
-
-
-class TestSOPToolsRegistration:
-    """Test SOP tools registration with MCP server"""
-
-    def test_register_sop_tools_creates_two_tools(self, test_sops):
-        """Verify that register_sop_tools registers list and get tools"""
-        mock_mcp = MagicMock()
-        register_sop_tools(mock_mcp, test_sops)
-
-        # Verify tool() was called twice
-        assert mock_mcp.tool.call_count == 2
+    return captured_functions
 
 
 class TestListAgentSOPs:
     """Test list_agent_sops tool functionality"""
 
-    def test_list_agent_sops_returns_sorted_metadata(
-        self, registered_tools, expected_metadata
-    ):
-        """Test that list_agent_sops returns sorted SOPs with metadata only"""
+    def test_list_agent_sops_returns_all_sops(self, registered_tools):
+        """Test that list_agent_sops returns all SOPs with name and description"""
         result = registered_tools["list_agent_sops"]()
 
         # Verify count
         assert len(result) == 2
 
-        # Verify alphabetical sorting
-        assert result[0]["name"] == "test-sop-a"
-        assert result[1]["name"] == "test-sop-b"
+        # Verify all SOPs are present
+        names = {sop["name"] for sop in result}
+        assert names == {"test-sop-a", "test-sop-b"}
 
-        # Verify metadata structure
+        # Verify structure (only name and description)
         for sop in result:
             assert "name" in sop
             assert "description" in sop
-            assert "parameters" in sop
+            assert len(sop) == 2  # Only name and description
 
-        # Verify metadata matches expected values
-        for sop in result:
-            expected = expected_metadata[sop["name"]]
-            assert sop["name"] == expected["name"]
-            assert sop["description"] == expected["description"]
-            assert sop["parameters"] == expected["parameters"]
+    def test_list_agent_sops_returns_correct_descriptions(self, registered_tools):
+        """Test that list_agent_sops returns correct descriptions"""
+        result = registered_tools["list_agent_sops"]()
+
+        descriptions = {sop["name"]: sop["description"] for sop in result}
+        assert descriptions["test-sop-a"] == "First test SOP"
+        assert descriptions["test-sop-b"] == "Second test SOP"
 
 
 class TestGetAgentSOP:
     """Test get_agent_sop tool functionality"""
 
-    def test_get_agent_sop_returns_full_metadata(
-        self, registered_tools, expected_metadata
-    ):
-        """Test that get_agent_sop returns complete SOP metadata"""
+    def test_get_agent_sop_returns_full_content(self, registered_tools, test_sops):
+        """Test that get_agent_sop returns name, description, and full content"""
         result = registered_tools["get_agent_sop"]("test-sop-a")
 
-        # Verify it returns the expected metadata structure
-        expected = expected_metadata["test-sop-a"]
-        assert result["name"] == expected["name"]
-        assert result["description"] == expected["description"]
-        assert result["parameters"] == expected["parameters"]
+        # Verify structure
+        assert result["name"] == "test-sop-a"
+        assert result["description"] == "First test SOP"
+        assert "content" in result
 
-        # Verify optional sections are included when present
-        assert "examples" in result
-        assert "troubleshooting" in result
-        assert result["examples"] == expected["examples"]
-        assert result["troubleshooting"] == expected["troubleshooting"]
+        # Verify content is the full SOP content
+        expected_content = test_sops["test-sop-a"]["content"]
+        assert result["content"] == expected_content
 
     def test_get_agent_sop_raises_error_for_invalid_name(self, registered_tools):
         """Test that get_agent_sop raises ValueError for non-existent SOP"""

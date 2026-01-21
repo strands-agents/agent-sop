@@ -2,14 +2,10 @@ from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 from strands_agents_sops.utils import (
-    create_sop_metadata,
     expand_sop_paths,
-    get_all_sops,
     load_builtin_sops,
     load_external_sops,
-    parse_sop_examples,
-    parse_sop_parameters,
-    parse_sop_troubleshooting,
+    load_sops,
 )
 
 
@@ -142,90 +138,6 @@ This is a test SOP for testing purposes.
     assert "test SOP for testing purposes" in result[0]["description"]
 
 
-def test_parse_sop_parameters_empty():
-    """Test parse_sop_parameters with no parameters section"""
-    content = "# Test\n## Overview\nTest content"
-    result = parse_sop_parameters(content)
-    assert result == []
-
-
-def test_parse_sop_parameters_success():
-    """Test parse_sop_parameters with valid parameters"""
-    content = """# Test SOP
-
-## Parameters
-- **required_param** (required): A required parameter
-- **optional_param** (optional, default: test_value): An optional parameter with default
-- **simple_optional** (optional): Simple optional parameter
-"""
-
-    result = parse_sop_parameters(content)
-
-    assert len(result) == 3
-
-    # Check required parameter
-    assert result[0]["name"] == "required_param"
-    assert result[0]["required"] is True
-    assert result[0]["default"] is None
-    assert result[0]["description"] == "A required parameter"
-
-    # Check optional parameter with default
-    assert result[1]["name"] == "optional_param"
-    assert result[1]["required"] is False
-    assert result[1]["default"] == "test_value"
-    assert result[1]["description"] == "An optional parameter with default"
-
-    # Check simple optional parameter
-    assert result[2]["name"] == "simple_optional"
-    assert result[2]["required"] is False
-    assert result[2]["default"] is None
-
-
-def test_parse_sop_examples_empty():
-    """Test parse_sop_examples with no examples section"""
-    content = "# Test\n## Overview\nTest content"
-    result = parse_sop_examples(content)
-    assert result is None
-
-
-def test_parse_sop_examples_success():
-    """Test parse_sop_examples with valid examples section"""
-    content = """# Test SOP
-
-## Examples
-Example usage:
-```
-test command
-```
-"""
-
-    result = parse_sop_examples(content)
-    assert "Example usage:" in result
-    assert "test command" in result
-
-
-def test_parse_sop_troubleshooting_empty():
-    """Test parse_sop_troubleshooting with no troubleshooting section"""
-    content = "# Test\n## Overview\nTest content"
-    result = parse_sop_troubleshooting(content)
-    assert result is None
-
-
-def test_parse_sop_troubleshooting_success():
-    """Test parse_sop_troubleshooting with valid troubleshooting section"""
-    content = """# Test SOP
-
-## Troubleshooting
-Common issues:
-- Issue 1: Solution 1
-- Issue 2: Solution 2
-"""
-
-    result = parse_sop_troubleshooting(content)
-    assert "Common issues:" in result
-    assert "Issue 1: Solution 1" in result
-
-
 def test_load_builtin_sops_no_directory():
     """Test load_builtin_sops when sops directory doesn't exist"""
     with patch("strands_agents_sops.utils.logger") as mock_logger:
@@ -273,21 +185,21 @@ def test_load_builtin_sops_file_error():
                 mock_logger.error.assert_called()
 
 
-def test_get_all_sops_builtin_only():
-    """Test get_all_sops with only builtin SOPs"""
+def test_load_sops_builtin_only():
+    """Test load_sops with only builtin SOPs"""
     builtin_sop = {"name": "builtin", "content": "test", "description": "test"}
 
     with patch(
         "strands_agents_sops.utils.load_builtin_sops", return_value=[builtin_sop]
     ):
-        result = get_all_sops()
+        result = load_sops()
 
         assert len(result) == 1
         assert result[0] == builtin_sop
 
 
-def test_get_all_sops_with_external():
-    """Test get_all_sops with external SOPs taking precedence"""
+def test_load_sops_with_external():
+    """Test load_sops with external SOPs taking precedence"""
     external_sop = {"name": "test", "content": "external", "description": "external"}
     builtin_sop = {"name": "test", "content": "builtin", "description": "builtin"}
     other_builtin = {"name": "other", "content": "other", "description": "other"}
@@ -302,53 +214,9 @@ def test_get_all_sops_with_external():
                 "strands_agents_sops.utils.load_builtin_sops",
                 return_value=[builtin_sop, other_builtin],
             ):
-                result = get_all_sops("/test")
+                result = load_sops("/test")
 
                 assert len(result) == 2
                 # External SOP should take precedence
                 assert result[0] == external_sop
                 assert result[1] == other_builtin
-
-
-def test_create_sop_metadata_minimal():
-    """Test create_sop_metadata with minimal SOP content"""
-    content = """# Test SOP
-
-## Overview
-Basic test SOP.
-"""
-
-    result = create_sop_metadata("test", content)
-
-    assert result["name"] == "test"
-    assert result["description"] == "Basic test SOP."
-    assert result["parameters"] == []
-    assert "examples" not in result
-    assert "troubleshooting" not in result
-
-
-def test_create_sop_metadata_complete():
-    """Test create_sop_metadata with complete SOP content"""
-    content = """# Test SOP
-
-## Overview
-Complete test SOP with all sections.
-
-## Parameters
-- **param1** (required): Test parameter
-
-## Examples
-Example usage here.
-
-## Troubleshooting
-Troubleshooting info here.
-"""
-
-    result = create_sop_metadata("test", content)
-
-    assert result["name"] == "test"
-    assert "Complete test SOP" in result["description"]
-    assert len(result["parameters"]) == 1
-    assert result["parameters"][0]["name"] == "param1"
-    assert "Example usage here" in result["examples"]
-    assert "Troubleshooting info here" in result["troubleshooting"]
