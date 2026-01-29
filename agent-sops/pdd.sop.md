@@ -40,7 +40,7 @@ Set up a directory structure to organize all artifacts created during the proces
   - {project_dir}/design/ (directory for design documents)
   - {project_dir}/implementation/ (directory for implementation plans)
 - You MUST notify the user when the structure has been created
-- You MUST prompt the user to add all project files to Q's context using the command: `/context add {project_dir}/**/*.md`
+- You MUST prompt the user to add all project files to Kiro's context using the command: `/context add {project_dir}/**/*.md`
 - You MUST explain that this will ensure all project files remain in context throughout the process
 
 ### 2. Initial Process Planning
