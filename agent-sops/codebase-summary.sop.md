@@ -6,8 +6,8 @@ This sop analyzes a codebase and generates comprehensive documentation including
 
 ## Parameters
 
-- **output_dir** (optional, default: ".sop/summary"): Directory where documentation will be stored
-- **consolidate** (optional, default: false): Whether to create a consolidated documentation file
+- **output_dir** (optional, default: ".agents/summary"): Directory where documentation will be stored
+- **consolidate** (optional, default: true): Whether to create a consolidated documentation file
 - **consolidate_target** (optional, default: "AGENTS.md"): Target file for consolidation (e.g., "README.md", "CONTRIBUTING.md", or custom filename). Only used if consolidate is true
 - **consolidate_prompt** (optional): Description of how to structure the consolidated content for the target file type (e.g., Reference the AGENTS.md example below for the default "consolidate_prompt"). Only used if consolidate is true
 - **check_consistency** (optional, default: true): Whether to check for inconsistencies across documents
@@ -108,6 +108,7 @@ Create a consolidated documentation file if requested.
 
 **Constraints:**
 - If consolidate is true, you MUST create a consolidated documentation file
+- If the consolidate_target file already exists, You MUST merge the new content with existing content rather than overwriting because this preserves valuable manually-curated content
 - You MUST place the consolidated file in the codebase root directory (outside of the output_dir)
 - You MUST use consolidate_target as the filename for the consolidated file
 - If consolidate_prompt is provided, you MUST use it to guide the structure and content of the consolidated file
@@ -146,7 +147,7 @@ Provide a summary of the documentation process and suggest next steps.
 
 ### Example Input (Default AGENTS.md)
 ```
-output_dir: ".sop/summary"
+output_dir: ".agents/summary"
 consolidate: true
 consolidate_target: "AGENTS.md"
 consolidate_prompt: "Create a comprehensive AGENTS.md file optimized for AI coding assistants. You MUST focus on information that is not already present in other documentation sources like README.md or CONTRIBUTING.md. Useful information for this file includes: File purpose, directory structure, Coding style patterns, file organization patterns, instructions on how to write and run tests, documentation guidelines, and package specific guidance."
@@ -156,13 +157,13 @@ codebase_path: "/path/to/project"
 ### Example Output (Generate Mode)
 ```
 Setting up directory structure...
-✅ Created directory .summary/
+✅ Created directory .agents/summary/
 ✅ Created subdirectories for documentation artifacts
 
 Analyzing codebase structure...
 ✅ Found 15 packages across 3 programming languages
 ✅ Identified 45 major components and 12 key interfaces
-✅ Codebase information saved to .summary/codebase_info.md
+✅ Codebase information saved to .agents/summary/codebase_info.md
 
 Generating documentation files...
 ✅ Created index.md with knowledge base metadata
@@ -172,7 +173,7 @@ Generating documentation files...
 Reviewing documentation...
 ✅ Consistency check complete
 ✅ Completeness check complete
-✅ Review notes saved to .summary/review_notes.md
+✅ Review notes saved to .agents/summary/review_notes.md
 
 Consolidating documentation...
 ✅ Created AGENTS.md optimized for AI coding assistants
@@ -180,7 +181,7 @@ Consolidating documentation...
 
 Summary and Next Steps:
 ✅ Documentation generation complete!
-✅ To use with AI assistants, add .summary/index.md to context
+✅ To use with AI assistants, add .agents/summary/index.md to context
 ✅ AGENTS.md provides comprehensive guidance for AI coding assistance
 ```
 
@@ -205,7 +206,7 @@ Update mode detected - checking for changes...
 
 Analyzing recent changes...
 ✅ Updated components: AuthService, DataProcessor, APIGateway
-✅ Change summary saved to .summary/recent_changes.md
+✅ Change summary saved to .agents/summary/recent_changes.md
 
 Updating documentation...
 ✅ Updated architecture.md with new AuthService patterns
@@ -219,13 +220,13 @@ Consolidating updated documentation...
 Summary:
 ✅ Documentation updated based on 8 recent commits
 ✅ 3 major components updated in documentation
-✅ Review .summary/recent_changes.md for detailed change summary
+✅ Review .agents/summary/recent_changes.md for detailed change summary
 ```
 
 ### Example Output Structure
 ```
 AGENTS.md (consolidated file in root directory)
-.summary/
+.agents/summary/
 ├── index.md (knowledge base index)
 ├── codebase_info.md
 ├── architecture.md

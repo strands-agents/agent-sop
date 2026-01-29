@@ -8,7 +8,7 @@ This sop generates structured code task files from rough descriptions, ideas, or
 
 - **input** (required): Task description, file path, or PDD plan path. Can be a simple sentence, paragraph, detailed explanation, or path to a PDD implementation plan.
 - **step_number** (optional): For PDD plans only - specific step to process. If not provided, automatically determines the next uncompleted step from the checklist.
-- **output_dir** (optional, default: ".sop/planning"): Directory where the code task file will be created
+- **output_dir** (optional, default: ".agents/planning"): Directory where the code task file will be created
 - **task_name** (optional): For descriptions only - specific task name. If not provided, will be generated from the description.
 
 **Constraints for parameter acquisition:**

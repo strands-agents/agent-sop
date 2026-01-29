@@ -8,7 +8,7 @@ This sop guides the implementation of code tasks using test-driven development p
 
 - **task_description** (required): A description of the task to be implemented. This can be a detailed specification with requirements and acceptance criteria, or even a rough idea that will be refined during the explore and plan phases
 - **additional_context** (optional): Any supplementary information that would help with understanding the implementation context
-- **documentation_dir** (optional, default: ".sop/planning"): The directory where planning documents will be stored
+- **documentation_dir** (optional, default: ".agents/planning"): The directory where planning documents will be stored
 - **repo_root** (optional, default: current working directory): The root directory of the repository for code implementation
 - **task_name** (optional): A short, descriptive name for the implementation task
 - **mode** (optional, default: "auto"): The interaction mode:
@@ -352,7 +352,7 @@ mode: "interactive"
 **Expected Process:**
 1. Check for CODEASSIST.md and discover instruction files
 2. Detect project type from existing files (pom.xml, package.json, etc.)
-3. Set up directory structure in .sop/planning/implementation/email-validator/
+3. Set up directory structure in .agents/planning/implementation/email-validator/
 4. Explore requirements and create context documentation
 5. Plan test scenarios for valid/invalid email formats
 6. Implement tests first (TDD approach)
