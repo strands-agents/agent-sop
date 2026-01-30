@@ -10,7 +10,7 @@ This sop guides the implementation of code tasks using test-driven development p
 - **additional_context** (optional): Any supplementary information that would help with understanding the implementation context
 - **documentation_dir** (optional, default: ".agents/scratchpad/{project_name}"): The directory where planning documents will be stored
 - **repo_root** (optional, default: current working directory): The root directory of the repository for code implementation
-- **project_name** (optional): Project name for organizing working files. If processing a code task file, will be inferred from the task path. Otherwise, will be generated from the task description.
+- **project_name** (optional): Project name for organizing working files. If processing a code task file, will be inferred from the task path. Otherwise, will be generated from the task description with a YYYY-MM-DD date prefix.
 - **task_name** (optional): A short, descriptive name for the implementation task
 - **mode** (optional, default: "auto"): The interaction mode:
   - "interactive": Collaboration with user confirmation at each step

@@ -107,6 +107,8 @@ The hierarchy is organized by what you're likely to want to commit:
 3. **`tasks/`** - Code tasks from `code-task-generator`. May be committed or tracked in an issue tracker instead.
 4. **`scratchpad/`** - Working notes from `code-assist`. Transient implementation artifacts. Add to `.gitignore`.
 
+**Note:** When project names are auto-generated, they are prefixed with the current date (YYYY-MM-DD) for easy identification and sorting (e.g., `2026-01-30-auth-system`).
+
 This separation also enables you to focus your AI tools' context on useful reference docs. For example, in Kiro CLI, you can "pin" relevant files in the planning folder while implementing a project:
 ```
 /context add .agents/planning/{project_name}/**/*.md

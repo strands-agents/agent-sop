@@ -19,7 +19,7 @@ This sop guides you through the process of transforming a rough idea into a deta
   - Other methods: You SHOULD be open to other ways the user might want to provide the idea
 - You MUST use appropriate tools to access content based on the input method
 - You MUST confirm successful acquisition of all parameters before proceeding
-- If project_name is not provided, You MUST generate a short kebab-case name from the rough idea (e.g., "template-manager", "auth-system")
+- If project_name is not provided, You MUST generate a short kebab-case name from the rough idea, prefixed with the current date in YYYY-MM-DD format (e.g., "2026-01-30-template-manager", "2026-01-30-auth-system")
 - You SHOULD save the acquired rough idea to a consistent location for use in subsequent steps
 - You MUST NOT overwrite the existing project directory because this could destroy previous work and cause data loss
 - You MUST ask for project_dir if it is not given and the generated default directory already exists and has contents from previous iteration
