@@ -38,8 +38,8 @@ Initialize the analysis environment and create necessary directory structure.
 - You MUST create the output_dir if it doesn't exist
 - You MUST inform the user about the directory structure being created
 - If update_mode is true, you MUST:
-  - Check if an index.md file exists in the output_dir
-  - Use git commands to review the latest commits and see if its changes are documented
+  - Check if {output_dir}/.last_commit exists to determine the baseline commit
+  - Use git commands to review commits since the baseline and identify changes
 - If update_mode is false or no previous documentation exists, you MUST inform the user that full analysis will be performed
 - You MUST create subdirectories for organizing different types of documentation artifacts
 
@@ -128,6 +128,7 @@ Create consolidated documentation files if requested.
 Provide a summary of the documentation process and suggest next steps.
 
 **Constraints:**
+- You MUST save the current git HEAD commit hash to {output_dir}/.last_commit to enable future update_mode runs
 - You MUST summarize what has been accomplished
 - You MUST suggest next steps for using the documentation
 - You MUST provide guidance on maintaining and updating the documentation
@@ -226,6 +227,7 @@ Summary:
 ```
 AGENTS.md (consolidated file in root directory)
 .agents/summary/
+├── .last_commit (git commit hash for update_mode baseline)
 ├── index.md (knowledge base index)
 ├── codebase_info.md
 ├── architecture.md
