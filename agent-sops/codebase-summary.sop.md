@@ -6,9 +6,9 @@ This sop analyzes a codebase and generates comprehensive documentation including
 
 ## Parameters
 
-- **output_dir** (optional, default: ".sop/summary"): Directory where documentation will be stored
-- **consolidate** (optional, default: false): Whether to create a consolidated documentation file
-- **consolidate_target** (optional, default: "AGENTS.md"): Target file for consolidation (e.g., "README.md", "CONTRIBUTING.md", or custom filename). Only used if consolidate is true
+- **output_dir** (optional, default: ".agents/summary"): Directory where documentation will be stored
+- **consolidate** (optional, default: true): Whether to create consolidated documentation files
+- **consolidate_targets** (optional, default: "AGENTS.md"): Target files for consolidation, comma-separated (e.g., "AGENTS.md, README.md, CONTRIBUTING.md"). Only used if consolidate is true
 - **consolidate_prompt** (optional): Description of how to structure the consolidated content for the target file type (e.g., Reference the AGENTS.md example below for the default "consolidate_prompt"). Only used if consolidate is true
 - **check_consistency** (optional, default: true): Whether to check for inconsistencies across documents
 - **check_completeness** (optional, default: true): Whether to identify areas lacking sufficient detail
@@ -25,7 +25,7 @@ This sop analyzes a codebase and generates comprehensive documentation including
 - You MUST use appropriate tools to access content based on the input method
 - You MUST confirm successful acquisition of all parameters before proceeding
 - You MUST validate that the codebase_path exists and is accessible
-- If consolidate is false, you MUST inform the user that consolidate_target and consolidate_prompt will be ignored
+- If consolidate is false, you MUST inform the user that consolidate_targets and consolidate_prompt will be ignored
 
 ## Steps
 
@@ -38,8 +38,8 @@ Initialize the analysis environment and create necessary directory structure.
 - You MUST create the output_dir if it doesn't exist
 - You MUST inform the user about the directory structure being created
 - If update_mode is true, you MUST:
-  - Check if an index.md file exists in the output_dir
-  - Use git commands to review the latest commits and see if its changes are documented
+  - Check if {output_dir}/.last_commit exists to determine the baseline commit
+  - Use git commands to review commits since the baseline and identify changes
 - If update_mode is false or no previous documentation exists, you MUST inform the user that full analysis will be performed
 - You MUST create subdirectories for organizing different types of documentation artifacts
 
@@ -104,14 +104,14 @@ Review the documentation for consistency and completeness.
 
 ### 5. Consolidate Documentation
 
-Create a consolidated documentation file if requested.
+Create consolidated documentation files if requested.
 
 **Constraints:**
-- If consolidate is true, you MUST create a consolidated documentation file
-- You MUST place the consolidated file in the codebase root directory (outside of the output_dir)
-- You MUST use consolidate_target as the filename for the consolidated file
-- If consolidate_prompt is provided, you MUST use it to guide the structure and content of the consolidated file
-- You MUST tailor the consolidated content to the target file type:
+- If consolidate is true, you MUST create consolidated documentation files for each target in consolidate_targets
+- For each consolidate_target file that already exists, You MUST merge the new content with existing content rather than overwriting because this preserves valuable manually-curated content
+- You MUST place consolidated files in the codebase root directory (outside of the output_dir)
+- If consolidate_prompt is provided, you MUST use it to guide the structure and content of the consolidated files
+- You MUST tailor the consolidated content to each target file type:
   - AGENTS.md: Focus on AI assistant context, project and directory structure, development patterns, and assistant-specific instructions
   - README.md: Focus on project overview, installation, usage, and getting started information
   - CONTRIBUTING.md: Focus on development setup, coding standards, contribution workflow, and guidelines
@@ -121,13 +121,14 @@ Create a consolidated documentation file if requested.
 - You MUST add metadata tags to each section to facilitate targeted information retrieval
 - You MUST include cross-references between related sections
 - You MUST include information from all relevant documentation files
-- If consolidate is false, you MUST skip this step and inform the user that no consolidated file will be created
+- If consolidate is false, you MUST skip this step and inform the user that no consolidated files will be created
 
 ### 6. Summary and Next Steps
 
 Provide a summary of the documentation process and suggest next steps.
 
 **Constraints:**
+- You MUST save the current git HEAD commit hash to {output_dir}/.last_commit to enable future update_mode runs
 - You MUST summarize what has been accomplished
 - You MUST suggest next steps for using the documentation
 - You MUST provide guidance on maintaining and updating the documentation
@@ -136,7 +137,7 @@ Provide a summary of the documentation process and suggest next steps.
   - Explain how AI assistants can leverage the index.md file as a knowledge base to find relevant information
   - Emphasize that the index.md contains sufficient metadata for assistants to understand which files contain detailed information
   - Provide example queries that demonstrate how to effectively use the documentation
-- If consolidate is true, you MUST provide guidance on using the consolidated file
+- If consolidate is true, you MUST provide guidance on using the consolidated files
 - If update_mode was used, you MUST:
   - Summarize what changes were detected and updated in the documentation
   - Highlight any significant architectural changes
@@ -146,9 +147,9 @@ Provide a summary of the documentation process and suggest next steps.
 
 ### Example Input (Default AGENTS.md)
 ```
-output_dir: ".sop/summary"
+output_dir: ".agents/summary"
 consolidate: true
-consolidate_target: "AGENTS.md"
+consolidate_targets: "AGENTS.md"
 consolidate_prompt: "Create a comprehensive AGENTS.md file optimized for AI coding assistants. You MUST focus on information that is not already present in other documentation sources like README.md or CONTRIBUTING.md. Useful information for this file includes: File purpose, directory structure, Coding style patterns, file organization patterns, instructions on how to write and run tests, documentation guidelines, and package specific guidance."
 codebase_path: "/path/to/project"
 ```
@@ -156,13 +157,13 @@ codebase_path: "/path/to/project"
 ### Example Output (Generate Mode)
 ```
 Setting up directory structure...
-✅ Created directory .summary/
+✅ Created directory .agents/summary/
 ✅ Created subdirectories for documentation artifacts
 
 Analyzing codebase structure...
 ✅ Found 15 packages across 3 programming languages
 ✅ Identified 45 major components and 12 key interfaces
-✅ Codebase information saved to .summary/codebase_info.md
+✅ Codebase information saved to .agents/summary/codebase_info.md
 
 Generating documentation files...
 ✅ Created index.md with knowledge base metadata
@@ -172,7 +173,7 @@ Generating documentation files...
 Reviewing documentation...
 ✅ Consistency check complete
 ✅ Completeness check complete
-✅ Review notes saved to .summary/review_notes.md
+✅ Review notes saved to .agents/summary/review_notes.md
 
 Consolidating documentation...
 ✅ Created AGENTS.md optimized for AI coding assistants
@@ -180,13 +181,13 @@ Consolidating documentation...
 
 Summary and Next Steps:
 ✅ Documentation generation complete!
-✅ To use with AI assistants, add .summary/index.md to context
+✅ To use with AI assistants, add .agents/summary/index.md to context
 ✅ AGENTS.md provides comprehensive guidance for AI coding assistance
 ```
 
 ### Example Input (README.md)
 ```
-consolidate_target: "README.md"
+consolidate_targets: "README.md"
 consolidate_prompt: "Create a user-friendly README that explains the project purpose, installation, and usage"
 ```
 
@@ -205,7 +206,7 @@ Update mode detected - checking for changes...
 
 Analyzing recent changes...
 ✅ Updated components: AuthService, DataProcessor, APIGateway
-✅ Change summary saved to .summary/recent_changes.md
+✅ Change summary saved to .agents/summary/recent_changes.md
 
 Updating documentation...
 ✅ Updated architecture.md with new AuthService patterns
@@ -219,13 +220,14 @@ Consolidating updated documentation...
 Summary:
 ✅ Documentation updated based on 8 recent commits
 ✅ 3 major components updated in documentation
-✅ Review .summary/recent_changes.md for detailed change summary
+✅ Review .agents/summary/recent_changes.md for detailed change summary
 ```
 
 ### Example Output Structure
 ```
 AGENTS.md (consolidated file in root directory)
-.summary/
+.agents/summary/
+├── .last_commit (git commit hash for update_mode baseline)
 ├── index.md (knowledge base index)
 ├── codebase_info.md
 ├── architecture.md

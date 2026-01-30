@@ -8,8 +8,9 @@ This sop guides the implementation of code tasks using test-driven development p
 
 - **task_description** (required): A description of the task to be implemented. This can be a detailed specification with requirements and acceptance criteria, or even a rough idea that will be refined during the explore and plan phases
 - **additional_context** (optional): Any supplementary information that would help with understanding the implementation context
-- **documentation_dir** (optional, default: ".sop/planning"): The directory where planning documents will be stored
+- **documentation_dir** (optional, default: ".agents/scratchpad/{project_name}"): The directory where planning documents will be stored
 - **repo_root** (optional, default: current working directory): The root directory of the repository for code implementation
+- **project_name** (optional): Project name for organizing working files. If processing a code task file, will be inferred from the task path. Otherwise, will be generated from the task description with a YYYY-MM-DD date prefix.
 - **task_name** (optional): A short, descriptive name for the implementation task
 - **mode** (optional, default: "auto"): The interaction mode:
   - "interactive": Collaboration with user confirmation at each step
@@ -60,7 +61,7 @@ Initialize the project environment and create necessary directory structures.
 **Constraints:**
 - You MUST validate and create the documentation directory structure properly:
   - Use `mkdir -p {documentation_dir}` to explicitly create the documentation directory as a directory
-  - Create the full path: `{documentation_dir}/implementation/{task_name}/` with logs subdirectory using `mkdir -p`
+  - Create the full path: `{documentation_dir}/{task_name}/` with logs subdirectory using `mkdir -p`
   - Verify the directory structure was created successfully before proceeding
 - You MUST discover existing instruction files using: `find . -maxdepth 3 -type f \( -path "*/node_modules/*" -o -path "*/build/*" -o -path "*/.venv/*" -o -path "*/venv/*" -o -path "*/__pycache__/*" -o -path "*/.git/*" -o -path "*/dist/*" -o -path "*/target/*" \) -prune -o -name "*.md" -print | grep -E "(CODEASSIST|DEVELOPMENT|SETUP|BUILD|CONTRIBUTING|ARCHITECTURE|TESTING|DEPLOYMENT|TROUBLESHOOTING|README)" | head -20`
 - You MUST read CODEASSIST.md if found and apply its constraints throughout (see Important Notes)
@@ -145,7 +146,7 @@ Create a comprehensive list of test scenarios covering normal operation, edge ca
 **Constraints:**
 - You MUST cover all acceptance criteria with at least one test scenario
 - You MUST define explicit input/output pairs for each test case
-- You MUST save the test scenarios to `{documentation_dir}/implementation/{task_name}/plan.md`
+- You MUST save the test scenarios to `{documentation_dir}/{task_name}/plan.md`
 - You MUST design tests that will initially fail when run against non-existent implementations
 - You MUST NOT create mock implementations during the test design phase because tests should be written based solely on expected behavior, not influenced by implementation details
 - You MUST focus on test scenarios and expected behaviors rather than detailed test code in documentation
@@ -165,7 +166,7 @@ Create a comprehensive list of test scenarios covering normal operation, edge ca
 Outline the high-level structure of the implementation and create an implementation plan.
 
 **Constraints:**
-- You MUST save the implementation plan to `{documentation_dir}/implementation/{task_name}/plan.md`
+- You MUST save the implementation plan to `{documentation_dir}/{task_name}/plan.md`
 - You MUST include all key implementation tasks in the plan 
 - You SHOULD consider performance, security, and maintainability implications
 - You MUST keep implementation planning documentation concise and focused on architecture and patterns
@@ -225,9 +226,9 @@ Write test cases based on the approved outlines, following strict TDD principles
 Write implementation code to pass the tests, focusing on simplicity and correctness first.
 
 **Constraints:**
-- You MUST update your progress in the implementation plan in `{documentation_dir}/implementation/{task_name}/plan.md`
+- You MUST update your progress in the implementation plan in `{documentation_dir}/{task_name}/plan.md`
 - You MUST follow the strict TDD cycle: RED → GREEN → REFACTOR
-- You MUST document each TDD cycle in `{documentation_dir}/implementation/{task_name}/progress.md`
+- You MUST document each TDD cycle in `{documentation_dir}/{task_name}/progress.md`
 - You MUST implement only what is needed to make the current test(s) pass
 - You MUST follow the coding style and conventions of the existing codebase
 - You MUST ensure all implementation code is written directly in the repo_root directories
@@ -277,8 +278,8 @@ If the implementation is complete, proceed with review of the implementation to 
 - You MUST refactor the implementation to align with identified coding conventions from the surrounding codebase
 - You MUST prioritize readability and maintainability over clever optimizations
 - You MUST maintain test passing status throughout refactoring
-- You SHOULD document simplification opportunities in `{documentation_dir}/implementation/{task_name}/progress.md`
-- You SHOULD document significant refactorings and convention alignments in `{documentation_dir}/implementation/{task_name}/progress.md`
+- You SHOULD document simplification opportunities in `{documentation_dir}/{task_name}/progress.md`
+- You SHOULD document significant refactorings and convention alignments in `{documentation_dir}/{task_name}/progress.md`
 
 > 💬 See [Mode Behavior](#mode-behavior) for mode-specific interaction guidance
 
@@ -317,7 +318,7 @@ If all tests are passing, draft a conventional commit message and perform the ac
 - You MUST use git status to check which files have been modified
 - You MUST use git add to stage all relevant files
 - You MUST execute the git commit command with the prepared commit message
-- You MUST document the commit hash and status in `{documentation_dir}/implementation/{task_name}/progress.md`
+- You MUST document the commit hash and status in `{documentation_dir}/{task_name}/progress.md`
 - You MUST NOT push changes to remote repositories because this could publish unreviewed code to shared repositories where others depend on it
 - You MUST verify that all items in the implementation checklist are marked as complete before marking the prompt as complete
 - You SHOULD include the "🤖 Assisted by the code-assist SOP" footer
@@ -334,7 +335,7 @@ If all tests are passing, draft a conventional commit message and perform the ac
   * Prioritizes readability and extensibility
   * Avoids over-engineering and over-abstraction
   * Is idiomatic and modern in the implementation language
-* A well-organized set of implementation artifacts in the `{documentation_dir}/implementation/{task_name}/` directory
+* A well-organized set of implementation artifacts in the `{documentation_dir}/{task_name}/` directory
 * Documentation of key design decisions and implementation notes
 * Properly committed changes with conventional commit messages
 * An implementation process with the appropriate level of user interaction based on the chosen mode
@@ -352,7 +353,7 @@ mode: "interactive"
 **Expected Process:**
 1. Check for CODEASSIST.md and discover instruction files
 2. Detect project type from existing files (pom.xml, package.json, etc.)
-3. Set up directory structure in .sop/planning/implementation/email-validator/
+3. Set up directory structure in .agents/scratchpad/{project_name}/email-validator/
 4. Explore requirements and create context documentation
 5. Plan test scenarios for valid/invalid email formats
 6. Implement tests first (TDD approach)
@@ -417,7 +418,7 @@ If the implementation encounters unexpected challenges:
 ### Build Output Management
 - Pipe build output to log files: `[build-command] > build_output.log 2>&1`
 - Search for specific success/failure indicators instead of displaying full output
-- Save build logs to `{documentation_dir}/implementation/{task_name}/logs/`
+- Save build logs to `{documentation_dir}/{task_name}/logs/`
 
 ### Documentation Organization
 - Use consolidated files: context.md, plan.md, progress.md
@@ -425,22 +426,22 @@ If the implementation encounters unexpected challenges:
 - Track progress with markdown checklists
 
 ## Artifacts
-• {documentation_dir}/implementation/{task_name}/
-• {documentation_dir}/implementation/{task_name}/context.md
+• {documentation_dir}/{task_name}/
+• {documentation_dir}/{task_name}/context.md
  • Workspace structure and package analysis
  • Requirements, patterns, and dependencies
  • Implementation paths and mappings
-• {documentation_dir}/implementation/{task_name}/plan.md
+• {documentation_dir}/{task_name}/plan.md
  • Test scenarios and test planning
  • Implementation planning and strategy
  • All planning-related documentation
-• {documentation_dir}/implementation/{task_name}/progress.md
+• {documentation_dir}/{task_name}/progress.md
  • Script execution tracking
  • TDD cycle documentation
  • Refactoring and simplification notes
  • Commit status and final results
  • Technical challenges encountered
  • Setup and progress notes
-• {documentation_dir}/implementation/{task_name}/logs/
+• {documentation_dir}/{task_name}/logs/
  • Build outputs (one log per package, replaced on each build)
 

@@ -7,7 +7,8 @@ This sop guides you through the process of transforming a rough idea into a deta
 ## Parameters
 
 - **rough_idea** (required): The initial concept or idea you want to develop into a detailed design
-- **project_dir** (optional, default: ".sop/planning"): The base directory where all project files will be stored
+- **project_name** (optional): A short, descriptive name for the project. If not provided, will be generated from the rough idea
+- **project_dir** (optional, default: ".agents/planning/{project_name}"): The base directory where all project files will be stored
 
 **Constraints for parameter acquisition:**
 - You MUST ask for all required parameters upfront in a single prompt rather than one at a time
@@ -18,9 +19,10 @@ This sop guides you through the process of transforming a rough idea into a deta
   - Other methods: You SHOULD be open to other ways the user might want to provide the idea
 - You MUST use appropriate tools to access content based on the input method
 - You MUST confirm successful acquisition of all parameters before proceeding
+- If project_name is not provided, You MUST generate a short kebab-case name from the rough idea, prefixed with the current date in YYYY-MM-DD format (e.g., "2026-01-30-template-manager", "2026-01-30-auth-system")
 - You SHOULD save the acquired rough idea to a consistent location for use in subsequent steps
 - You MUST NOT overwrite the existing project directory because this could destroy previous work and cause data loss
-- You MUST ask for project_dir if it is not given and default ".sop/planning" directory already exist and has contents from previous iteration
+- You MUST ask for project_dir if it is not given and the generated default directory already exists and has contents from previous iteration
 
 ## Steps
 
@@ -38,7 +40,7 @@ Set up a directory structure to organize all artifacts created during the proces
   - {project_dir}/design/ (directory for design documents)
   - {project_dir}/implementation/ (directory for implementation plans)
 - You MUST notify the user when the structure has been created
-- You MUST prompt the user to add all project files to Q's context using the command: `/context add {project_dir}/**/*.md`
+- You MUST prompt the user to add all project files to Kiro's context using the command: `/context add {project_dir}/**/*.md`
 - You MUST explain that this will ensure all project files remain in context throughout the process
 
 ### 2. Initial Process Planning
@@ -211,7 +213,7 @@ Provide a summary of all artifacts created and next steps.
 ```
 Rough idea: I want to build a feature for our team's internal tool that allows users to create and manage templates for common documents we produce. Users should be able to create, edit, and share templates, as well as use them to generate new documents with custom fields.
 
-Project directory: docs/template-feature
+Project name: template-feature
 ```
 
 ### Example Output
@@ -234,7 +236,7 @@ I notice you have several additional MCP search tools available beyond the stand
 I've completed the transformation of your rough idea into a detailed design with an implementation plan. Here's what was created:
 
 ## Directory Structure
-- docs/template-feature/
+- .agents/planning/template-feature/
   - rough-idea.md (your initial concept)
   - idea-honing.md (our Q&A requirements clarification)
   - research/

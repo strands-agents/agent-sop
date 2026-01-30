@@ -74,6 +74,46 @@ Initialize the project environment and create necessary directory structures.
 | **[code-assist](agent-sops/code-assist.sop.md)** | TDD-based code implementation with structured workflow | Feature development, bug fixes, refactoring |
 | **[eval](agent-sops/eval.sop.md)** | Automated evaluation workflow for AI agents using [Strands Evals SDK](https://github.com/strands-agents/evals) | Evaluation planning, test data generation, evaluation execution, and result analysis ([usage guide](https://strandsagents.com/latest/documentation/docs/user-guide/evals-sdk/eval-sop/)) |
 
+## Directory Structure
+
+The Prompt-Driven Development (PDD) family of SOPs (`codebase-summary`, `pdd`, `code-task-generator`, `code-assist`) write their artifacts to a `.agents/` directory with this default organizational structure:
+
+```
+.agents/
+├── summary/               # codebase-summary output (always commit)
+│   └── *.md
+├── planning/              # pdd output (often worth committing)
+│   └── {project_name}/
+│       ├── rough-idea.md
+│       ├── idea-honing.md
+│       ├── research/
+│       ├── design/
+│       └── implementation/
+├── tasks/                 # code-task-generator output (optionally commit)
+│   └── {project_name}/
+│       └── step01/
+│           └── task-*.code-task.md
+└── scratchpad/            # code-assist working files (add to .gitignore)
+    └── {project_name}/
+        └── {task_name}/
+```
+
+**Why this structure?**
+
+The hierarchy is organized by what you're likely to want to commit:
+
+1. **`summary/`** - Documentation from `codebase-summary`. Useful for both humans and agents. Recommend always committing.
+2. **`planning/`** - Design docs from `pdd`. Captures decisions, alternatives considered, and rationale that tend to be lost in traditional software development. Often worth committing.
+3. **`tasks/`** - Code tasks from `code-task-generator`. May be committed or tracked in an issue tracker instead.
+4. **`scratchpad/`** - Working notes from `code-assist`. Transient implementation artifacts. Add to `.gitignore`.
+
+**Note:** When project names are auto-generated, they are prefixed with the current date (YYYY-MM-DD) for easy identification and sorting (e.g., `2026-01-30-auth-system`).
+
+This separation also enables you to focus your AI tools' context on useful reference docs. For example, in Kiro CLI, you can "pin" relevant files in the planning folder while implementing a project:
+```
+/context add .agents/planning/{project_name}/**/*.md
+```
+
 ## Quick Start
 
 Install the `strands-agents-sops` package:

@@ -8,8 +8,8 @@ This sop generates structured code task files from rough descriptions, ideas, or
 
 - **input** (required): Task description, file path, or PDD plan path. Can be a simple sentence, paragraph, detailed explanation, or path to a PDD implementation plan.
 - **step_number** (optional): For PDD plans only - specific step to process. If not provided, automatically determines the next uncompleted step from the checklist.
-- **output_dir** (optional, default: ".sop/planning"): Directory where the code task file will be created
-- **task_name** (optional): For descriptions only - specific task name. If not provided, will be generated from the description.
+- **output_dir** (optional, default: ".agents/tasks/{project_name}"): Directory where the code task file will be created
+- **project_name** (optional): Project name for organizing tasks. If processing a PDD plan, will be inferred from the plan path. Otherwise, will be generated from the description with a YYYY-MM-DD date prefix.
 
 **Constraints for parameter acquisition:**
 - You MUST ask for all required parameters upfront in a single prompt rather than one at a time
@@ -233,14 +233,14 @@ The application currently accepts any string as an email address, leading to dat
 ### Example Input (Description Mode)
 ```
 input: "I need a function that validates email addresses and returns detailed error messages"
-output_dir: "tasks/"
+output_dir: ".agents/tasks/my-project"
 ```
 
 ### Example Output (Description Mode)
 ```
 Detected mode: description
 
-Generated code task: tasks/email-validator.code-task.md
+Generated code task: .agents/tasks/my-project/email-validator.code-task.md
 
 Created task for email validation functionality with comprehensive acceptance criteria and implementation guidance.
 
@@ -249,14 +249,14 @@ Next steps: Run code-assist on the generated task to implement the solution.
 
 ### Example Input (PDD Mode)
 ```
-input: "planning/implementation/plan.md"
+input: ".agents/planning/my-project/implementation/plan.md"
 ```
 
 ### Example Output (PDD Mode)
 ```
 Detected mode: pdd
 
-Generated code tasks for step 2: planning/implementation/step02/
+Generated code tasks for step 2: .agents/tasks/my-project/step02/
 
 Created tasks:
 - task-01-create-data-models.code-task.md

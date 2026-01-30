@@ -4,5 +4,5 @@ python/strands_agents_sops/rules
 skills
 dist
 .amazonq
-.sop
+.agents/scratchpad
 .coverage
