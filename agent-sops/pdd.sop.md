@@ -180,7 +180,7 @@ Create a structured implementation plan with a series of steps for implementing 
 - You MUST ensure each step includes:
   - A clear objective
   - General implementation guidance
-  - Test requirements where appropriate
+  - Test requirements for the functionality introduced in this step
   - How it integrates with previous work
   - **Demo** - explicit description of the working functionality that can be demonstrated after completing this step
 - You MUST ensure each step results in working, demoable functionality that provides value
@@ -189,7 +189,9 @@ Create a structured implementation plan with a series of steps for implementing 
 - You MUST assume that all context documents (requirements, design, research) will be available during implementation
 - You MUST break down the implementation into a series of discrete, manageable steps
 - You MUST ensure each step builds incrementally on previous steps
-- You SHOULD prioritize test-driven development where appropriate
+- You MUST structure each step so that tests are written before or alongside the implementation code
+- You MUST include test requirements as part of each step that introduces or modifies functionality, not as separate testing-only steps
+- You MUST NOT create steps that are solely dedicated to testing or "adding tests" for functionality implemented in previous steps because this violates test-driven development principles and allows untested code to accumulate
 - You MUST ensure the plan covers all aspects of the design
 - You SHOULD sequence steps to validate core functionality early
 - You MUST ensure the checklist items correspond directly to the steps in the implementation plan
