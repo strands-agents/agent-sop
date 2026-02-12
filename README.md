@@ -443,7 +443,17 @@ response = client.messages.create(
 ```
 
 #### Claude Code
-Install skills as plugins in Claude Code:
+
+Use agent-sop as a native Claude Code plugin:
+
+```bash
+# Run Claude Code with the plugin
+claude --plugin-dir ./agent-sop
+
+# Skills are available as /agent-sop:code-assist, /agent-sop:pdd, etc.
+```
+
+Alternatively, install skills via the marketplace:
 
 ```bash
 # Add this repository as a marketplace

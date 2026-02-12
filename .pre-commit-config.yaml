@@ -1,0 +1,9 @@
+repos:
+  - repo: local
+    hooks:
+      - id: generate-skills
+        name: Generate Claude Code skills
+        entry: bash -c 'cd python && uv run strands-agents-sops skills --output-dir ../skills'
+        language: system
+        files: ^agent-sops/.*\.sop\.md$
+        pass_filenames: false

@@ -240,3 +240,21 @@ Second SOP.
             # Check for known built-in skills
             skill_names = [skill.parent.name for skill in builtin_skills]
             assert "code-assist" in skill_names
+
+    def test_skill_frontmatter_simplified(self):
+        """Test that generated skills have simplified frontmatter without type/version"""
+        with tempfile.TemporaryDirectory() as output_dir:
+            generate_anthropic_skills(output_dir)
+
+            skill_file = Path(output_dir) / "code-assist" / "SKILL.md"
+            assert skill_file.exists()
+
+            skill_content = skill_file.read_text()
+
+            # Verify required fields are present
+            assert "name: code-assist" in skill_content
+            assert "description:" in skill_content
+
+            # Verify deprecated fields are NOT present
+            assert "type:" not in skill_content
+            assert "version:" not in skill_content

@@ -59,8 +59,6 @@ def _create_skill_file(
     frontmatter = f"""---
 name: {skill_name}
 description: {description}
-type: anthropic-skill
-version: "1.0"
 ---
 
 """
