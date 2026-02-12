@@ -5,3 +5,7 @@ dist
 .amazonq
 .agents/scratchpad
 .coverage
+
+# Generated skills (published via GitHub Actions to skills-dist branch)
+skills/
+skills-dist/

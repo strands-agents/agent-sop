@@ -444,7 +444,7 @@ response = client.messages.create(
 
 #### Claude Code
 
-**Option 1: Install via marketplace (recommended)**
+**Install via marketplace (recommended)**
 
 ```bash
 # Add the marketplace
@@ -456,11 +456,20 @@ claude plugin install agent-sops@agent-sop
 # Skills available as /code-assist, /pdd, /codebase-summary, /code-task-generator, /eval
 ```
 
-**Option 2: Use as plugin directory**
+The skills are automatically generated and published from the main branch to ensure they're always up-to-date with the latest SOPs.
+
+**For Development:**
+
+If you want to use local skills for development or testing:
 
 ```bash
 # Clone the repo
 git clone https://github.com/strands-agents/agent-sop
+
+# Generate local skills
+cd agent-sop
+pip install strands-agents-sops
+strands-agents-sops skills --output-dir ./skills
 
 # Run Claude Code with the plugin
 claude --plugin-dir ./agent-sop

@@ -12,7 +12,7 @@
     {
       "name": "agent-sops",
       "description": "All agent SOPs including code-assist, pdd, codebase-summary, code-task-generator, and eval",
-      "source": "./",
+      "source": "https://raw.githubusercontent.com/strands-agents/agent-sop/skills-dist/",
       "skills": [
         "./skills/code-assist",
         "./skills/codebase-summary",
