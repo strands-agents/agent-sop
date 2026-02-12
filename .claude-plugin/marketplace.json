@@ -1,0 +1,25 @@
+{
+  "name": "agent-sop",
+  "owner": {
+    "name": "Strands Agents",
+    "email": "strands-agents@amazon.com"
+  },
+  "metadata": {
+    "description": "Natural language workflows (SOPs) for AI agents",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "agent-sops",
+      "description": "All agent SOPs including code-assist, pdd, codebase-summary, code-task-generator, and eval",
+      "source": "./",
+      "skills": [
+        "./skills/code-assist",
+        "./skills/codebase-summary",
+        "./skills/code-task-generator",
+        "./skills/eval",
+        "./skills/pdd"
+      ]
+    }
+  ]
+}

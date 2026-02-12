@@ -453,14 +453,14 @@ claude --plugin-dir ./agent-sop
 # Skills are available as /agent-sop:code-assist, /agent-sop:pdd, etc.
 ```
 
-Alternatively, install skills via the marketplace:
+Alternatively, install via the marketplace:
 
 ```bash
 # Add this repository as a marketplace
-/plugin marketplace add strands-agents/agent-sop
+claude plugin marketplace add strands-agents/agent-sop
 
-# Install skills
-/plugin install example-skills@agent-sop
+# Install all agent SOPs
+claude plugin install agent-sops@agent-sop
 ```
 
 ### Skill Format
