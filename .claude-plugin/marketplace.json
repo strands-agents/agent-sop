@@ -11,9 +11,10 @@
   "plugins": [
     {
       "name": "agent-sops",
-      "description": "All agent SOPs including code-assist, pdd, codebase-summary, code-task-generator, and eval",
+      "description": "All agent SOPs including agent-sop-author, code-assist, pdd, codebase-summary, code-task-generator, and eval",
       "source": "https://raw.githubusercontent.com/strands-agents/agent-sop/skills-dist/",
       "skills": [
+        "./skills/agent-sop-author",
         "./skills/code-assist",
         "./skills/codebase-summary",
         "./skills/code-task-generator",

@@ -444,7 +444,13 @@ response = client.messages.create(
 
 #### Claude Code
 
-**Install via marketplace (recommended)**
+**Install via Vercel Skills CLI**
+
+```bash
+npx skills add https://github.com/strands-agents/agent-sop/tree/skills-dist
+```
+
+**Install via marketplace**
 
 ```bash
 # Add the marketplace
@@ -453,7 +459,7 @@ claude plugin marketplace add strands-agents/agent-sop
 # Install all agent SOPs
 claude plugin install agent-sops@agent-sop
 
-# Skills available as /code-assist, /pdd, /codebase-summary, /code-task-generator, /eval
+# Skills available as /code-assist, /pdd, /codebase-summary, /code-task-generator, /eval, /agent-sop-author
 ```
 
 The skills are automatically generated and published to the `skills-dist` branch on each GitHub Release (and can be republished manually via workflow dispatch).
@@ -508,7 +514,22 @@ Agent SOPs use a standardized markdown format with key features that enable repe
 
 ## Creating Agent SOPs
 
-### Authoring with AI Agents
+### Authoring with the Agent SOP Author Skill
+
+The recommended way to create Agent SOPs is using the `agent-sop-author` skill, which guides agents through the full authoring workflow including validation:
+
+```bash
+# Install via Vercel Skills CLI
+npx skills add https://github.com/strands-agents/agent-sop/tree/skills-dist
+
+# Or install via Claude Code marketplace
+claude plugin marketplace add strands-agents/agent-sop
+claude plugin install agent-sops@agent-sop
+```
+
+Once installed, ask your agent to create a new SOP and it will use the skill to guide the process.
+
+### Authoring with the Format Rule
 
 Agent SOPs can be authored in minutes using your favorite AI agent and the standard formatting rule. You can either copy the rule directly from this repo or use `strands-agents-sops rule`:
 

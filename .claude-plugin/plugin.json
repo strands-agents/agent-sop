@@ -1,7 +1,7 @@
 {
   "name": "agent-sop",
   "version": "1.0.0",
-  "description": "Natural language workflows (SOPs) for AI agents including code-assist, pdd, codebase-summary, code-task-generator, and eval.",
+  "description": "Natural language workflows (SOPs) for AI agents including code-assist, pdd, codebase-summary, code-task-generator, eval, and agent-sop-author.",
   "repository": "https://github.com/strands-agents/agent-sop",
   "license": "Apache-2.0"
 }

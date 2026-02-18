@@ -40,6 +40,12 @@ jobs:
         run: |
           set -euo pipefail
 
+          # Save native skills from main before switching branches
+          NATIVE_SKILLS_DIR=$(mktemp -d)
+          if [ -d skills ]; then
+            cp -R skills/* "$NATIVE_SKILLS_DIR/" 2>/dev/null || true
+          fi
+
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
 
@@ -55,7 +61,13 @@ jobs:
 
           rm -rf skills
           mkdir -p skills
+
+          # Copy generated skills (from SOPs)
           cp -R generated-skills/* skills/
+
+          # Copy native skills (from skills/ on main), without overwriting generated ones
+          cp -Rn "$NATIVE_SKILLS_DIR"/* skills/ 2>/dev/null || true
+          rm -rf "$NATIVE_SKILLS_DIR"
 
           git add skills README.md .nojekyll
 

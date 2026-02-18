@@ -6,6 +6,5 @@ dist
 .agents/scratchpad
 .coverage
 
-# Generated skills (published via GitHub Actions to skills-dist branch)
-skills/
+# Generated skills output (local only, published via GitHub Actions to skills-dist branch)
 skills-dist/
