@@ -456,7 +456,7 @@ claude plugin install agent-sops@agent-sop
 # Skills available as /code-assist, /pdd, /codebase-summary, /code-task-generator, /eval
 ```
 
-The skills are automatically generated and published from the main branch to ensure they're always up-to-date with the latest SOPs.
+The skills are automatically generated and published to the `skills-dist` branch on each GitHub Release (and can be republished manually via workflow dispatch).
 
 **For Development:**
 
