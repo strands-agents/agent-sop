@@ -514,6 +514,8 @@ Agent SOPs use a standardized markdown format with key features that enable repe
 
 ## Creating Agent SOPs
 
+Agent SOPs can be authored in minutes simply by chatting with your favorite AI agent.
+
 ### Authoring with the Agent SOP Author Skill
 
 The recommended way to create Agent SOPs is using the `agent-sop-author` skill, which guides agents through the full authoring workflow including validation:
@@ -531,7 +533,7 @@ Once installed, ask your agent to create a new SOP and it will use the skill to 
 
 ### Authoring with the Format Rule
 
-Agent SOPs can be authored in minutes using your favorite AI agent and the standard formatting rule. You can either copy the rule directly from this repo or use `strands-agents-sops rule`:
+Alternatively, you can author SOPs using the standard formatting rule. You can either copy the rule directly from this repo or use `strands-agents-sops rule`:
 
 ```bash
 # Output the Agent SOP format rule
