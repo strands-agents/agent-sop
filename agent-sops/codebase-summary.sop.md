@@ -85,7 +85,7 @@ Create comprehensive documentation files for different aspects of the system.
   - {output_dir}/dependencies.md (external dependencies and their usage)
 - You MUST ensure each documentation file contains relevant information from the codebase analysis
 - You MUST use Mermaid diagrams for all visual representations throughout the documentation
-- You MUST NOT use ASCII art for any visual elements
+- You MUST NOT use ASCII art for any visual elements because Mermaid diagrams render properly in markdown viewers and are easier to maintain
 - If update_mode is true, you MUST:
   - Preserve existing documentation structure where possible
   - Only update sections related to modified components
@@ -109,10 +109,13 @@ Create consolidated documentation files if requested.
 **Constraints:**
 - If consolidate is true, you MUST create consolidated documentation files for each target in consolidate_targets
 - For each consolidate_target file that already exists, You MUST merge the new content with existing content rather than overwriting because this preserves valuable manually-curated content
+- You MUST identify and preserve any sections that appear to be manually written or iteratively refined (e.g., specific tool commands, workflow constraints, common mistakes) because human-curated operational knowledge is more valuable than auto-generated content. These sections SHOULD be given priority over auto-generated content when there are conflicts or space constraints
+- You MUST review existing documentation files (README.md, CONTRIBUTING.md, docs/) and MUST NOT include information in consolidated files that is already present and discoverable in those files because redundant content increases agent cost and reasoning overhead without improving task performance
+- You MUST keep consolidated files as concise as possible. Each section MUST contain only information that would change the agent's behavior compared to having no context file. You MUST NOT include general programming best practices that a competent developer would already know because verbose context files increase token cost and agent reasoning time without proportional benefit
 - You MUST place consolidated files in the codebase root directory (outside of the output_dir)
 - If consolidate_prompt is provided, you MUST use it to guide the structure and content of the consolidated files
 - You MUST tailor the consolidated content to each target file type:
-  - AGENTS.md: Focus on AI assistant context, project and directory structure, development patterns, and assistant-specific instructions
+  - AGENTS.md: Focus on exact build/test/lint/format commands, non-obvious tooling, repo-specific gotchas, and operational constraints that cannot be inferred from code. Deprioritize exhaustive directory listings and generic component descriptions
   - README.md: Focus on project overview, installation, usage, and getting started information
   - CONTRIBUTING.md: Focus on development setup, coding standards, contribution workflow, and guidelines
   - Other files: Adapt content based on filename and consolidate_prompt
@@ -150,7 +153,7 @@ Provide a summary of the documentation process and suggest next steps.
 output_dir: ".agents/summary"
 consolidate: true
 consolidate_targets: "AGENTS.md"
-consolidate_prompt: "Create a comprehensive AGENTS.md file optimized for AI coding assistants. You MUST focus on information that is not already present in other documentation sources like README.md or CONTRIBUTING.md. Useful information for this file includes: File purpose, directory structure, Coding style patterns, file organization patterns, instructions on how to write and run tests, documentation guidelines, and package specific guidance."
+consolidate_prompt: "Create a concise AGENTS.md file optimized for AI coding assistants. Focus exclusively on information that would change an agent's behavior compared to having no context file. Prioritize: (1) exact build, test, lint, and format commands with flags, (2) non-obvious tooling requirements or repo-specific tools, (3) common mistakes or gotchas specific to this codebase, (4) patterns that deviate from language/framework defaults, (5) operational constraints that cannot be inferred from reading source code. Do NOT include: exhaustive directory structure listings, generic component descriptions, architecture overviews, general programming best practices, or any information the agent could discover by reading existing files like README.md or CONTRIBUTING.md."
 codebase_path: "/path/to/project"
 ```
 
