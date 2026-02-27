@@ -17,7 +17,6 @@ This sop analyzes a codebase and generates comprehensive documentation including
 - **consolidate_prompt** (optional): Description of how to structure the consolidated content for the target file type (e.g., Reference the AGENTS.md example below for the default "consolidate_prompt"). Only used if consolidate is true
 - **check_consistency** (optional, default: true): Whether to check for inconsistencies across documents
 - **check_completeness** (optional, default: true): Whether to identify areas lacking sufficient detail
-- **update_mode** (optional, default: false): Whether to update existing documentation based on recent changes
 - **codebase_path** (optional, default: current directory): Path to the codebase to analyze
 
 **Constraints for parameter acquisition:**
@@ -42,10 +41,6 @@ Initialize the analysis environment and create necessary directory structure.
 - You MUST validate that the codebase_path exists and is accessible
 - You MUST create the output_dir if it doesn't exist
 - You MUST inform the user about the directory structure being created
-- If update_mode is true, you MUST:
-  - Check if {output_dir}/.last_commit exists to determine the baseline commit
-  - Use git commands to review commits since the baseline and identify changes
-- If update_mode is false or no previous documentation exists, you MUST inform the user that full analysis will be performed
 - You MUST create subdirectories for organizing different types of documentation artifacts
 
 ### 2. Analyze Codebase Structure
@@ -63,10 +58,6 @@ Perform comprehensive analysis of the codebase to understand its structure, comp
 - You MUST analyze code patterns and design principles used throughout the codebase
 - You MUST use Mermaid diagrams for all visual representations instead of ASCII art
 - You MUST document basic codebase information in {output_dir}/codebase_info.md
-- If update_mode is true, you MUST:
-  - Analyze which packages and files were modified in recent commits
-  - Prioritize analysis of modified components
-  - Create a change summary document listing all relevant changes since last update
 
 ### 3. Generate Documentation Files
 
@@ -91,9 +82,6 @@ Create comprehensive documentation files for different aspects of the system.
 - You MUST ensure each documentation file contains relevant information from the codebase analysis
 - You MUST use Mermaid diagrams for all visual representations throughout the documentation
 - You MUST NOT use ASCII art for any visual elements because Mermaid diagrams render properly in markdown viewers and are easier to maintain
-- If update_mode is true, you MUST:
-  - Preserve existing documentation structure where possible
-  - Only update sections related to modified components
 
 ### 4. Review Documentation
 
@@ -113,14 +101,25 @@ Create consolidated documentation files if requested.
 
 **Constraints:**
 - If consolidate is true, you MUST create consolidated documentation files for each target in consolidate_targets
-- For each consolidate_target file that already exists, You MUST merge the new content with existing content rather than overwriting because this preserves valuable manually-curated content
-- You MUST identify and preserve any sections that appear to be manually written or iteratively refined (e.g., specific tool commands, workflow constraints, common mistakes) because human-curated operational knowledge is more valuable than auto-generated content. These sections SHOULD be given priority over auto-generated content when there are conflicts or space constraints
-- You MUST review existing documentation files (README.md, CONTRIBUTING.md, docs/) and MUST NOT include information in consolidated files that is already present and discoverable in those files because redundant content increases agent cost and reasoning overhead without improving task performance
+- For each consolidate_target file that already exists, You MUST read the existing file before generating the new one
+- You MUST identify and preserve any sections marked as manually maintained (e.g., "Custom Instructions" sections with HTML comments indicating they are not auto-generated) because human-curated operational knowledge is more valuable than auto-generated content. These sections MUST NOT be modified, rewritten, or removed during consolidation
+- If an existing consolidate_target file contains content that appears to be manually added conventions, workflow rules, or operational guidance but is not in a "Custom Instructions" section, you SHOULD migrate that content into the Custom Instructions section of the new file
 - You MUST keep consolidated files as concise as possible. Each section MUST contain only information that would change the agent's behavior compared to having no context file. You MUST NOT include general programming best practices that a competent developer would already know because verbose context files increase token cost and agent reasoning time without proportional benefit
+- You MUST NOT fabricate or guess acronyms, abbreviations, or initialisms that are not explicitly defined in the codebase or its documentation because hallucinated acronyms mislead agents and humans who rely on the generated documentation
+- You MUST NOT include volatile metrics that become stale after code changes, such as lines-of-code counts, file sizes, byte counts, or specific line counts because these create documentation that is immediately outdated and erodes trust in the generated content
+- You MUST NOT include specific build, test, lint, or format commands unless they are non-obvious or specific to the repository because common build commands are better provided by centralized tooling and skills rather than duplicated across every context file
 - You MUST place consolidated files in the codebase root directory (outside of the output_dir)
 - If consolidate_prompt is provided, you MUST use it to guide the structure and content of the consolidated files
 - You MUST tailor the consolidated content to each target file type:
-  - AGENTS.md: Focus on exact build/test/lint/format commands, non-obvious tooling, repo-specific gotchas, and operational constraints that cannot be inferred from code. Deprioritize exhaustive directory listings and generic component descriptions
+  - AGENTS.md: Provide a starting point for navigating the codebase by documenting major subsystems, key entry points, and directory organization so agents can locate relevant code without reading every file. Focus on repo-specific tools, patterns that deviate from language/framework defaults, and information discoverable from config files (CI, linters, git hooks) that agents might otherwise miss. SHOULD avoid duplicating information already present in README.md or CONTRIBUTING.md because redundant content increases token cost, but MAY include brief summaries of critical setup information to make the file more self-contained. Deprioritize exhaustive file-by-file directory listings and generic descriptions that don't aid navigation. You MUST include a "Custom Instructions" section at the end of the file with the following format:
+    ```
+    ## Custom Instructions
+
+    <!-- This section is maintained by developers and agents during day-to-day work.
+         It is NOT auto-generated by codebase-summary and MUST be preserved during refreshes.
+         Add project-specific conventions, gotchas, and workflow requirements here. -->
+    ```
+    On a fresh generation (no existing AGENTS.md), this section MUST be empty (containing only the heading and comment). If an existing AGENTS.md has a Custom Instructions section, its content MUST be preserved exactly as-is in the new file
   - README.md: Focus on project overview, installation, usage, and getting started information
   - CONTRIBUTING.md: Focus on development setup, coding standards, contribution workflow, and guidelines
   - Other files: Adapt content based on filename and consolidate_prompt
@@ -136,7 +135,6 @@ Create consolidated documentation files if requested.
 Provide a summary of the documentation process and suggest next steps.
 
 **Constraints:**
-- You MUST save the current git HEAD commit hash to {output_dir}/.last_commit to enable future update_mode runs
 - You MUST summarize what has been accomplished
 - You MUST suggest next steps for using the documentation
 - You MUST provide guidance on maintaining and updating the documentation
@@ -146,10 +144,6 @@ Provide a summary of the documentation process and suggest next steps.
   - Emphasize that the index.md contains sufficient metadata for assistants to understand which files contain detailed information
   - Provide example queries that demonstrate how to effectively use the documentation
 - If consolidate is true, you MUST provide guidance on using the consolidated files
-- If update_mode was used, you MUST:
-  - Summarize what changes were detected and updated in the documentation
-  - Highlight any significant architectural changes
-  - Recommend areas that might need further manual review
 
 ## Examples
 
@@ -158,7 +152,7 @@ Provide a summary of the documentation process and suggest next steps.
 output_dir: ".agents/summary"
 consolidate: true
 consolidate_targets: "AGENTS.md"
-consolidate_prompt: "Create a concise AGENTS.md file optimized for AI coding assistants. Focus exclusively on information that would change an agent's behavior compared to having no context file. Prioritize: (1) exact build, test, lint, and format commands with flags, (2) non-obvious tooling requirements or repo-specific tools, (3) common mistakes or gotchas specific to this codebase, (4) patterns that deviate from language/framework defaults, (5) operational constraints that cannot be inferred from reading source code. Do NOT include: exhaustive directory structure listings, generic component descriptions, architecture overviews, general programming best practices, or any information the agent could discover by reading existing files like README.md or CONTRIBUTING.md."
+consolidate_prompt: "Create a concise AGENTS.md that provides a starting point for navigating the codebase. Document major subsystems, key entry points, and directory organization so agents can locate relevant code without reading every file. Include: (1) directory overview and component map, (2) repo-specific tools and scripts found in the codebase, (3) patterns that deviate from language/framework defaults, (4) information discoverable from config files (CI, linters, git hooks) that agents might otherwise miss. Do NOT include: exhaustive file-by-file directory listings, generic component descriptions that don't aid navigation, general programming best practices, volatile metrics like lines-of-code counts or file sizes, standard build/test/lint commands that are common to the language or framework, or fabricated acronyms. End with an empty 'Custom Instructions' section for human/agent-maintained conventions."
 codebase_path: "/path/to/project"
 ```
 
@@ -206,36 +200,10 @@ check_consistency: true
 check_completeness: true
 ```
 
-### Example Output (Update Mode)
-```
-Update mode detected - checking for changes...
-✅ Found existing documentation
-✅ Identified 8 commits since last update affecting 3 packages
-
-Analyzing recent changes...
-✅ Updated components: AuthService, DataProcessor, APIGateway
-✅ Change summary saved to .agents/summary/recent_changes.md
-
-Updating documentation...
-✅ Updated architecture.md with new AuthService patterns
-✅ Updated components.md with DataProcessor changes
-✅ Updated interfaces.md with new API endpoints
-
-Consolidating updated documentation...
-✅ Updated AGENTS.md with recent changes
-✅ Added "Recent Changes" section highlighting updates
-
-Summary:
-✅ Documentation updated based on 8 recent commits
-✅ 3 major components updated in documentation
-✅ Review .agents/summary/recent_changes.md for detailed change summary
-```
-
 ### Example Output Structure
 ```
 AGENTS.md (consolidated file in root directory)
 .agents/summary/
-├── .last_commit (git commit hash for update_mode baseline)
 ├── index.md (knowledge base index)
 ├── codebase_info.md
 ├── architecture.md
@@ -244,8 +212,7 @@ AGENTS.md (consolidated file in root directory)
 ├── data_models.md
 ├── workflows.md
 ├── dependencies.md
-├── review_notes.md
-└── recent_changes.md (if update_mode)
+└── review_notes.md
 ```
 
 ### Example Mermaid Diagram Types
@@ -293,10 +260,11 @@ For very large codebases that take significant time to analyze:
 - You SHOULD suggest focusing on specific directories or components if performance becomes an issue
 - Consider running with consolidate=false to generate individual files faster
 
-### Update Mode Issues
-If update mode fails to detect changes correctly:
-- Check if git history is available and accessible
-- Try running with update_mode=false to generate fresh documentation
+### Existing AGENTS.md
+If the generated AGENTS.md doesn't properly preserve existing custom content:
+- Check that the Custom Instructions section has the expected HTML comment marker
+- If custom content was in non-standard locations, verify it was migrated to the Custom Instructions section
+- Consider manually moving important content into the Custom Instructions section before re-running
 
 ### Consolidation Issues
 If consolidation fails or produces poor results:
@@ -309,9 +277,3 @@ If certain aspects of the codebase are not well documented:
 - Check the review_notes.md file for identified gaps
 - Consider running with check_completeness=true to identify missing areas
 - Review the codebase analysis to ensure all components were properly identified
-
-### Git Integration Problems
-If git commands fail during update mode:
-- Ensure the codebase_path is within a valid git repository
-- Check that git is installed and accessible
-- Verify that the user has appropriate permissions to read git history
