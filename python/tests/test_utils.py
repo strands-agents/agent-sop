@@ -15,6 +15,19 @@ def test_expand_sop_paths_with_empty_parts():
     assert len(result) == 2
 
 
+def test_expand_sop_paths_semicolon_separator():
+    """Test expand_sop_paths with semicolon separator (cross-platform)"""
+    result = expand_sop_paths("/path1;/path2")
+    assert len(result) == 2
+
+
+def test_expand_sop_paths_semicolon_with_windows_drive():
+    """Test expand_sop_paths preserves Windows drive letters when using semicolons"""
+    # Semicolons must be used on Windows to avoid splitting on the colon in C:\...
+    result = expand_sop_paths("C:\\Users\\sops;D:\\other\\sops")
+    assert len(result) == 2
+
+
 def test_load_external_sops_nonexistent_directory():
     """Test load_external_sops with non-existent directory"""
     with patch("strands_agents_sops.utils.logger") as mock_logger:
