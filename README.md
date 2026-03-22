@@ -157,7 +157,11 @@ while(True):
 
 ### Using as MCP Server
 
-The MCP (Model Context Protocol) server exposes SOPs as prompts that AI assistants can discover and use on-demand:
+The MCP (Model Context Protocol) server exposes SOPs as prompts that AI assistants can discover and use on-demand.
+
+Some MCP clients start this command for you from their MCP configuration. For example, in Kiro CLI you usually add `strands-agents-sops mcp` to `~/.kiro/settings/mcp.json` and let Kiro launch it automatically instead of starting a separate terminal process yourself.
+
+The underlying server command is:
 
 ```bash
 # Install the package (see Quick Start for pip alternative)
@@ -172,6 +176,42 @@ strands-agents-sops mcp --sop-paths ~/my-sops:/path/to/other-sops
 # External SOPs override built-in SOPs with same name
 strands-agents-sops mcp --sop-paths ~/custom-sops  # Your custom code-assist.sop.md overrides built-in
 ```
+
+#### Kiro CLI Setup
+
+To use Agent SOPs in Kiro CLI, add the MCP server to your Kiro config.
+
+For built-in SOPs only:
+
+```json
+{
+  "mcpServers": {
+    "agent-sops": {
+      "command": "strands-agents-sops",
+      "args": ["mcp"],
+      "env": {}
+    }
+  }
+}
+```
+
+To include external SOPs, add `--sop-paths` to the same config:
+
+```json
+{
+  "mcpServers": {
+    "agent-sops": {
+      "command": "strands-agents-sops",
+      "args": ["mcp", "--sop-paths", "~/my-sops"],
+      "env": {}
+    }
+  }
+}
+```
+
+The `agent-sops` key is just an example label for the MCP server. You can use a different name if you prefer.
+
+After updating `~/.kiro/settings/mcp.json`, restart Kiro CLI or reload MCP servers. Kiro will launch `strands-agents-sops mcp` for you, so you do not need to run it manually in another terminal.
 
 #### Using SOPs in Different AI Tools
 
@@ -212,18 +252,19 @@ My custom workflow for specific tasks.
 Do something custom.
 EOF
 
-# Start MCP server with your custom SOPs
+# Use your custom SOPs with the MCP server command
 strands-agents-sops mcp --sop-paths ~/my-sops
 ```
 
-Then connect your MCP-compatible AI assistant to access SOPs as tools. Here is an example mcp server configuration:
+If your MCP client manages servers through configuration, use the same arguments there instead of starting the command manually. For example, in Kiro CLI this goes in `~/.kiro/settings/mcp.json`:
 
 ```json
 {
   "mcpServers": {
     "agent-sops": {
       "command": "strands-agents-sops",
-      "args": ["mcp", "--sop-paths", "~/my-sops"]
+      "args": ["mcp", "--sop-paths", "~/my-sops"],
+      "env": {}
     }
   }
 }

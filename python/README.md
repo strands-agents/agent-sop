@@ -44,6 +44,10 @@ agent = Agent(
 
 ### MCP Server Usage
 
+Most MCP clients start the server command from their own config. For example, in Kiro CLI you typically add `strands-agents-sops mcp` to `~/.kiro/settings/mcp.json` and let Kiro launch it automatically.
+
+The underlying server command is:
+
 ```bash
 # Install and run MCP server
 pip install strands-agents-sops
@@ -58,17 +62,24 @@ strands-agents-sops mcp --sop-paths ~/my-sops:/path/to/other-sops
 strands-agents-sops mcp --sop-paths ~/custom-sops
 ```
 
-Add to your MCP client configuration:
+For Kiro CLI, add this to `~/.kiro/settings/mcp.json`:
 ```json
 {
   "mcpServers": {
     "agent-sops": {
       "command": "strands-agents-sops",
-      "args": ["mcp", "--sop-paths", "~/my-sops"]
+      "args": ["mcp", "--sop-paths", "~/my-sops"],
+      "env": {}
     }
   }
 }
 ```
+
+The `agent-sops` key is only a label for the MCP server, so you can rename it if you want.
+
+Remove `--sop-paths` if you only want the built-in SOPs.
+
+After updating the config, restart Kiro CLI or reload MCP servers. You do not need to run `strands-agents-sops mcp` in a separate terminal once Kiro is configured.
 
 ### Anthropic Skills Generation
 
