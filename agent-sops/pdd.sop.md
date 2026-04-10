@@ -262,8 +262,8 @@ I've completed the transformation of your rough idea into a detailed design with
 The implementation plan breaks down the work into 12 incremental steps, starting with core data models and building up to the complete feature set.
 
 ## Next Steps
-1. Review the detailed design document at docs/template-feature/design/detailed-design.md
-2. Check the implementation plan and checklist at docs/template-feature/implementation/plan.md
+1. Review the detailed design document at .agents/planning/template-feature/design/detailed-design.md
+2. Check the implementation plan and checklist at .agents/planning/template-feature/implementation/plan.md
 3. Begin implementation following the checklist in the implementation plan
 
 Would you like me to explain any specific part of the design or implementation plan in more detail?
