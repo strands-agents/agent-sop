@@ -9,8 +9,12 @@ logger = logging.getLogger(__name__)
 def expand_sop_paths(sop_paths_str: str) -> list[Path]:
     """Expand and validate SOP directory paths.
 
+    Paths are separated by `os.pathsep` (`:` on Unix, `;` on Windows) so that
+    Windows drive letters like ``C:\\Users\\...`` are not misinterpreted as
+    separators.  For backward compatibility, `;` is also accepted on Unix.
+
     Args:
-        sop_paths_str: Colon-separated string of directory paths
+        sop_paths_str: Separator-delimited string of directory paths
 
     Returns:
         List of expanded Path objects
@@ -18,8 +22,18 @@ def expand_sop_paths(sop_paths_str: str) -> list[Path]:
     if not sop_paths_str:
         return []
 
+    # On Windows os.pathsep is ";", on Unix it is ":".
+    # Always split on ";" first so that it works cross-platform.
+    # Only fall back to ":" when no ";" is present (pure-Unix shorthand).
+    import os
+
+    if ";" in sop_paths_str:
+        parts = sop_paths_str.split(";")
+    else:
+        parts = sop_paths_str.split(os.pathsep)
+
     paths = []
-    for path_str in sop_paths_str.split(":"):
+    for path_str in parts:
         path_str = path_str.strip()
         if not path_str:
             continue

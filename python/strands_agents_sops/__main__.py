@@ -25,7 +25,7 @@ def main():
     mcp_parser = subparsers.add_parser("mcp", help="Run MCP server (default)")
     mcp_parser.add_argument(
         "--sop-paths",
-        help="Colon-separated list of directory paths to load external SOPs from. "
+        help="Separated list of directory paths (use semicolons on Windows, colons on Unix) to load external SOPs from. "
         "Supports absolute paths, relative paths, and tilde (~) expansion.",
     )
 
@@ -38,7 +38,7 @@ def main():
     )
     skills_parser.add_argument(
         "--sop-paths",
-        help="Colon-separated list of directory paths to load external SOPs from. "
+        help="Separated list of directory paths (use semicolons on Windows, colons on Unix) to load external SOPs from. "
         "Supports absolute paths, relative paths, and tilde (~) expansion.",
     )
 
@@ -61,7 +61,7 @@ def main():
     )
     commands_parser.add_argument(
         "--sop-paths",
-        help="Colon-separated list of directory paths to load external SOPs from. "
+        help="Separated list of directory paths (use semicolons on Windows, colons on Unix) to load external SOPs from. "
         "Supports absolute paths, relative paths, and tilde (~) expansion.",
     )
 
