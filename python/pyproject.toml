@@ -50,10 +50,11 @@ include = [
     "strands_agents_sops/__init__.py",
     "strands_agents_sops/__main__.py",
     "strands_agents_sops/cursor.py",
-    "strands_agents_sops/mcp.py",
     "strands_agents_sops/skills.py",
     "strands_agents_sops/rules.py",
     "strands_agents_sops/utils.py",
+    "strands_agents_sops/mcp/__init__.py",
+    "strands_agents_sops/mcp/server.py",
     "strands_agents_sops/sops/*.md",
     "strands_agents_sops/rules/*.md"
 ]
