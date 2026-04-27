@@ -40,7 +40,7 @@ Set up a directory structure to organize all artifacts created during the proces
   - {project_dir}/design/ (directory for design documents)
   - {project_dir}/implementation/ (directory for implementation plans)
 - You MUST notify the user when the structure has been created
-- You MUST prompt the user to add all project files to Kiro's context using the command: `/context add {project_dir}/**/*.md`
+- You MUST prompt the user to add all project files ({project_dir}/**/*.md) to the agent's context using whatever mechanism their agent provides (e.g., a context command, attaching files, or equivalent)
 - You MUST explain that this will ensure all project files remain in context throughout the process
 
 ### 2. Initial Process Planning
@@ -105,7 +105,7 @@ Conduct research on relevant technologies, libraries, or existing code that coul
 - You SHOULD organize research by topic (e.g., {project_dir}/research/existing-code.md, {project_dir}/research/technologies.md)
 - You MUST include mermaid diagrams when documenting system architectures, data flows, or component relationships in research
 - You MUST include links to relevant references and sources when research is based on external materials (websites, documentation, articles, etc.)
-- You MAY use tools like search_internal_code, read_internal_website, or fs_read to gather information
+- You MAY use any available tools to gather information, such as code search, web/documentation readers, and file readers
 - You MUST ask the user whether other available search tools should also be used.
 - You MUST periodically check with the user during the research process (these check-ins may involve brief dialogue to clarify feedback) to:
   - Share preliminary findings
