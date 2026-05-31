@@ -624,3 +624,83 @@ This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENS
 ## Security
 
 See [CONTRIBUTING](CONTRIBUTING.md#security-issue-notifications) for more information.
+
+
+---
+
+## FAQ
+
+### What are Agent SOPs?
+
+Agent SOPs (Standard Operating Procedures) are markdown-based instruction sets that guide AI agents through sophisticated workflows using natural language, parameterized inputs, and constraint-based execution. They transform complex processes into reusable, shareable workflows.
+
+### What SOPs are available?
+
+| SOP | Purpose | Use Cases |
+|-----|---------|-----------|
+| **codebase-summary** | Comprehensive codebase analysis and documentation | Project onboarding, documentation creation |
+| **pdd** | Prompt-driven development methodology | Complex problem solving, architectural decisions |
+| **code-task-generator** | Intelligent task breakdown from requirements | Project planning, sprint preparation |
+| **code-assist** | TDD-based code implementation | Feature development, bug fixes, refactoring |
+| **eval** | Automated evaluation workflow for AI agents | Evaluation planning, test data generation, result analysis |
+
+### How do I install Agent SOPs?
+
+**Using Homebrew:**
+```bash
+brew install strands-agents-sops
+```
+
+**Using pip:**
+```bash
+pip install strands-agents-sops
+```
+
+### What is the .agents/ directory structure?
+
+| Directory | Purpose | Commit Recommendation |
+|-----------|---------|----------------------|
+| `.agents/summary/` | Codebase-summary output | **Always commit** |
+| `.agents/planning/` | PDD design docs | **Often commit** |
+| `.agents/tasks/` | Code tasks | **Optionally commit** |
+| `.agents/scratchpad/` | Working notes | **Add to .gitignore** |
+
+### What are the key concepts?
+
+| Concept | Description |
+|---------|-------------|
+| **RFC 2119 Constraints** | MUST, SHOULD, MAY keywords for constraint-based execution |
+| **Parameterized Inputs** | Flexible reuse across different contexts |
+| **Step-by-step Instructions** | Structured workflow guidance |
+| **Multi-modal Distribution** | MCP tools, Anthropic Skills, Python modules |
+
+### How do I use Agent SOPs with Strands Agents?
+
+```python
+from strands import Agent
+from strands_tools import editor, shell
+from strands_agents_sops import code_assist
+
+agent = Agent(
+  system_prompt=code_assist,
+  tools=[editor, shell]
+)
+```
+
+### What are the available tools?
+
+- **Strands Agents SDK**: [github.com/strands-agents/sdk-python](https://github.com/strands-agents/sdk-python)
+- **Strands Tools**: [github.com/strands-agents/tools](https://github.com/strands-agents/tools)
+- **Strands MCP Server**: [github.com/strands-agents/mcp-server](https://github.com/strands-agents/mcp-server)
+- **Strands Agent Builder**: [github.com/strands-agents/agent-builder](https://github.com/strands-agents/agent-builder)
+
+### Where can I find documentation?
+
+- **Documentation**: [strandsagents.com](https://strandsagents.com)
+- **Samples**: [github.com/strands-agents/samples](https://github.com/strands-agents/samples)
+- **Evals SDK Guide**: [strandsagents.com/documentation/docs/user-guide/evals-sdk/eval-sop](https://strandsagents.com/latest/documentation/docs/user-guide/evals-sdk/eval-sop/)
+
+### What license does Agent SOPs use?
+
+Agent SOPs is open source. Check the [LICENSE](LICENSE) file for details.
+
