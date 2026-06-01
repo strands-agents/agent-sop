@@ -139,6 +139,9 @@ Develop a comprehensive design document based on the requirements and research.
 **Constraints:**
 - You MUST create a detailed design document at {project_dir}/design/detailed-design.md
 - You MUST write the design as a standalone document that can be understood without reading other project files
+- You MUST NOT reference or link to local project files or file paths within the detailed design (e.g., files under {project_dir}/research/, idea-honing.md, or rough-idea.md) because these files are unavailable when the design is shared, published to a review system, or read outside the local environment, which breaks the document for reviewers
+- You MUST inline any content needed from research or other project files (findings, diagrams, data, rationale) directly into the design rather than pointing to those files, so the design remains durable and self-contained
+- You MAY include links to durable external references (public documentation, internal wikis, articles, or other URLs) since these remain accessible to reviewers outside the local environment
 - You MUST include the following sections in the design document:
   - Overview
   - Detailed Requirements (consolidated from idea-honing.md)
@@ -157,7 +160,7 @@ Develop a comprehensive design document based on the requirements and research.
 - You SHOULD include diagrams or visual representations when appropriate using mermaid syntax
 - You MUST generate mermaid diagrams for architectural overviews, data flow, and component relationships
 - You MUST ensure the design addresses all requirements identified during the clarification process
-- You SHOULD highlight design decisions and their rationales, referencing research findings where applicable
+- You SHOULD highlight design decisions and their rationales, drawing on relevant research findings
 - You MUST review the design with the user and iterate based on feedback
 - You MUST explicitly ask the user if they are ready to proceed to implementation before moving to Step 7
 - You MUST NOT proceed to the implementation plan step without explicit user confirmation because this could skip important design refinement
