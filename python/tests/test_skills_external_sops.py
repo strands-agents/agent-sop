@@ -2,7 +2,7 @@ import tempfile
 from pathlib import Path
 from unittest.mock import patch
 
-from strands_agents_sops.skills import generate_anthropic_skills
+from strands_agents_sops.skills import generate_agent_skills
 
 
 class TestSkillsCLIIntegration:
@@ -11,7 +11,7 @@ class TestSkillsCLIIntegration:
     def test_skills_accepts_sop_paths_argument(self):
         """Test that skills subcommand accepts --sop-paths argument"""
         with patch(
-            "strands_agents_sops.__main__.generate_anthropic_skills"
+            "strands_agents_sops.__main__.generate_agent_skills"
         ) as mock_generate:
             with patch(
                 "sys.argv",
@@ -25,7 +25,7 @@ class TestSkillsCLIIntegration:
     def test_skills_accepts_both_arguments(self):
         """Test that skills subcommand accepts both --sop-paths and --output-dir"""
         with patch(
-            "strands_agents_sops.__main__.generate_anthropic_skills"
+            "strands_agents_sops.__main__.generate_agent_skills"
         ) as mock_generate:
             with patch(
                 "sys.argv",
@@ -46,7 +46,7 @@ class TestSkillsCLIIntegration:
     def test_skills_backward_compatibility(self):
         """Test that skills subcommand works without --sop-paths"""
         with patch(
-            "strands_agents_sops.__main__.generate_anthropic_skills"
+            "strands_agents_sops.__main__.generate_agent_skills"
         ) as mock_generate:
             with patch(
                 "sys.argv",
@@ -81,7 +81,7 @@ Test step content.
             sop_file.write_text(external_sop)
 
             with tempfile.TemporaryDirectory() as output_dir:
-                generate_anthropic_skills(output_dir, sop_paths=temp_dir)
+                generate_agent_skills(output_dir, sop_paths=temp_dir)
 
                 # Check that external SOP skill was created
                 skill_file = Path(output_dir) / "external-test" / "SKILL.md"
@@ -112,7 +112,7 @@ Custom implementation.
             sop_file.write_text(external_sop)
 
             with tempfile.TemporaryDirectory() as output_dir:
-                generate_anthropic_skills(output_dir, sop_paths=temp_dir)
+                generate_agent_skills(output_dir, sop_paths=temp_dir)
 
                 # Check that external version was used
                 skill_file = Path(output_dir) / "code-assist" / "SKILL.md"
@@ -145,7 +145,7 @@ This is the second version that should be ignored.
             (Path(temp_dir2) / "test.sop.md").write_text(sop2)
 
             with tempfile.TemporaryDirectory() as output_dir:
-                generate_anthropic_skills(
+                generate_agent_skills(
                     output_dir, sop_paths=f"{temp_dir1}:{temp_dir2}"
                 )
 
@@ -181,7 +181,7 @@ Content.
             (Path(temp_dir) / "valid.sop.md").write_text(valid_sop)
 
             with tempfile.TemporaryDirectory() as output_dir:
-                generate_anthropic_skills(output_dir, sop_paths=temp_dir)
+                generate_agent_skills(output_dir, sop_paths=temp_dir)
 
                 # Check that only valid SOP was processed
                 assert not (Path(output_dir) / "invalid").exists()
@@ -191,7 +191,7 @@ Content.
         """Test that non-existent directories are handled gracefully"""
         with tempfile.TemporaryDirectory() as output_dir:
             # Should not raise exception
-            generate_anthropic_skills(output_dir, sop_paths="/nonexistent/path")
+            generate_agent_skills(output_dir, sop_paths="/nonexistent/path")
 
             # Built-in SOPs should still be processed
             builtin_skills = list(Path(output_dir).glob("*/SKILL.md"))
@@ -220,7 +220,7 @@ Second SOP.
             (Path(temp_dir2) / "sop-two.sop.md").write_text(sop2)
 
             with tempfile.TemporaryDirectory() as output_dir:
-                generate_anthropic_skills(
+                generate_agent_skills(
                     output_dir, sop_paths=f"{temp_dir1}:{temp_dir2}"
                 )
 
@@ -231,7 +231,7 @@ Second SOP.
     def test_backward_compatibility_no_sop_paths(self):
         """Test that skills generation works without sop_paths parameter"""
         with tempfile.TemporaryDirectory() as output_dir:
-            generate_anthropic_skills(output_dir)
+            generate_agent_skills(output_dir)
 
             # Should generate built-in skills
             builtin_skills = list(Path(output_dir).glob("*/SKILL.md"))
@@ -244,7 +244,7 @@ Second SOP.
     def test_skill_frontmatter_simplified(self):
         """Test that generated skills have simplified frontmatter without type/version"""
         with tempfile.TemporaryDirectory() as output_dir:
-            generate_anthropic_skills(output_dir)
+            generate_agent_skills(output_dir)
 
             skill_file = Path(output_dir) / "code-assist" / "SKILL.md"
             assert skill_file.exists()

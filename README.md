@@ -36,7 +36,7 @@ Agent SOPs use a standardized format to define:
 - **Parameterized inputs** for flexible reuse across different contexts
 - **Step-by-step instructions** with RFC 2119 constraints (MUST, SHOULD, MAY)
 - **Examples and troubleshooting** for reliable execution
-- **Multi-modal distribution** (MCP tools, Anthropic Skills, Python modules)
+- **Multi-modal distribution** (MCP tools, Agent Skills, Python modules)
 
 ### Example SOP Structure
 
@@ -380,29 +380,29 @@ This approach maintains the parameterized nature of SOPs while working within Cu
 
 ---
 
-## Anthropic Skills Integration
+## Agent Skills Integration
 
-Agent SOPs are fully compatible with Claude's [Skills system](https://support.claude.com/en/articles/12512176-what-are-skills), allowing you to teach Claude specialized workflows that can be reused across conversations and projects.
+Agent SOPs can be generated as [Agent Skills](https://agentskills.io/), the open `SKILL.md` format supported by Claude and other skill-compatible agents. This lets you teach agents specialized SOP workflows that can be reused across conversations and projects.
 
 ### How SOPs Work as Skills
 
-The key value of using SOPs as Skills is **progressive disclosure of context**. Instead of loading all workflow instructions into Claude's context upfront, you can provide many SOP skills to Claude, and Claude will intelligently decide which ones to load and execute based on the task at hand.
+The key value of using SOPs as Skills is **progressive disclosure of context**. Instead of loading all workflow instructions into an agent's context upfront, you can provide many SOP skills, and the agent can load and execute the relevant workflow based on the task at hand.
 
 This approach offers several advantages:
 
 - **Context Efficiency**: Only relevant workflow instructions are loaded when needed
 - **Scalable Expertise**: Provide dozens of specialized workflows without overwhelming the context
-- **Intelligent Selection**: Claude automatically chooses the most appropriate SOP for each task
-- **Dynamic Loading**: Complex workflows are only activated when Claude determines they're useful
+- **Intelligent Selection**: Agents can choose the most appropriate SOP for each task
+- **Dynamic Loading**: Complex workflows are only activated when the agent determines they're useful
 
-For example, you might provide Claude with all Agent SOPs as skills. When asked to "implement user authentication," Claude would automatically select and load the `code-assist` skill. When asked to "document this codebase," it would choose the `codebase-summary` skill instead.
+For example, you might provide an agent with all Agent SOPs as skills. When asked to "implement user authentication," the agent can select and load the `code-assist` skill. When asked to "document this codebase," it can choose the `codebase-summary` skill instead.
 
 ### Converting SOPs to Skills
 
-Each Agent SOP can be automatically converted to Anthropic's Skills format:
+Each Agent SOP can be automatically converted to Agent Skills format:
 
 ```bash
-# Generate Skills format from built-in SOPs only
+# Generate Agent Skills from built-in SOPs only
 strands-agents-sops skills
 
 # Or specify custom output directory
@@ -454,6 +454,8 @@ skills/
 └── pdd/
     └── SKILL.md
 ```
+
+Each generated `SKILL.md` contains the SOP workflow in standard Agent Skills format.
 
 ### Using Skills in Claude
 

@@ -1,7 +1,7 @@
 # AGENTS.md - AI Assistant Context for Agent SOP Project
 
 ## Project Overview
-Agent SOP provides natural language workflows that enable AI agents to perform complex, multi-step tasks with consistency and reliability. This is a Python package that implements the Model Context Protocol (MCP) for AI assistant integration and supports conversion to Anthropic Skills format.
+Agent SOP provides natural language workflows that enable AI agents to perform complex, multi-step tasks with consistency and reliability. This is a Python package that implements the Model Context Protocol (MCP) for AI assistant integration and supports conversion to Agent Skills format.
 
 ## Directory Structure
 
@@ -10,7 +10,7 @@ agent-sop/
 ├── python/strands_agents_sops/    # Main Python package
 │   ├── __main__.py               # CLI entry point (mcp|skills|rule commands)
 │   ├── mcp.py                    # MCP server implementation
-│   ├── skills.py                 # Anthropic Skills conversion
+│   ├── skills.py                 # Agent Skills conversion
 │   └── utils.py                  # Shared SOP utilities
 ├── agent-sops/                   # Source SOP definitions
 │   ├── codebase-summary.sop.md   # Documentation generation workflow
@@ -123,7 +123,7 @@ strands-agents-sops mcp --sop-paths ~/my-sops:/team/sops
 
 ### Skills Integration
 ```bash
-# Generate Skills format for Claude
+# Generate Agent Skills format
 strands-agents-sops skills --output-dir ./skills
 
 # Include custom SOPs in Skills generation

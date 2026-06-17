@@ -56,7 +56,7 @@ jobs:
             git checkout --orphan skills-dist
             git rm -rf . || true
             touch .nojekyll
-            printf '%s\n' '# Skills Distribution' '' 'This branch contains auto-generated Claude Code skills from the main branch.' '' 'Generated from: https://github.com/strands-agents/agent-sop' > README.md
+            printf '%s\n' '# Skills Distribution' '' 'This branch contains auto-generated Agent Skills from the main branch.' '' 'Generated from: https://github.com/strands-agents/agent-sop' > README.md
           fi
 
           rm -rf skills

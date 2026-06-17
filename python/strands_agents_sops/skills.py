@@ -7,8 +7,8 @@ from .utils import expand_sop_paths, load_external_sops
 logger = logging.getLogger(__name__)
 
 
-def generate_anthropic_skills(output_dir: str, sop_paths: str | None = None):
-    """Generate Anthropic skills from SOPs"""
+def generate_agent_skills(output_dir: str, sop_paths: str | None = None):
+    """Generate Agent Skills from SOPs"""
     output_path = Path(output_dir)
     output_path.mkdir(exist_ok=True)
 
@@ -45,7 +45,7 @@ def generate_anthropic_skills(output_dir: str, sop_paths: str | None = None):
             description = overview_match.group(1).strip().replace("\n", " ")
             _create_skill_file(output_path, skill_name, content, description)
 
-    print(f"\nAnthropic skills generated in: {output_path.absolute()}")
+    print(f"\nAgent Skills generated in: {output_path.absolute()}")
 
 
 def _create_skill_file(
@@ -65,4 +65,4 @@ description: {description}
 
     skill_file = skill_dir / "SKILL.md"
     skill_file.write_text(frontmatter + content)
-    print(f"Created Anthropic skill: {skill_file}")
+    print(f"Created Agent Skill: {skill_file}")

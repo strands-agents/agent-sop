@@ -3,7 +3,7 @@ import argparse
 from .cursor import generate_cursor_commands
 from .mcp import run_mcp_server
 from .rules import output_rules
-from .skills import generate_anthropic_skills
+from .skills import generate_agent_skills
 
 # Registry for command generators: maps type -> (generator_function, default_output_dir)
 COMMAND_GENERATORS = {
@@ -30,7 +30,7 @@ def main():
     )
 
     # Skills generation command
-    skills_parser = subparsers.add_parser("skills", help="Generate Anthropic skills")
+    skills_parser = subparsers.add_parser("skills", help="Generate Agent Skills")
     skills_parser.add_argument(
         "--output-dir",
         default="skills",
@@ -69,7 +69,7 @@ def main():
 
     if args.command == "skills":
         sop_paths = getattr(args, "sop_paths", None)
-        generate_anthropic_skills(args.output_dir, sop_paths=sop_paths)
+        generate_agent_skills(args.output_dir, sop_paths=sop_paths)
     elif args.command == "rule":
         output_rules()
     elif args.command == "commands":

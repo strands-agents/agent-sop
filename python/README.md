@@ -13,7 +13,7 @@
   </p>
 </div>
 
-A comprehensive Python package that provides Agent Standard Operating Procedures (SOPs) as importable strings, structured prompts for AI agents via Model Context Protocol (MCP), and Anthropic Skills generation capabilities.
+A comprehensive Python package that provides Agent Standard Operating Procedures (SOPs) as importable strings, structured prompts for AI agents via Model Context Protocol (MCP), and Agent Skills generation capabilities.
 
 ## 🚀 Quick Start
 
@@ -81,10 +81,10 @@ Remove `--sop-paths` if you only want the built-in SOPs.
 
 After updating the config, restart Kiro CLI or reload MCP servers. You do not need to run `strands-agents-sops mcp` in a separate terminal once Kiro is configured.
 
-### Anthropic Skills Generation
+### Agent Skills Generation
 
 ```bash
-# Generate skills for Claude
+# Generate Agent Skills for Claude and other skill-compatible agents
 strands-agents-sops skills
 
 # Custom output directory

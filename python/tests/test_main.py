@@ -3,7 +3,7 @@ from unittest.mock import patch
 from strands_agents_sops.__main__ import main
 
 
-@patch("strands_agents_sops.__main__.generate_anthropic_skills")
+@patch("strands_agents_sops.__main__.generate_agent_skills")
 @patch("sys.argv", ["strands-agents-sops", "skills", "--output-dir", "test-dir"])
 def test_main_skills_command(mock_generate):
     """Test main function with skills command"""
