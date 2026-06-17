@@ -1,0 +1,42 @@
+name: Test and Lint
+
+on:
+  workflow_call:
+    inputs:
+      ref:
+        required: true
+        type: string
+
+jobs:
+  test-lint:
+    name: Test and Lint
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.10', '3.11', '3.12', '3.13', '3.14']
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref }}
+          persist-credentials: false
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: 'pip'
+
+      - name: Install hatch
+        run: pip install --no-cache-dir hatch
+
+      - name: Run lint
+        working-directory: python
+        run: hatch run lint
+
+      - name: Run tests
+        working-directory: python
+        run: hatch test --python ${{ matrix.python-version }}
