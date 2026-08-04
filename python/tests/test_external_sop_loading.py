@@ -2,7 +2,7 @@ import tempfile
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
-from strands_agents_sops.mcp import run_mcp_server
+from strands_agents_sops.mcp import SERVER_KWARGS, run_mcp_server
 from strands_agents_sops.utils import expand_sop_paths, load_external_sops
 
 
@@ -101,11 +101,11 @@ Test step content.
 class TestMCPIntegration:
     """Test MCP server integration with external SOPs"""
 
-    @patch("strands_agents_sops.mcp.FastMCP")
-    def test_mcp_server_with_external_sops(self, mock_fastmcp):
+    @patch("strands_agents_sops.mcp.MCPServer")
+    def test_mcp_server_with_external_sops(self, mock_mcp_server):
         """Test MCP server initialization with external SOPs"""
         mock_mcp_instance = MagicMock()
-        mock_fastmcp.return_value = mock_mcp_instance
+        mock_mcp_server.return_value = mock_mcp_instance
 
         with tempfile.TemporaryDirectory() as temp_dir:
             # Create test SOP
@@ -125,7 +125,9 @@ Test content.
             run_mcp_server(sop_paths=f"{temp_dir}")
 
             # Verify MCP server was created and run
-            mock_fastmcp.assert_called_once_with("agent-sop-prompt-server")
+            mock_mcp_server.assert_called_once_with(
+                "agent-sop-prompt-server", **SERVER_KWARGS
+            )
             mock_mcp_instance.run.assert_called_once()
 
             # Verify prompt registration was called (built-in + external SOPs)
@@ -133,11 +135,11 @@ Test content.
                 mock_mcp_instance.prompt.call_count >= 1
             )  # At least external SOP registered
 
-    @patch("strands_agents_sops.mcp.FastMCP")
-    def test_external_sops_override_builtin(self, mock_fastmcp):
+    @patch("strands_agents_sops.mcp.MCPServer")
+    def test_external_sops_override_builtin(self, mock_mcp_server):
         """Test that external SOPs override built-in SOPs with same name"""
         mock_mcp_instance = MagicMock()
-        mock_fastmcp.return_value = mock_mcp_instance
+        mock_mcp_server.return_value = mock_mcp_instance
 
         with tempfile.TemporaryDirectory() as temp_dir:
             # Create external SOP with same name as built-in
@@ -157,7 +159,9 @@ Custom implementation.
             run_mcp_server(sop_paths=f"{temp_dir}")
 
             # Verify MCP server was created and run
-            mock_fastmcp.assert_called_once_with("agent-sop-prompt-server")
+            mock_mcp_server.assert_called_once_with(
+                "agent-sop-prompt-server", **SERVER_KWARGS
+            )
             mock_mcp_instance.run.assert_called_once()
 
             # Check that prompt was registered (external should win over built-in)
@@ -172,11 +176,11 @@ Custom implementation.
             registered_description = prompt_calls[0][1]["description"]
             assert "custom version" in registered_description.lower()
 
-    @patch("strands_agents_sops.mcp.FastMCP")
-    def test_first_external_sop_wins_conflict(self, mock_fastmcp):
+    @patch("strands_agents_sops.mcp.MCPServer")
+    def test_first_external_sop_wins_conflict(self, mock_mcp_server):
         """Test that first external SOP wins when multiple external SOPs have same name"""
         mock_mcp_instance = MagicMock()
-        mock_fastmcp.return_value = mock_mcp_instance
+        mock_mcp_server.return_value = mock_mcp_instance
 
         with (
             tempfile.TemporaryDirectory() as temp_dir1,
@@ -213,17 +217,19 @@ This is the second version that should be ignored.
             registered_description = prompt_calls[0][1]["description"]
             assert "first version" in registered_description.lower()
 
-    @patch("strands_agents_sops.mcp.FastMCP")
-    def test_mcp_server_without_external_sops(self, mock_fastmcp):
+    @patch("strands_agents_sops.mcp.MCPServer")
+    def test_mcp_server_without_external_sops(self, mock_mcp_server):
         """Test MCP server works without external SOPs (backward compatibility)"""
         mock_mcp_instance = MagicMock()
-        mock_fastmcp.return_value = mock_mcp_instance
+        mock_mcp_server.return_value = mock_mcp_instance
 
         # Run MCP server without external paths
         run_mcp_server()
 
         # Verify MCP server was created and run
-        mock_fastmcp.assert_called_once_with("agent-sop-prompt-server")
+        mock_mcp_server.assert_called_once_with(
+            "agent-sop-prompt-server", **SERVER_KWARGS
+        )
         mock_mcp_instance.run.assert_called_once()
 
         # Verify built-in SOPs were registered

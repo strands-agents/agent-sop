@@ -251,7 +251,12 @@ strands-agents-sops skills --sop-paths ~/my-sops --output-dir ./skills
 - **`.github/workflows/`**: CI/CD for automated testing and publishing
 
 ### Dependencies
-- **Runtime**: MCP >=1.20.0 (only required dependency)
+- **Runtime**: MCP >=1.20.0,<3.0.0 (only required dependency)
+  - `mcp.py` must work with both mcp 1.x and 2.x: mcp 2.0.0 renamed `FastMCP` to
+    `MCPServer` and moved it from `mcp.server.fastmcp` to `mcp.server.mcpserver`, so the
+    import is a `try`/`except ImportError` shim bound to the name `MCPServer`. `hatch test`
+    runs the whole suite against both majors via the `mcp` axis of the `hatch-test` matrix, so
+    keep that axis in place when touching test config.
 - **Development**: pytest, pytest-cov, ruff
 - **Build**: hatchling, hatch-vcs
 

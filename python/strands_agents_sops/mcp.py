@@ -1,10 +1,34 @@
 import logging
 import re
+from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
 
-from mcp.server.fastmcp import FastMCP
-
 from .utils import expand_sop_paths, load_external_sops
+
+
+def _package_version() -> str:
+    try:
+        return version("strands-agents-sops")
+    except PackageNotFoundError:  # pragma: no cover - running from a source tree
+        return ""
+
+
+try:
+    # mcp >= 2.0.0 renamed FastMCP to MCPServer and moved it out of
+    # mcp.server.fastmcp. Both spellings expose the prompt() and run() API used
+    # below, so support either resolved version. Both majors are exercised in CI
+    # via the mcp axis of the hatch-test matrix in pyproject.toml.
+    from mcp.server.mcpserver import MCPServer
+
+    # Their constructors differ: only MCPServer takes version= (and defaults it
+    # to "", so clients would otherwise see an empty serverInfo.version), while
+    # FastMCP rejects the kwarg and reports the mcp library's own version. Keep
+    # any other constructor argument to what both majors accept.
+    SERVER_KWARGS: dict[str, str] = {"version": _package_version()}
+except ImportError:  # pragma: no cover - depends on installed mcp version
+    from mcp.server.fastmcp import FastMCP as MCPServer
+
+    SERVER_KWARGS = {}
 
 logger = logging.getLogger(__name__)
 
@@ -15,7 +39,7 @@ def run_mcp_server(sop_paths: str | None = None):
     Args:
         sop_paths: Optional colon-separated string of external SOP directory paths
     """
-    mcp = FastMCP("agent-sop-prompt-server")
+    mcp = MCPServer("agent-sop-prompt-server", **SERVER_KWARGS)
     registered_sops = set()  # Track registered SOP names for first-wins behavior
 
     def register_sop(name: str, content: str, description: str):

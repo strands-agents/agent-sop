@@ -10,7 +10,9 @@ readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "Apache-2.0"}
 dependencies = [
-    "mcp>=1.20.0",
+    # Supports both mcp 1.x and 2.x (2.0.0 renamed FastMCP to MCPServer); the
+    # upper bound keeps a future major from breaking installs again.
+    "mcp>=1.20.0,<3.0.0",
 ]
 
 [project.scripts]
@@ -42,8 +44,17 @@ dependencies = [
     "pytest-cov",
 ]
 
+# Test against both supported mcp majors: 2.0.0 renamed FastMCP to MCPServer, so
+# the compatibility shim in strands_agents_sops/mcp.py needs both paths exercised.
 [[tool.hatch.envs.hatch-test.matrix]]
 python = ["3.10", "3.11", "3.12", "3.13", "3.14"]
+mcp = ["1", "2"]
+
+[tool.hatch.envs.hatch-test.overrides]
+matrix.mcp.extra-dependencies = [
+    { value = "mcp>=1.20.0,<2.0.0", if = ["1"] },
+    { value = "mcp>=2.0.0,<3.0.0", if = ["2"] },
+]
 
 [tool.hatch.build.targets.wheel]
 include = [
