@@ -31,7 +31,7 @@ An Agent SOP is a standardized markdown file (`.sop.md`) that defines:
 - **Parameterized inputs** for flexible reuse
 - **Step-by-step instructions** with RFC 2119 constraints
 - **Examples and troubleshooting** for reliable execution
-- **Multi-modal distribution** (MCP tools, Anthropic Skills, Python modules)
+- **Multi-modal distribution** (MCP tools, Agent Skills, Python modules)
 
 ### Key Features
 

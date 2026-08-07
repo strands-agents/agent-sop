@@ -45,7 +45,7 @@ Set up a directory structure to organize all artifacts created during the proces
   - {project_dir}/design/ (directory for design documents)
   - {project_dir}/implementation/ (directory for implementation plans)
 - You MUST notify the user when the structure has been created
-- You MUST prompt the user to add all project files to Kiro's context using the command: `/context add {project_dir}/**/*.md`
+- You MUST prompt the user to add all project files ({project_dir}/**/*.md) to the agent's context using whatever mechanism their agent provides (e.g., a context command, attaching files, or equivalent)
 - You MUST explain that this will ensure all project files remain in context throughout the process
 
 ### 2. Initial Process Planning
@@ -110,7 +110,7 @@ Conduct research on relevant technologies, libraries, or existing code that coul
 - You SHOULD organize research by topic (e.g., {project_dir}/research/existing-code.md, {project_dir}/research/technologies.md)
 - You MUST include mermaid diagrams when documenting system architectures, data flows, or component relationships in research
 - You MUST include links to relevant references and sources when research is based on external materials (websites, documentation, articles, etc.)
-- You MAY use tools like search_internal_code, read_internal_website, or fs_read to gather information
+- You MAY use any available tools to gather information, such as code search, web/documentation readers, and file readers
 - You MUST ask the user whether other available search tools should also be used.
 - You MUST periodically check with the user during the research process (these check-ins may involve brief dialogue to clarify feedback) to:
   - Share preliminary findings
@@ -144,6 +144,9 @@ Develop a comprehensive design document based on the requirements and research.
 **Constraints:**
 - You MUST create a detailed design document at {project_dir}/design/detailed-design.md
 - You MUST write the design as a standalone document that can be understood without reading other project files
+- You MUST NOT reference or link to local project files or file paths within the detailed design (e.g., files under {project_dir}/research/, idea-honing.md, or rough-idea.md) because these files are unavailable when the design is shared, published to a review system, or read outside the local environment, which breaks the document for reviewers
+- You MUST inline any content needed from research or other project files (findings, diagrams, data, rationale) directly into the design rather than pointing to those files, so the design remains durable and self-contained
+- You MAY include links to durable external references (public documentation, internal wikis, articles, or other URLs) since these remain accessible to reviewers outside the local environment
 - You MUST include the following sections in the design document:
   - Overview
   - Detailed Requirements (consolidated from idea-honing.md)
@@ -162,7 +165,7 @@ Develop a comprehensive design document based on the requirements and research.
 - You SHOULD include diagrams or visual representations when appropriate using mermaid syntax
 - You MUST generate mermaid diagrams for architectural overviews, data flow, and component relationships
 - You MUST ensure the design addresses all requirements identified during the clarification process
-- You SHOULD highlight design decisions and their rationales, referencing research findings where applicable
+- You SHOULD highlight design decisions and their rationales, drawing on relevant research findings
 - You MUST review the design with the user and iterate based on feedback
 - You MUST explicitly ask the user if they are ready to proceed to implementation before moving to Step 7
 - You MUST NOT proceed to the implementation plan step without explicit user confirmation because this could skip important design refinement
