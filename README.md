@@ -626,3 +626,134 @@ This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENS
 ## Security
 
 See [CONTRIBUTING](CONTRIBUTING.md#security-issue-notifications) for more information.
+
+## FAQ
+
+### What are Agent SOPs?
+
+Agent SOPs (Standard Operating Procedures) are markdown-based instruction sets that guide AI agents through sophisticated workflows using natural language, parameterized inputs, and constraint-based execution. They transform complex processes into reusable, shareable workflows that work across different AI systems and teams.
+
+### How do Agent SOPs compare to LangChain or CrewAI?
+
+- **Agent SOPs**: Natural language workflows with step-by-step instructions and RFC 2119 constraints (MUST, SHOULD, MAY), reusable across AI systems
+- **LangChain**: Chain-based orchestration library, requires Python code for workflow definition
+- **CrewAI**: Role-playing multi-agent framework, focused on agent collaboration patterns
+
+Agent SOPs focus on **workflow standardization** rather than orchestration or collaboration.
+
+### What SOPs are available?
+
+| SOP | Purpose | Use Cases |
+|-----|---------|-----------|
+| **codebase-summary** | Comprehensive codebase analysis | Project onboarding, documentation creation |
+| **pdd** | Prompt-driven development | Complex problem solving, architectural decisions |
+| **code-task-generator** | Task breakdown and planning | Project planning, sprint preparation |
+| **code-assist** | TDD-based code implementation | Feature development, bug fixes |
+| **eval** | Automated evaluation workflow | Evaluation planning, test data generation |
+
+### How do I get started?
+
+**Install via Homebrew:**
+```bash
+brew install strands-agents-sops
+```
+
+**Install via pip:**
+```bash
+pip install strands-agents-sops
+```
+
+### How do I use SOPs with Strands Agents?
+
+```python
+from strands import Agent
+from strands_tools import editor, shell
+from strands_agents_sops import code_assist
+
+agent = Agent(
+  system_prompt=code_assist,
+  tools=[editor, shell]
+)
+
+agent("Start code-assist sop")
+```
+
+### How do I use SOPs as MCP Server?
+
+Add to your MCP client config (e.g., Kiro CLI `~/.kiro/settings/mcp.json`):
+```json
+{
+  "mcpServers": {
+    "agent-sops": {
+      "command": "strands-agents-sops",
+      "args": ["mcp"],
+      "env": {}
+    }
+  }
+}
+```
+
+For external SOPs:
+```json
+{
+  "mcpServers": {
+    "agent-sops": {
+      "command": "strands-agents-sops",
+      "args": ["mcp", "--sop-paths", "~/my-sops"],
+      "env": {}
+    }
+  }
+}
+```
+
+### How do I create custom SOPs?
+
+Create a markdown file with `.sop.md` postfix:
+```markdown
+# Custom Workflow
+
+## Overview
+My custom workflow for specific tasks.
+
+## Parameters
+- **task_name** (required): Description of the task
+
+## Steps
+### 1. Custom Step
+Do something custom.
+
+**Constraints:**
+- You MUST validate inputs
+- You SHOULD log progress
+```
+
+Then use with `--sop-paths ~/my-sops`.
+
+### How do SOPs integrate with Cursor IDE?
+
+Convert SOPs to Cursor commands:
+```bash
+strands-agents-sops commands --type cursor
+```
+
+This generates `.cursor/commands` that can be invoked with `/` prefix.
+
+### What is the .agents directory structure?
+
+```
+.agents/
+├── summary/       # codebase-summary output (commit)
+├── planning/      # pdd output (often commit)
+├── tasks/         # code-task-generator output (optional)
+└── scratchpad/    # code-assist working files (gitignore)
+```
+
+### Where can I find help?
+
+- [Documentation](https://strandsagents.com/)
+- [Python SDK](https://github.com/strands-agents/sdk-python)
+- [Tools](https://github.com/strands-agents/tools)
+- [Samples](https://github.com/strands-agents/samples)
+- [MCP Server](https://github.com/strands-agents/mcp-server)
+- [Agent Builder](https://github.com/strands-agents/agent-builder)
+- [GitHub Issues](https://github.com/strands-agents/agent-sop/issues)
