@@ -70,6 +70,24 @@ Test step content.
             assert sops[0]["name"] == "test"
             assert "This is a test SOP for external loading." in sops[0]["description"]
 
+    def test_discover_nested_sop_files_in_stable_order(self):
+        """Nested SOPs are loaded in deterministic relative-path order."""
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            first = root / "alpha" / "shared.sop.md"
+            second = root / "zeta" / "shared.sop.md"
+            first.parent.mkdir()
+            second.parent.mkdir()
+            first.write_text("# First\n\n## Overview\nFirst nested SOP.\n")
+            second.write_text("# Second\n\n## Overview\nSecond nested SOP.\n")
+
+            sops = load_external_sops([root])
+
+            assert [sop["description"] for sop in sops] == [
+                "First nested SOP.",
+                "Second nested SOP.",
+            ]
+
     def test_handle_invalid_sop_format(self):
         """Test handling of SOP files without Overview section"""
         with tempfile.TemporaryDirectory() as temp_dir:
@@ -134,6 +152,29 @@ Test content.
             assert (
                 mock_mcp_instance.prompt.call_count >= 1
             )  # At least external SOP registered
+
+    @patch("strands_agents_sops.mcp.MCPServer")
+    def test_mcp_server_registers_nested_external_sop(self, mock_mcp_server):
+        """Nested external SOPs are exposed as MCP prompts."""
+        mock_mcp_instance = MagicMock()
+        mock_mcp_server.return_value = mock_mcp_instance
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            nested_dir = Path(temp_dir) / "team" / "operations"
+            nested_dir.mkdir(parents=True)
+            (nested_dir / "deploy.sop.md").write_text(
+                "# Deploy\n\n## Overview\nDeploy from a nested SOP.\n"
+            )
+
+            run_mcp_server(sop_paths=temp_dir)
+
+            prompt_calls = [
+                call
+                for call in mock_mcp_instance.prompt.call_args_list
+                if call.kwargs["name"] == "deploy"
+            ]
+            assert len(prompt_calls) == 1
+            assert prompt_calls[0].kwargs["description"] == "Deploy from a nested SOP."
 
     @patch("strands_agents_sops.mcp.MCPServer")
     def test_external_sops_override_builtin(self, mock_mcp_server):

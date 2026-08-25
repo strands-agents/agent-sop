@@ -65,7 +65,7 @@ def test_load_external_sops_no_overview():
         mock_dir = MagicMock()
         mock_dir.exists.return_value = True
         mock_dir.is_dir.return_value = True
-        mock_dir.glob.return_value = [mock_file]
+        mock_dir.rglob.return_value = [mock_file]
 
         result = load_external_sops([mock_dir])
 
@@ -83,7 +83,7 @@ def test_load_external_sops_file_error():
         mock_dir = MagicMock()
         mock_dir.exists.return_value = True
         mock_dir.is_dir.return_value = True
-        mock_dir.glob.return_value = [mock_file]
+        mock_dir.rglob.return_value = [mock_file]
 
         result = load_external_sops([mock_dir])
 
@@ -97,7 +97,7 @@ def test_load_external_sops_directory_error():
         mock_dir = MagicMock()
         mock_dir.exists.return_value = True
         mock_dir.is_dir.return_value = True
-        mock_dir.glob.side_effect = Exception("Scan error")
+        mock_dir.rglob.side_effect = Exception("Scan error")
 
         result = load_external_sops([mock_dir])
 

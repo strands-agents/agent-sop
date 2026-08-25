@@ -31,3 +31,22 @@ def test_generate_cursor_commands_with_custom_sops():
         output_path = Path(temp_dir)
         files = list(output_path.glob("*.md"))
         assert len(files) > 0
+
+
+def test_generate_cursor_commands_with_nested_custom_sop():
+    """Nested custom SOPs are converted to Cursor commands."""
+    with (
+        tempfile.TemporaryDirectory() as temp_dir,
+        tempfile.TemporaryDirectory() as output_dir,
+    ):
+        nested_dir = Path(temp_dir) / "team" / "operations"
+        nested_dir.mkdir(parents=True)
+        (nested_dir / "deploy.sop.md").write_text(
+            "# Deploy\n\n## Overview\nDeploy from a nested SOP.\n"
+        )
+
+        generate_cursor_commands(output_dir, sop_paths=temp_dir)
+
+        command_file = Path(output_dir) / "deploy.sop.md"
+        assert command_file.exists()
+        assert "Deploy from a nested SOP." in command_file.read_text()

@@ -99,6 +99,7 @@ strands-agents-sops skills --sop-paths ~/my-sops --output-dir ./skills
 Both MCP and Skills commands support loading custom SOPs:
 
 - **File format**: Only files with `.sop.md` postfix are recognized as SOPs
+- **Recursive discovery**: Each path is searched recursively, including nested directories
 - **Colon-separated paths**: `~/sops1:/absolute/path:relative/path`
 - **Path expansion**: Supports `~` (home directory) and relative paths  
 - **First-wins precedence**: External SOPs override built-in SOPs with same name
