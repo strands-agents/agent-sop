@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 def generate_agent_skills(output_dir: str, sop_paths: str | None = None):
     """Generate Agent Skills from SOPs"""
     output_path = Path(output_dir)
-    output_path.mkdir(exist_ok=True)
+    output_path.mkdir(parents=True, exist_ok=True)
 
     processed_sops = set()  # Track processed SOP names for first-wins behavior
 
