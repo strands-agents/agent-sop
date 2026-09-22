@@ -237,6 +237,7 @@ The syntax for invoking MCP prompts varies between AI tools:
 The `--sop-paths` argument allows you to extend the MCP server with your own SOPs:
 
 - **File format**: Only files with `.sop.md` postfix are recognized as SOPs
+- **Recursive discovery**: Each path is searched recursively, including nested directories
 - **Colon-separated paths**: `~/sops1:/absolute/path:relative/path`
 - **Path expansion**: Supports `~` (home directory) and relative paths
 - **First-wins precedence**: External SOPs override built-in SOPs with same name
@@ -309,6 +310,7 @@ strands-agents-sops commands --type cursor --sop-paths ~/custom-sops --output-di
 The `--sop-paths` argument allows you to extend commands generation with your own SOPs:
 
 - **File format**: Only files with `.sop.md` postfix are recognized as SOPs
+- **Recursive discovery**: Each path is searched recursively, including nested directories
 - **Colon-separated paths**: `~/sops1:/absolute/path:relative/path`
 - **Path expansion**: Supports `~` (home directory) and relative paths
 - **First-wins precedence**: External SOPs override built-in SOPs with same name
@@ -423,6 +425,7 @@ strands-agents-sops skills --sop-paths ~/custom-sops --output-dir ./skills
 The `--sop-paths` argument allows you to extend skills generation with your own SOPs:
 
 - **File format**: Only files with `.sop.md` postfix are recognized as SOPs
+- **Recursive discovery**: Each path is searched recursively, including nested directories
 - **Colon-separated paths**: `~/sops1:/absolute/path:relative/path`
 - **Path expansion**: Supports `~` (home directory) and relative paths
 - **First-wins precedence**: External SOPs override built-in SOPs with same name

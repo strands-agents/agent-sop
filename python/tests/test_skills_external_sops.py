@@ -95,6 +95,22 @@ Test step content.
                 )
                 assert "# External Test SOP" in skill_content
 
+    def test_generate_skills_with_nested_external_sop(self):
+        """Nested external SOPs are converted to Agent Skills."""
+        with tempfile.TemporaryDirectory() as temp_dir:
+            nested_dir = Path(temp_dir) / "team" / "operations"
+            nested_dir.mkdir(parents=True)
+            (nested_dir / "deploy.sop.md").write_text(
+                "# Deploy\n\n## Overview\nDeploy from a nested SOP.\n"
+            )
+
+            with tempfile.TemporaryDirectory() as output_dir:
+                generate_agent_skills(output_dir, sop_paths=temp_dir)
+
+                skill_file = Path(output_dir) / "deploy" / "SKILL.md"
+                assert skill_file.exists()
+                assert "Deploy from a nested SOP." in skill_file.read_text()
+
     def test_external_sop_overrides_builtin(self):
         """Test that external SOP overrides built-in SOP with same name"""
         with tempfile.TemporaryDirectory() as temp_dir:

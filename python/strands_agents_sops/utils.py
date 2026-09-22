@@ -37,10 +37,10 @@ def expand_sop_paths(sop_paths_str: str) -> list[Path]:
 
 
 def load_external_sops(sop_directories: list[Path]) -> list[dict[str, Any]]:
-    """Load SOPs from external directories.
+    """Load SOPs recursively from external directories.
 
     Args:
-        sop_directories: List of directory paths to search for SOPs
+        sop_directories: List of directory trees to search for SOPs
 
     Returns:
         List of SOP dictionaries with name, content, and description
@@ -57,7 +57,11 @@ def load_external_sops(sop_directories: list[Path]) -> list[dict[str, Any]]:
             continue
 
         try:
-            for sop_file in directory.glob("*.sop.md"):
+            sop_files = sorted(
+                directory.rglob("*.sop.md"),
+                key=lambda path: path.relative_to(directory).as_posix(),
+            )
+            for sop_file in sop_files:
                 if not sop_file.is_file():
                     continue
 
