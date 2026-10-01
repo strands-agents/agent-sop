@@ -145,9 +145,7 @@ This is the second version that should be ignored.
             (Path(temp_dir2) / "test.sop.md").write_text(sop2)
 
             with tempfile.TemporaryDirectory() as output_dir:
-                generate_agent_skills(
-                    output_dir, sop_paths=f"{temp_dir1}:{temp_dir2}"
-                )
+                generate_agent_skills(output_dir, sop_paths=f"{temp_dir1}:{temp_dir2}")
 
                 # Check that first version was used
                 skill_file = Path(output_dir) / "test" / "SKILL.md"
@@ -220,9 +218,7 @@ Second SOP.
             (Path(temp_dir2) / "sop-two.sop.md").write_text(sop2)
 
             with tempfile.TemporaryDirectory() as output_dir:
-                generate_agent_skills(
-                    output_dir, sop_paths=f"{temp_dir1}:{temp_dir2}"
-                )
+                generate_agent_skills(output_dir, sop_paths=f"{temp_dir1}:{temp_dir2}")
 
                 # Check that both SOPs were processed
                 assert (Path(output_dir) / "sop-one" / "SKILL.md").exists()
@@ -240,6 +236,17 @@ Second SOP.
             # Check for known built-in skills
             skill_names = [skill.parent.name for skill in builtin_skills]
             assert "code-assist" in skill_names
+
+    def test_output_dir_with_missing_parent_created(self):
+        """Generating into an --output-dir whose parent does not exist (e.g.
+        ~/.agents/skills on a clean machine) must create the full path, not raise."""
+        with tempfile.TemporaryDirectory() as temp_dir:
+            nested_output = Path(temp_dir) / "missing" / "skills"
+
+            generate_agent_skills(str(nested_output))
+
+            assert nested_output.is_dir()
+            assert (nested_output / "code-assist" / "SKILL.md").exists()
 
     def test_skill_frontmatter_simplified(self):
         """Test that generated skills have simplified frontmatter without type/version"""
