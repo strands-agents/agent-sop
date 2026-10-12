@@ -75,6 +75,18 @@ def load_external_sops(sop_directories: list[Path]) -> list[dict[str, Any]]:
                     description = overview_match.group(1).strip().replace("\n", " ")
                     sop_name = sop_file.stem.removesuffix(".sop")
 
+                    # sop_name is later joined onto an output directory as a bare
+                    # path segment (e.g. skills.py's `output_path / sop_name`) to
+                    # create per-SOP files/directories. A crafted filename such as
+                    # "...sop.md" derives sop_name == "..", which escapes the
+                    # intended output directory by one level. Reject any name that
+                    # isn't a plain, single path component.
+                    if not sop_name or sop_name in (".", "..") or os.sep in sop_name:
+                        logger.warning(
+                            f"Skipping SOP with unsafe name {sop_name!r} from {sop_file}"
+                        )
+                        continue
+
                     external_sops.append(
                         {
                             "name": sop_name,

@@ -97,6 +97,19 @@ Test step content.
         sops = load_external_sops([nonexistent_path])
         assert len(sops) == 0  # Should handle gracefully
 
+    def test_reject_path_traversal_sop_name(self):
+        """A filename like '...sop.md' derives sop_name == '..', which would
+        escape the intended output directory when later joined onto one
+        (e.g. skills.py's `output_path / sop_name`). Must be skipped."""
+        with tempfile.TemporaryDirectory() as temp_dir:
+            sop_content = """## Overview
+Attempts to masquerade as the parent directory.
+"""
+            (Path(temp_dir) / "...sop.md").write_text(sop_content)
+
+            sops = load_external_sops([Path(temp_dir)])
+            assert len(sops) == 0
+
 
 class TestMCPIntegration:
     """Test MCP server integration with external SOPs"""
