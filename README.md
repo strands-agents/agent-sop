@@ -18,11 +18,16 @@
   
   <p>
     <a href="https://strandsagents.com/">Documentation</a>
-    ◆ <a href="https://github.com/strands-agents/sdk-python">Python SDK</a>
-    ◆ <a href="https://github.com/strands-agents/tools">Tools</a>
     ◆ <a href="https://github.com/strands-agents/samples">Samples</a>
-    ◆ <a href="https://github.com/strands-agents/mcp-server">MCP Server</a>
-    ◆ <a href="https://github.com/strands-agents/agent-builder">Agent Builder</a>
+    ◆ <a href="https://github.com/strands-agents/harness-sdk/tree/main/strands-cli">CLI</a>
+    ◆ <a href="https://github.com/strands-agents/harness-sdk/tree/main/strands-mcp">MCP Server</a>
+    <br>
+    Harness (<a href="https://github.com/strands-agents/harness-sdk/tree/main/harness-py">Python</a>, <a href="https://github.com/strands-agents/harness-sdk/tree/main/harness-ts">TypeScript</a>)
+    ◆ SDK (<a href="https://github.com/strands-agents/harness-sdk/tree/main/strands-py">Python</a>, <a href="https://github.com/strands-agents/harness-sdk/tree/main/strands-ts">TypeScript</a>)
+    ◆ <a href="https://github.com/strands-agents/box">Box</a>
+    ◆ <a href="https://github.com/strands-agents/shell">Shell</a>
+    ◆ <a href="https://github.com/strands-agents/evals">Evals</a>
+    ◆ <a href="https://github.com/strands-labs">Labs</a>
   </p>
 </div>
 
@@ -135,7 +140,7 @@ Install strands agents and the sops package:
 
 ```bash
 brew install strands-agents-sops
-pip install strands-agents strands-agents-tools
+pip install strands-agents
 ```
 
 > **Note:** See [Quick Start](#quick-start) above for pip installation of `strands-agents-sops`.
@@ -144,12 +149,12 @@ Create a simple cli coding agent:
 
 ```python
 from strands import Agent
-from strands_tools import editor, shell
+from strands.vended_tools import file_editor, shell
 from strands_agents_sops import code_assist
 
 agent = Agent(
   system_prompt=code_assist,
-  tools=[editor, shell]
+  tools=[file_editor, shell]
 )
 
 agent("Start code-assist sop")

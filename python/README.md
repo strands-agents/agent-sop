@@ -24,24 +24,24 @@ A comprehensive Python package that provides Agent Standard Operating Procedures
 
 ```bash
 # Install the package
-pip install strands-agents strands-agents-tools strands-agents-sops
+pip install strands-agents strands-agents-sops
 ```
 
 ```python
 from strands import Agent
-from strands_tools import shell, editor
+from strands.vended_tools import file_editor, shell
 import strands_agents_sops as sops
 
 # Create an agent with the Prompt-Driven Development SOP
 agent = Agent(
     system_prompt=sops.pdd,
-    tools=[shell, editor]
+    tools=[shell, file_editor]
 )
 
 # Use SOPs with custom input
 agent = Agent(
     system_prompt=sops.pdd_with_input("Help me design a REST API"),
-    tools=[shell, editor]
+    tools=[shell, file_editor]
 )
 ```
 

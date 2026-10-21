@@ -152,13 +152,13 @@ strands-agents-sops commands --type cursor --sop-paths ~/my-sops --output-dir .c
 ### Python Integration
 ```python
 from strands import Agent
-from strands_tools import editor, shell
+from strands.vended_tools import file_editor, shell
 from strands_agents_sops import code_assist
 
 # Create agent with SOP as system prompt
 agent = Agent(
     system_prompt=code_assist,
-    tools=[editor, shell]
+    tools=[file_editor, shell]
 )
 
 # Execute SOP
