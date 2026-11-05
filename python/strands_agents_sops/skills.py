@@ -1,3 +1,4 @@
+import json
 import logging
 import re
 from pathlib import Path
@@ -48,6 +49,15 @@ def generate_agent_skills(output_dir: str, sop_paths: str | None = None):
     print(f"\nAgent Skills generated in: {output_path.absolute()}")
 
 
+def _yaml_string(value: str) -> str:
+    # Escape line breaks and non-printable characters JSON permits literally.
+    return re.sub(
+        r"[\x7f-\x9f\u2028\u2029\ufffe\uffff]",
+        lambda match: f"\\u{ord(match[0]):04x}",
+        json.dumps(value, ensure_ascii=False),
+    )
+
+
 def _create_skill_file(
     output_path: Path, skill_name: str, content: str, description: str
 ):
@@ -57,12 +67,12 @@ def _create_skill_file(
     skill_dir.mkdir(parents=True, exist_ok=True)
 
     frontmatter = f"""---
-name: {skill_name}
-description: {description}
+name: {_yaml_string(skill_name)}
+description: {_yaml_string(description)}
 ---
 
 """
 
     skill_file = skill_dir / "SKILL.md"
-    skill_file.write_text(frontmatter + content)
+    skill_file.write_text(frontmatter + content, encoding="utf-8")
     print(f"Created Agent Skill: {skill_file}")

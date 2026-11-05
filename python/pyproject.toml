@@ -42,6 +42,7 @@ clean = [
 dependencies = [
     "pytest",
     "pytest-cov",
+    "pyyaml",
 ]
 
 # Test against both supported mcp majors: 2.0.0 renamed FastMCP to MCPServer, so

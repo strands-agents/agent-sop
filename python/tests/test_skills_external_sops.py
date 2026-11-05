@@ -2,6 +2,8 @@ import tempfile
 from pathlib import Path
 from unittest.mock import patch
 
+import yaml
+
 from strands_agents_sops.skills import generate_agent_skills
 
 
@@ -88,7 +90,10 @@ Test step content.
                 assert skill_file.exists()
 
                 skill_content = skill_file.read_text()
-                assert "name: external-test" in skill_content
+                assert (
+                    yaml.safe_load(skill_content.split("---", 2)[1])["name"]
+                    == "external-test"
+                )
                 assert (
                     "This is an external test SOP for skills generation."
                     in skill_content
@@ -145,9 +150,7 @@ This is the second version that should be ignored.
             (Path(temp_dir2) / "test.sop.md").write_text(sop2)
 
             with tempfile.TemporaryDirectory() as output_dir:
-                generate_agent_skills(
-                    output_dir, sop_paths=f"{temp_dir1}:{temp_dir2}"
-                )
+                generate_agent_skills(output_dir, sop_paths=f"{temp_dir1}:{temp_dir2}")
 
                 # Check that first version was used
                 skill_file = Path(output_dir) / "test" / "SKILL.md"
@@ -220,9 +223,7 @@ Second SOP.
             (Path(temp_dir2) / "sop-two.sop.md").write_text(sop2)
 
             with tempfile.TemporaryDirectory() as output_dir:
-                generate_agent_skills(
-                    output_dir, sop_paths=f"{temp_dir1}:{temp_dir2}"
-                )
+                generate_agent_skills(output_dir, sop_paths=f"{temp_dir1}:{temp_dir2}")
 
                 # Check that both SOPs were processed
                 assert (Path(output_dir) / "sop-one" / "SKILL.md").exists()
@@ -252,7 +253,10 @@ Second SOP.
             skill_content = skill_file.read_text()
 
             # Verify required fields are present
-            assert "name: code-assist" in skill_content
+            assert (
+                yaml.safe_load(skill_content.split("---", 2)[1])["name"]
+                == "code-assist"
+            )
             assert "description:" in skill_content
 
             # Verify deprecated fields are NOT present
